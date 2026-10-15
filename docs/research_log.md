@@ -38,3 +38,36 @@ Newest first. Decisions, pilot results, and anything that changed from the plan.
   already there; 5 of 60 truncated even at 2,500 tokens).
 - New config `configs/c0_gate_27b_long.yaml` (2,000-token cap; the 27B needs ~1,100) and
   `scripts/run_gate_27b_overnight.sh` for the overnight 27B run. Expected ~3 h.
+
+### 2026-10-15, 16:30: 8B gate result (2,500-token cap)
+
+`runs/c0_gate_8b_long/summary.csv`, figure `reports/figures/c0_qwen3_8b.png`. N=30 games
+(60 decisions) per level; exclusions 0–5% per cell (all truncations), so under the 5% limit.
+
+| level | coop rate | 95% CI |
+|---|---|---|
+| 0 | 0.26 | 0.16–0.39 |
+| 20 | 0.53 | 0.41–0.65 |
+| 40 | 0.52 | 0.39–0.65 |
+| 60 | 0.43 | 0.31–0.56 |
+| 80 | 0.48 | 0.36–0.61 |
+| 100 | 0.72 | 0.59–0.82 |
+| unknown ("?") | 0.23 | 0.14–0.35 |
+| base | 0.37 | 0.26–0.49 |
+
+- The signal exists but is weak: 0% vs 100% differs (z = −4.8, p ≈ 1e-6), base vs 100% too
+  (p ≈ 1e-4). The middle of the curve is flat (20% vs 80%: p = 0.58). Nothing like the
+  paper's 0 → 100% switch by 60–80%, and no threshold.
+- Why it is flat: the 8B does not reason about the similarity signal the way the paper's
+  models do. It treats "similar" as a cue to look for a symmetric Nash equilibrium, gets
+  confused, and hedges. Hedge answers (exactly 50/50) are 5–26% of decisions per level,
+  and strong answers (≥ 90 or ≤ 10) are a minority except at 100% (40% ≥ 0.9). At 100% it
+  sometimes argues "we reason the same, so bias toward A0", which is the paper's effect,
+  but inconsistently.
+- Implication: the 8B is at best a weak carrier for the screen. The honest-vs-false-beard
+  comparisons need a model that actually cooperates at a high stated similarity; a 0.72
+  ceiling with wide intervals would need large N to resolve defenses. Gate decision waits
+  for the 27B overnight run (`scripts/run_gate_27b_overnight.sh`); the paper reports Qwen
+  3.5 27B with a sharp threshold at 50%.
+- Fallback if the 27B is also weak: API models for the screen (budget cap ~$30, Steve's
+  call), with the local models kept for pilots only.
