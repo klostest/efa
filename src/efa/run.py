@@ -126,6 +126,7 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
                 # Reasoning was cut off. A format-fix on a truncated argument yields a
                 # coin-flip answer, not a decision, so count it as truncated and exclude.
                 rec["probs"], rec["excluded"], rec["truncated"] = None, True, True
+                parsed[(g, p)] = rec
                 continue
             fix_reqs.append(Request("", pd.format_fix_prompt(req.user, c.text), max_tokens=100,
                                     temperature=0.0, sample=g, tags=req.tags))

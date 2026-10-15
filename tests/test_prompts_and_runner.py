@@ -48,3 +48,17 @@ def test_runner_end_to_end_with_fake_players(tmp_path: Path):
     assert (gb.excluded == gb.games).all()
     # a second run hits the cache and adds nothing new to the model call count
     run_config(cfg, tmp_path / "out2")
+
+def test_runner_excludes_truncated_answers_without_dropping_games(tmp_path: Path):
+    cfg = tmp_path / "cfg.yaml"
+    cfg.write_text(
+        "seed: 0\nn_games: 6\nmax_tokens: 50\nmodels: ['fake:truncated']\n"
+        "conditions:\n  - {name: oracle, levels: [80]}\n"
+    )
+    out = tmp_path / "run"
+    run_config(cfg, out)
+    games = load_games(out)
+    assert len(games) == 6 and all(g["excluded"] for g in games)
+    df = summarize(games)
+    assert int(df.truncated.iloc[0]) == 12 and int(df.format_fixed.iloc[0]) == 0
+    assert df.n_decisions.iloc[0] == 0

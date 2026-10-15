@@ -15,7 +15,12 @@ class FakeClient:
 
     def complete(self, requests: list[Request]) -> list[Completion]:
         self.calls += len(requests)
-        return [Completion(self.rule(r), self.model, finish_reason="stop") for r in requests]
+        out = []
+        for r in requests:
+            res = self.rule(r)
+            text, finish = res if isinstance(res, tuple) else (res, "stop")
+            out.append(Completion(text, self.model, finish_reason=finish))
+        return out
 
 
 def _always(a0: int):
@@ -41,4 +46,6 @@ rules = {
     "coin": lambda r: 'hm\n{"A0": 50, "A1": 50}',
     "threshold50": _threshold,
     "garbage": lambda r: "I refuse to answer in JSON.",
+    # reasoning cut off by the token cap, no answer: the runner must exclude, not format-fix
+    "truncated": lambda r: ("Step 1: the payoff matrix is", "length"),
 }

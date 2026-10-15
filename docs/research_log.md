@@ -23,3 +23,18 @@ Newest first. Decisions, pilot results, and anything that changed from the plan.
 - Design change from the review: D1 (flat claim cost) is predicted to *fail* by Grafen's
   differential-cost condition; D1 + D2 together test that condition. Agents must choose
   whether to claim in D1, so D1 adds one decision per agent per game.
+
+### 2026-10-15, later: both gate runs truncated; runner crash on the truncation path
+
+- The 27B gate run (800-token cap, started before the truncation fix) was stopped after 120
+  games: every one of its 240 answers hit the cap, and the 100-token format-fix overran too.
+  The model is not looping; it writes a full expected-value derivation and reaches "determine
+  the optimal output" right at 800 tokens. The smoke test had used a shorter prompt, which is
+  why it looked brief. Those 120 games stay in `runs/c0_gate` and are not used.
+- The 8B retry at 2,500 tokens crashed after 5 games with `KeyError: (5, 0)`: the truncation
+  branch in `run_cell` skipped the `parsed[(g, p)] = rec` line, so the first game with a
+  still-truncated answer had no record. Fixed; `fake:truncated` rule and a runner test cover
+  the path now (15 tests). Relaunched from the cache (the first cell's 60 completions were
+  already there; 5 of 60 truncated even at 2,500 tokens).
+- New config `configs/c0_gate_27b_long.yaml` (2,000-token cap; the 27B needs ~1,100) and
+  `scripts/run_gate_27b_overnight.sh` for the overnight 27B run. Expected ~3 h.
