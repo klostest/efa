@@ -36,6 +36,7 @@ def summarize(games: list[dict]) -> pd.DataFrame:
         llm_players = [p for p in range(2) if c["policies"][p] == "llm"]
         acts, pc, welfare, excl, n_tokens, n_fixed, n_len = [], [], [], 0, [], 0, 0
         for g in gs:
+            n_len += sum(bool(g["players"][p].get("truncated")) for p in llm_players)
             if g["excluded"]:
                 excl += 1
                 continue
@@ -45,7 +46,6 @@ def summarize(games: list[dict]) -> pd.DataFrame:
                 pc.append(g["players"][p]["p_coop"])
                 n_tokens.append(g["players"][p].get("completion_tokens") or 0)
                 n_fixed += bool(g["players"][p].get("fixed"))
-                n_len += g["players"][p].get("finish") == "length"
         k, n = int(sum(acts)), len(acts)
         lo, hi = wilson(k, n)
         rows.append({
@@ -55,7 +55,7 @@ def summarize(games: list[dict]) -> pd.DataFrame:
             "stated_p_coop": float(np.mean(pc)) if pc else float("nan"),
             "welfare": float(np.mean(welfare)) if welfare else float("nan"),
             "mean_tokens": float(np.mean(n_tokens)) if n_tokens else float("nan"),
-            "format_fixed": n_fixed, "hit_length": n_len,
+            "format_fixed": n_fixed, "truncated": n_len,
         })
     return pd.DataFrame(rows)
 

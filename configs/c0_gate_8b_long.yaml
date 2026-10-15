@@ -1,0 +1,10 @@
+# 8B retry with room to finish its reasoning (first pass truncated 59/60 answers at 800 tokens).
+seed: 0
+n_games: 30
+max_tokens: 2500
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3-8B-4bit"]
+conditions:
+  - {name: oracle, levels: [0, 20, 40, 60, 80, 100]}
+  - {name: unknown}
+  - {name: base}

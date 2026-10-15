@@ -115,13 +115,18 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
         c = next(it)
         rec = {"policy": "llm", "prompt": req.user, "response": c.text, "finish": c.finish_reason,
                "completion_tokens": c.completion_tokens, "cached": c.cached, "repaired": False,
-               "fixed": False, "excluded": False}
+               "fixed": False, "excluded": False, "truncated": False}
         try:
             a = parse_answer(c.text, ["A0", "A1"])
             rec["probs"] = a.probs
             rec["repaired"] = a.repaired
         except AnswerError as e:
             rec["parse_error"] = str(e)
+            if c.finish_reason == "length":
+                # Reasoning was cut off. A format-fix on a truncated argument yields a
+                # coin-flip answer, not a decision, so count it as truncated and exclude.
+                rec["probs"], rec["excluded"], rec["truncated"] = None, True, True
+                continue
             fix_reqs.append(Request("", pd.format_fix_prompt(req.user, c.text), max_tokens=100,
                                     temperature=0.0, sample=g, tags=req.tags))
             fix_keys.append((g, p))
