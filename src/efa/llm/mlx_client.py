@@ -37,13 +37,22 @@ def thinking_stage(text: str, finish: str) -> str:
 
 
 class MlxClient:
-    def __init__(self, model: str, completion_batch_size: int = 32, prefill_batch_size: int = 8):
+    def __init__(
+        self,
+        model: str,
+        completion_batch_size: int = 32,
+        prefill_batch_size: int = 8,
+        stage2_prefill_batch_size: int = 2,
+    ):
         from mlx_lm import load
 
         self.model = model
         self._model, self._tok = load(model)
         self.completion_batch_size = completion_batch_size
         self.prefill_batch_size = prefill_batch_size
+        # Stage 2 re-prefills prompt + thinking (2,500+ tokens each). Prefilling 8 of those at
+        # once exhausted Metal memory on a 48 GB M4 Max; 2 is safe.
+        self.stage2_prefill_batch_size = stage2_prefill_batch_size
 
     def _render(self, r: Request) -> list[int]:
         msgs = []
@@ -57,7 +66,7 @@ class MlxClient:
             ids = self._tok.apply_chat_template(msgs, add_generation_prompt=True)
         return list(ids)
 
-    def _generate(self, prompts: list[list[int]], max_tokens: int, temp: float):
+    def _generate(self, prompts: list[list[int]], max_tokens: int, temp: float, prefill_batch_size: int | None = None):
         from mlx_lm.generate import batch_generate
         from mlx_lm.sample_utils import make_sampler
 
@@ -68,7 +77,7 @@ class MlxClient:
             max_tokens=max_tokens,
             sampler=make_sampler(temp=temp),
             completion_batch_size=self.completion_batch_size,
-            prefill_batch_size=self.prefill_batch_size,
+            prefill_batch_size=prefill_batch_size or self.prefill_batch_size,
             return_token_ids=True,
         )
         out = []
@@ -102,7 +111,7 @@ class MlxClient:
                 todo.append((j, what))
                 todo_prompts.append(prompts[j] + ids + list(extra))
             if todo:
-                for (j, what), (text2, ids2, finish2) in zip(todo, self._generate(todo_prompts, max_tokens, temp)):
+                for (j, what), (text2, ids2, finish2) in zip(todo, self._generate(todo_prompts, max_tokens, temp, self.stage2_prefill_batch_size)):
                     text1, ids1, _ = stage1[j]
                     full = text1 + (FORCED_CLOSE + ANSWER_PREFILL if what == "force" else "") + text2
                     out[idxs[j]] = Completion(full, self.model, len(prompts[j]), len(ids1) + len(ids2), finish2)

@@ -190,7 +190,9 @@ def run_config(path: Path, out_dir: Path, only: str | None = None) -> list[dict]
     with open(out_dir / "games.jsonl", "a") as log:
         for cell in tqdm(cells, desc="cells"):
             if cell.model not in clients:
-                clients[cell.model] = CachedClient(make_client(cell.model), out_dir / "cache.sqlite")
+                clients[cell.model] = CachedClient(
+                    make_client(cell.model, **cfg.get("client", {})), out_dir / "cache.sqlite"
+                )
             s = run_cell(cell, clients[cell.model], rng, log)
             summaries.append(s)
             tqdm.write(json.dumps(s))
