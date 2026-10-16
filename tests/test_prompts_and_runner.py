@@ -62,3 +62,26 @@ def test_runner_excludes_truncated_answers_without_dropping_games(tmp_path: Path
     df = summarize(games)
     assert int(df.truncated.iloc[0]) == 12 and int(df.format_fixed.iloc[0]) == 0
     assert df.n_decisions.iloc[0] == 0
+
+
+
+def test_rerun_skips_cells_already_logged(tmp_path: Path):
+    cfg = tmp_path / "cfg.yaml"
+    cfg.write_text(
+        "seed: 0\nn_games: 4\nmodels: ['fake:always_a0']\nconditions:\n  - {name: base}\n"
+    )
+    out = tmp_path / "run"
+    first = run_config(cfg, out)
+    second = run_config(cfg, out)
+    assert first[0]["ok"] == 4 and second[0].get("skipped")
+    assert len(load_games(out)) == 4
+
+
+def test_pilot_then_full_cell_is_not_double_counted(tmp_path: Path):
+    out = tmp_path / "run"
+    for n in (2, 5):
+        cfg = tmp_path / f"cfg{n}.yaml"
+        cfg.write_text(f"seed: 0\nn_games: {n}\nmodels: ['fake:always_a0']\nconditions:\n  - {{name: base}}\n")
+        run_config(cfg, out)
+    games = load_games(out)
+    assert len(games) == 5 and sorted(g["game"] for g in games) == [0, 1, 2, 3, 4]

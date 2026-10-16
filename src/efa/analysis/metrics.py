@@ -22,8 +22,21 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
 
 
 def load_games(run_dir: Path) -> list[dict]:
+    """All games in the run log, keeping the first record of each (cell, game) pair: a rerun
+    of a pilot cell at a larger N replays the pilot games from the cache and logs them again."""
+    seen: set[tuple[str, int]] = set()
+    games = []
     with open(Path(run_dir) / "games.jsonl") as f:
-        return [json.loads(line) for line in f if line.strip()]
+        for line in f:
+            if not line.strip():
+                continue
+            g = json.loads(line)
+            key = (g["cell"]["cell_id"], g["game"])
+            if key in seen:
+                continue
+            seen.add(key)
+            games.append(g)
+    return games
 
 
 def summarize(games: list[dict]) -> pd.DataFrame:

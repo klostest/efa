@@ -177,6 +177,18 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
     return {"cell": cell.cell_id, "games": cell.n_games, "ok": n_ok, "seconds": round(time.time() - t0, 1)}
 
 
+def logged_games(log_path: Path) -> dict[str, int]:
+    """Games already in the log, per cell id, so a rerun skips finished cells."""
+    counts: dict[str, int] = {}
+    if log_path.exists():
+        with open(log_path) as f:
+            for line in f:
+                if line.strip():
+                    cid = json.loads(line)["cell"]["cell_id"]
+                    counts[cid] = counts.get(cid, 0) + 1
+    return counts
+
+
 def run_config(path: Path, out_dir: Path, only: str | None = None) -> list[dict]:
     cfg = yaml.safe_load(Path(path).read_text())
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -187,8 +199,14 @@ def run_config(path: Path, out_dir: Path, only: str | None = None) -> list[dict]
     rng = np.random.default_rng(cfg.get("seed", 0))
     summaries = []
     clients: dict[str, CachedClient] = {}
+    done = logged_games(out_dir / "games.jsonl")
     with open(out_dir / "games.jsonl", "a") as log:
         for cell in tqdm(cells, desc="cells"):
+            if done.get(cell.cell_id, 0) >= cell.n_games:
+                s = {"cell": cell.cell_id, "games": cell.n_games, "skipped": "already logged"}
+                summaries.append(s)
+                tqdm.write(json.dumps(s))
+                continue
             if cell.model not in clients:
                 clients[cell.model] = CachedClient(
                     make_client(cell.model, **cfg.get("client", {})), out_dir / "cache.sqlite"
