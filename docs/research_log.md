@@ -111,3 +111,32 @@ cell, ~2.5 h for the sweep. The script now runs under `caffeinate -i`.
 - Setup difference from the paper worth stating in any write-up: they ran this model through
   OpenRouter with native thinking at "low" reasoning effort; we run it with thinking off and
   visible chain-of-thought at temperature 1. Same prompt text, different reasoning channel.
+
+### 2026-10-16, midday: budget pilots; switch to the paper's reasoning channel
+
+Steve's question: why not test the budget before a full run, and why not run the model the
+way the paper did (native thinking, low reasoning effort) instead of visible chain-of-thought
+with thinking off? Both were my choices and both were wrong. Pilots on the two hardest levels
+(40%, 60%), 6 games each, 24 decisions:
+
+| pilot | result |
+|---|---|
+| no thinking, 6,000-token cap | 15/24 hit the cap, 7/24 unparseable, 37 min. Fails. |
+| thinking budget 2,000, answer 600, CoT instruction on | 24/24 forced, 24/24 answer overran: the prompt's "think step by step" made the model re-derive everything visibly after the close. |
+| same, CoT instruction off (`cot: false`) | 24/24 forced, 18/24 overran: after a mid-derivation close the model restarts the derivation anyway; 6 answered with bare JSON. |
+| same, plus the JSON answer prefilled after a forced close | 24/24 parsed, 0 truncated, ~10 min per 12 decisions. Passes. |
+
+- Cooperation in the passing pilot: 40% → 5 of 12 lean cooperate (mean stated 0.42); 60% →
+  6 of 12 (mean 0.50). N is too small to say more; the full sweep decides.
+- What this measures: the decision after 2,000 tokens of native thinking, forced if needed.
+  At intermediate similarity this model never finishes on its own within a practical budget
+  (the 6,000-cap transcripts show it re-deriving the same break-even under new readings of
+  "X% similar"), so every mid-level answer is a forced one. That is also what a "low effort"
+  API setting does; the write-up states it plainly, with the forced-close rate per cell.
+- Differences from the paper that remain: 4-bit weights; OpenRouter's exact budget for
+  "low" unknown; no visible chain-of-thought in the answer (the thinking trace carries the
+  justifications for the taxonomy instead). `configs/c0_gate_27b_api.yaml` runs the same
+  sweep through OpenRouter for about $2 if an exact-channel comparison is wanted.
+- Lesson recorded: every new budget or channel gets a 24-decision pilot on the hardest cells
+  before a full run. Two full runs were lost to skipping this.
+- Overnight: `scripts/run_gate_27b_overnight.sh` now defaults to the thinking config.
