@@ -20,6 +20,10 @@ class Request:
     # `sample` distinguishes repeated draws of the same prompt in the cache; it is not a
     # sampling seed for the model (temperature-1 sampling is not reproducible on all backends).
     sample: int = 0
+    # When set, the model's native thinking mode is on: thinking is cut at this many tokens
+    # and the answer is forced (the local analog of an API "reasoning effort" setting).
+    # `max_tokens` then caps the answer that follows the thinking.
+    thinking_budget: int | None = None
     tags: dict = field(default_factory=dict, compare=False, hash=False)
 
 

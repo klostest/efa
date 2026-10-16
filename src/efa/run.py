@@ -23,6 +23,7 @@ from efa.game import pd
 from efa.game.answer import AnswerError, parse_answer, sample_action
 from efa.llm import Request, make_client
 from efa.llm.cache import CachedClient
+from efa.llm.mlx_client import FORCED_CLOSE
 from efa.mech import signal
 
 
@@ -37,6 +38,7 @@ class Cell:
     max_tokens: int = 800
     temperature: float = 1.0
     cot: bool = True
+    thinking_budget: int | None = None  # native thinking on, cut at this many tokens
 
 
 def expand_cells(cfg: dict) -> list[Cell]:
@@ -61,6 +63,7 @@ def expand_cells(cfg: dict) -> list[Cell]:
                         max_tokens=cfg.get("max_tokens", 800),
                         temperature=cfg.get("temperature", 1.0),
                         cot=cfg.get("cot", True),
+                        thinking_budget=cfg.get("thinking_budget"),
                     )
                 )
     return cells
@@ -92,6 +95,7 @@ def build_requests(cell: Cell) -> list[tuple[int, int, Request | None, pd.Varian
                 max_tokens=cell.max_tokens,
                 temperature=cell.temperature,
                 sample=g,
+                thinking_budget=cell.thinking_budget,
                 tags={"coop_token": v.coop_token, "cell": cell.cell_id, "player": p},
             )
             out.append((g, p, req, v))
@@ -115,7 +119,8 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
         c = next(it)
         rec = {"policy": "llm", "prompt": req.user, "response": c.text, "finish": c.finish_reason,
                "completion_tokens": c.completion_tokens, "cached": c.cached, "repaired": False,
-               "fixed": False, "excluded": False, "truncated": False}
+               "fixed": False, "excluded": False, "truncated": False,
+               "thinking_forced": FORCED_CLOSE in c.text}
         try:
             a = parse_answer(c.text, ["A0", "A1"])
             rec["probs"] = a.probs

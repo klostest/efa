@@ -15,3 +15,12 @@ def test_cache_round_trip(tmp_path):
     # a different sample index is a different key
     c.complete([Request("sys", "hi", sample=9)])
     assert inner.calls == 4
+
+
+def test_thinking_budget_is_part_of_the_key(tmp_path):
+    inner = FakeClient(lambda r: "x")
+    c = CachedClient(inner, tmp_path / "cache.sqlite")
+    c.complete([Request("", "hi"), Request("", "hi", thinking_budget=100), Request("", "hi", thinking_budget=200)])
+    assert inner.calls == 3
+    c.complete([Request("", "hi", thinking_budget=100)])
+    assert inner.calls == 3 and c.hits == 1

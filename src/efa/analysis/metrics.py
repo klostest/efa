@@ -34,9 +34,10 @@ def summarize(games: list[dict]) -> pd.DataFrame:
     for cell_id, gs in by_cell.items():
         c = gs[0]["cell"]
         llm_players = [p for p in range(2) if c["policies"][p] == "llm"]
-        acts, pc, welfare, excl, n_tokens, n_fixed, n_len = [], [], [], 0, [], 0, 0
+        acts, pc, welfare, excl, n_tokens, n_fixed, n_len, n_forced = [], [], [], 0, [], 0, 0, 0
         for g in gs:
             n_len += sum(bool(g["players"][p].get("truncated")) for p in llm_players)
+            n_forced += sum(bool(g["players"][p].get("thinking_forced")) for p in llm_players)
             if g["excluded"]:
                 excl += 1
                 continue
@@ -55,7 +56,7 @@ def summarize(games: list[dict]) -> pd.DataFrame:
             "stated_p_coop": float(np.mean(pc)) if pc else float("nan"),
             "welfare": float(np.mean(welfare)) if welfare else float("nan"),
             "mean_tokens": float(np.mean(n_tokens)) if n_tokens else float("nan"),
-            "format_fixed": n_fixed, "truncated": n_len,
+            "format_fixed": n_fixed, "truncated": n_len, "thinking_forced": n_forced,
         })
     return pd.DataFrame(rows)
 

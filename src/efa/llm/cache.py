@@ -1,6 +1,6 @@
 """SQLite cache in front of any client.
 
-Key = sha256(model, system, user, max_tokens, temperature, sample). A rerun of an identical
+Key = sha256(model, system, user, max_tokens, temperature, sample[, thinking_budget]). A rerun of an identical
 config costs zero model calls, and clearing the cache (delete the file) forces a fresh run,
 which is how the event-day run is produced.
 """
@@ -17,7 +17,9 @@ from efa.llm.base import Client, Completion, Request
 
 def request_key(model: str, r: Request) -> str:
     payload = json.dumps(
-        [model, r.system, r.user, r.max_tokens, r.temperature, r.sample], ensure_ascii=False
+        [model, r.system, r.user, r.max_tokens, r.temperature, r.sample]
+        + ([r.thinking_budget] if r.thinking_budget else []),
+        ensure_ascii=False,
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
