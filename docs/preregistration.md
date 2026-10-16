@@ -27,7 +27,14 @@ flat cost attached to the claim; (b) a secret cue drawn from a rotating pool?
 ## Design
 Game: one-shot symmetric Prisoner's Dilemma, payoffs CC 2/2, CD 0/3, DC 3/0, DD 1/1, the
 prompt wrapper and JSON probability answer format of Kundu et al. 2026 (Appendix J).
-Agents: chain-of-thought, temperature 1, one sampled action per stated distribution.
+Agents: temperature 1, one sampled action per stated distribution. Reasoning channel (decided
+2026-10-16 after four pilots, see the research log): the model's native thinking mode with a
+2,000-token thinking budget, the local analog of the paper's "low" reasoning effort. If the
+model has not closed its thinking by the budget, the harness closes it and prefills the
+opening of the JSON answer; the forced-close rate is reported per cell. The prompt carries no
+visible chain-of-thought instruction (with thinking on it made the model re-derive its answer
+twice). Answers cut by the token cap are excluded, never format-fixed, and the exclusion rate
+is reported per cell; a cell above 5% is rerun or flagged.
 Carrier model: Qwen3.5-27B 4-bit (mlx); second model Qwen3-8B 4-bit if it passes the gate.
 Validation model: Claude Haiku 4.5 via API on the headline cells.
 Counterbalancing: action label order and outcome-line order alternate across samples. Fixed
