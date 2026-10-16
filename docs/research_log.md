@@ -71,3 +71,43 @@ Newest first. Decisions, pilot results, and anything that changed from the plan.
   3.5 27B with a sharp threshold at 50%.
 - Fallback if the 27B is also weak: API models for the screen (budget cap ~$30, Steve's
   call), with the local models kept for pilots only.
+
+### 2026-10-16: 27B gate result at a 2,000-token cap (overnight run)
+
+`runs/c0_gate_27b_long/summary.csv`, figure `reports/figures/c0_qwen3.5_27b.png`. Wall time
+was inflated by the Mac sleeping (the 60% cell logged 15.5 h); awake time is ~17 min per
+cell, ~2.5 h for the sweep. The script now runs under `caffeinate -i`.
+
+| level | decisions kept / 60 | coop rate | 95% CI |
+|---|---|---|---|
+| 0 | 46 | 0.00 | 0.00–0.08 |
+| 20, 40, 60, 80 | 0–4 | n/a (all truncated) | |
+| 100 | 32 | 0.875 | 0.72–0.95 |
+| "?" | 22 | 0.09 | 0.03–0.28 |
+| base | 60 | 0.00 | 0.00–0.06 |
+| 100 vs always-defect (control) | 7 / 10 | 0.86 | |
+
+- **Endpoints replicate the paper.** Qwen 3.5 27B in Kundu et al. defects below 50% and
+  cooperates above; we see 0.00 at 0% and 0.875 at 100%, with base at 0.00 and "?" near 0.
+  Welfare 2.0 (mutual defection) at 0% and 3.75 at 100%. The 8B's 0.26 / 0.72 looks weak by
+  comparison.
+- **The middle is empty, not flat.** At 20–80% the model used the whole 2,000-token budget
+  in 56–58 of 60 decisions. It is not looping (repeat-line rate ≈ 0): it works out what
+  "X% similar" could mean, usually as a correlation between the two players' actions
+  (opponent plays A0 with probability s·p when I play A0 with probability p), solves for the
+  break-even, then second-guesses the interpretation. Its own algebra gives cooperate iff
+  2s > 1, i.e. a threshold at s = 50%, which is exactly the threshold the paper reports for
+  this model. The few mid-level answers that did finish took 1,500–2,000 tokens, so the
+  typical mid-level answer needs more than 2,000. At 0% and 100% the question is easy and
+  most answers finish in ~1,300–1,500 tokens.
+- **Exclusions at 0% (12%) and 100% (27%) exceed the preregistered 5% limit**, so those cells
+  also need the rerun; only base is clean.
+- Decision: third pass with a 6,000-token cap (`configs/c0_gate_27b_xl.yaml`), full sweep
+  so every cell is produced under one setting. Expected 4–6 h. If the middle still truncates
+  at 6,000, the finding is that this model cannot resolve intermediate similarity within a
+  practical budget, and the screen uses only 0% and 100% (plus the claim arm at 100%), which
+  is all the false-beard design needs; the paper's intermediate curve would then be cited
+  rather than reproduced.
+- Setup difference from the paper worth stating in any write-up: they ran this model through
+  OpenRouter with native thinking at "low" reasoning effort; we run it with thinking off and
+  visible chain-of-thought at temperature 1. Same prompt text, different reasoning channel.

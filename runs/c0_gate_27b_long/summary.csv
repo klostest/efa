@@ -1,0 +1,10 @@
+cell,condition,level,model,games,excluded,n_decisions,coop_rate,coop_lo,coop_hi,stated_p_coop,welfare,mean_tokens,format_fixed,truncated
+oracle_0__Qwen3.5-27B-4bit,oracle,0.0,mlx:mlx-community/Qwen3.5-27B-4bit,30,7,46,0.0,-6.938893903907228e-18,0.07707617732978073,0.0,2.0,1379.804347826087,0,7
+oracle_20__Qwen3.5-27B-4bit,oracle,20.0,mlx:mlx-community/Qwen3.5-27B-4bit,30,30,0,,,,,,,0,58
+oracle_40__Qwen3.5-27B-4bit,oracle,40.0,mlx:mlx-community/Qwen3.5-27B-4bit,30,30,0,,,,,,,0,58
+oracle_60__Qwen3.5-27B-4bit,oracle,60.0,mlx:mlx-community/Qwen3.5-27B-4bit,30,30,0,,,,,,,0,57
+oracle_80__Qwen3.5-27B-4bit,oracle,80.0,mlx:mlx-community/Qwen3.5-27B-4bit,30,30,0,,,,,,,0,56
+oracle_100__Qwen3.5-27B-4bit,oracle,100.0,mlx:mlx-community/Qwen3.5-27B-4bit,30,14,32,0.875,0.7193135021517204,0.950299461555257,0.875,3.75,1511.5625,0,16
+unknown__Qwen3.5-27B-4bit,unknown,,mlx:mlx-community/Qwen3.5-27B-4bit,30,19,22,0.09090909090909091,0.025294896282837792,0.2781538065838578,0.09090909090909091,2.1818181818181817,1433.6818181818182,0,24
+base__Qwen3.5-27B-4bit,base,,mlx:mlx-community/Qwen3.5-27B-4bit,30,0,60,0.0,-6.938893903907228e-18,0.06017393047793289,0.0,2.0,968.4833333333333,0,0
+oracle_100_vs_always_defect__Qwen3.5-27B-4bit,oracle,100.0,mlx:mlx-community/Qwen3.5-27B-4bit,10,3,7,0.8571428571428571,0.48686549668097007,0.9743210440510253,0.8571428571428571,2.857142857142857,1293.5714285714287,0,3
