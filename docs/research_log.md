@@ -140,3 +140,51 @@ with thinking off? Both were my choices and both were wrong. Pilots on the two h
 - Lesson recorded: every new budget or channel gets a 24-decision pilot on the hardest cells
   before a full run. Two full runs were lost to skipping this.
 - Overnight: `scripts/run_gate_27b_overnight.sh` now defaults to the thinking config.
+
+### 2026-10-17: 27B gate PASSED (thinking channel, full sweep)
+
+Run `runs/c0_gate_27b_think` (config `configs/c0_gate_27b_think.yaml`): native thinking with
+a 2,000-token budget, forced close + prefilled JSON, `cot: false`, N=30 games (60 decisions)
+per level, started 21:39 Oct 16, finished 01:10 Oct 17 (3.5 h; ~30 min per cell, the 0% cell
+and the 40%/60% pilot decisions came from the cache). Figure
+`reports/figures/c0_c0_gate_27b_think.png`.
+
+| stated similarity | realized cooperation | Wilson 95% | mean stated p(coop) | forced close | excluded |
+|---|---|---|---|---|---|
+| 0 | 0.00 | 0.00–0.06 | 0.00 | 60/60 | 0 |
+| 20 | 0.25 | 0.16–0.37 | 0.30 | 59/60 | 0 |
+| 40 | 0.45 | 0.33–0.58 | 0.42 | 60/60 | 0 |
+| 60 | 0.53 | 0.41–0.65 | 0.51 | 60/60 | 0 |
+| 80 | 0.63 | 0.51–0.74 | 0.63 | 58/60 | 0 |
+| 100 | 0.92 | 0.82–0.96 | 0.91 | 59/60 | 0 |
+| "?" (score withheld) | 0.37 | 0.26–0.49 | 0.39 | 57/60 | 0 |
+| base (no mention) | 0.00 | 0.00–0.06 | 0.00 | 59/60 | 0 |
+| 100 vs always-defect (control) | 1.00 (10/10 honest cooperate, payoffs 0/3) | | | | 0 |
+
+- **Gate verdict: pass.** Cooperation rises monotonically with stated similarity from 0.00 to
+  0.92; base sits at 0.00 and "?" at 0.37, both below the 100% level. Zero exclusions, zero
+  truncations, one or two format repairs per cell at most. Welfare goes from 2.0 (mutual
+  defection) at 0% to 3.8 at 100%.
+- **Shape vs the paper.** Kundu et al. report a sharp step at 50% for Qwen 3.5 27B. Ours
+  crosses 50% between 40% and 60% as well, but as a graded ramp: the mean stated probability
+  tracks the stated similarity almost one-to-one (0.30, 0.42, 0.51, 0.63, 0.91). The
+  model's own break-even is "cooperate iff 2s > 1"; after a forced close it hedges around that
+  threshold instead of committing. Forced closes are 57–60 of 60 in every cell, so nearly all
+  answers are "decision after 2,000 thinking tokens"; this is the local analog of low
+  reasoning effort and is stated as such.
+- **"?" is higher than the earlier estimate (0.09).** That earlier number came from the 22 of
+  60 answers that finished under a 2,000-token cap, which selected for quick defections; with
+  every answer counted it is 0.37. Still well below 100% oracle, consistent with the paper's
+  ordering (oracle high > "?" > base).
+- **Control cell is not an independent draw.** The honest player's prompt in "100 vs
+  always-defect" is byte-identical to the 100% oracle prompt, so the cache served the first 10
+  oracle-100 completions (0 s runtime). It checks the pipeline (a defector exploits a
+  cooperator for 0/3), not new behavior. Fine for a control; noted so nobody reads it as N=10
+  fresh games.
+- **Carrier decision:** Qwen3.5-27B is the carrier for the screen. The 8B result
+  (0.26→0.72, flat middle) was measured under the old channel (no thinking, 2,500-token cap),
+  so it is not comparable; a 24-decision thinking-mode pilot on the 8B decides whether it
+  stays as the second model or is dropped (plan: drop if flat).
+- Timing for the weekend matrix: ~30 min per 60 decisions on the 27B in this channel, so the
+  ~4,000-decision matrix is ~33 h, more than one overnight. Options: cut N on sweep cells,
+  drop the second model, or move the big C2/D1/D2 blocks to the API (Steve's call on spend).
