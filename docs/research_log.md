@@ -188,3 +188,20 @@ and the 40%/60% pilot decisions came from the cache). Figure
 - Timing for the weekend matrix: ~30 min per 60 decisions on the 27B in this channel, so the
   ~4,000-decision matrix is ~33 h, more than one overnight. Options: cut N on sweep cells,
   drop the second model, or move the big C2/D1/D2 blocks to the API (Steve's call on spend).
+
+### 2026-10-19: 8B in the thinking channel, pilot then full sweep
+
+Steve asked for the 8B experiment. Pilot first (`configs/c0_pilot_8b_think.yaml`, same
+settings as the 27B gate: thinking budget 2,000, answer 300, `cot: false`), 40% and 60%,
+6 games each, 24 decisions, 6 min:
+
+| level | parsed | truncated | forced close | realized coop | mean stated p(coop) |
+|---|---|---|---|---|---|
+| 40 | 12/12 | 0 | 12/12 | 0.42 | 0.42 |
+| 60 | 12/12 | 0 | 12/12 | 0.33 | 0.37 |
+
+- Passes the channel check (every answer parses). The trace is genuine reasoning, not a
+  loop (no repeated lines): the 8B sets up expected payoffs, is cut mid-algebra at 2,000
+  tokens, and often answers 50/50 after the forced close. ~3 min per 12 decisions, so the
+  full sweep (`configs/c0_gate_8b_think.yaml`, 250 games) is ~2 h. Launched 14:05 under
+  caffeinate; result below when done.

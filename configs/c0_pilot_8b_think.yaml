@@ -1,0 +1,13 @@
+# 8B budget pilot in the paper's reasoning channel (same settings as the 27B gate): native
+# thinking cut at 2,000 tokens, forced close + prefilled JSON answer, no visible
+# chain-of-thought instruction. Two hardest levels, 6 games each (24 decisions).
+# Pass criterion: every answer parses, no truncation; report the forced-close fraction.
+seed: 0
+n_games: 6
+max_tokens: 300
+thinking_budget: 2000
+cot: false
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3-8B-4bit"]
+conditions:
+  - {name: oracle, levels: [40, 60]}
