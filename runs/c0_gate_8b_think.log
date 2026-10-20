@@ -1,0 +1,27 @@
+=== start Mon Oct 19 14:05:06 PDT 2026  config=configs/c0_gate_8b_think.yaml
+cells:   0%|          | 0/9 [00:00<?, ?it/s]
+Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s][AFetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 2006.20it/s]
+                                            cells:   0%|          | 0/9 [10:51<?, ?it/s]cells:  11%|█         | 1/9 [10:51<1:26:55, 651.88s/it]                                                       cells:  11%|█         | 1/9 [3:17:14<1:26:55, 651.88s/it]cells:  22%|██▏       | 2/9 [3:17:14<13:18:43, 6846.18s/it]                                                           cells:  22%|██▏       | 2/9 [3:28:12<13:18:43, 6846.18s/it]cells:  33%|███▎      | 3/9 [3:28:12<6:42:05, 4020.88s/it]                                                           cells:  33%|███▎      | 3/9 [3:39:17<6:42:05, 4020.88s/it]cells:  44%|████▍     | 4/9 [3:39:17<3:44:38, 2695.79s/it]                                                          cells:  44%|████▍     | 4/9 [3:50:16<3:44:38, 2695.79s/it]cells:  56%|█████▌    | 5/9 [3:50:16<2:10:44, 1961.24s/it]                                                          cells:  56%|█████▌    | 5/9 [4:00:51<2:10:44, 1961.24s/it]cells:  67%|██████▋   | 6/9 [4:00:51<1:15:31, 1510.40s/it]                                                          cells:  67%|██████▋   | 6/9 [4:11:07<1:15:31, 1510.40s/it]cells:  78%|███████▊  | 7/9 [4:11:07<40:35, 1217.90s/it]                                                          cells:  78%|███████▊  | 7/9 [4:21:00<40:35, 1217.90s/it]cells:  89%|████████▉ | 8/9 [4:21:00<16:59, 1019.17s/it]                                                        cells:  89%|████████▉ | 8/9 [4:21:00<16:59, 1019.17s/it]cells: 100%|██████████| 9/9 [4:21:00<00:00, 1740.07s/it]
+{"cell": "oracle_0__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 649.9}
+{"cell": "oracle_20__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 11182.2}
+{"cell": "oracle_40__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 658.8}
+{"cell": "oracle_60__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 664.4}
+{"cell": "oracle_80__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 658.8}
+{"cell": "oracle_100__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 635.2}
+{"cell": "unknown__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 615.7}
+{"cell": "base__Qwen3-8B-4bit", "games": 30, "ok": 30, "seconds": 593.7}
+{"cell": "oracle_100_vs_always_defect__Qwen3-8B-4bit", "games": 10, "ok": 10, "seconds": 0.0}
+=== run done Mon Oct 19 18:26:07 PDT 2026
+wrote runs/c0_gate_8b_think/summary.csv
+condition  level                           model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+   oracle    0.0 mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.200    0.118    0.318          0.258    2.400       2011.0             0          0               60
+   oracle   20.0 mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.433    0.316    0.559          0.376    2.867       2011.0             0          0               60
+   oracle   40.0 mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.400    0.286    0.526          0.398    2.800       2011.0             0          0               60
+   oracle   60.0 mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.350    0.242    0.476          0.364    2.700       2011.0             0          0               60
+   oracle   80.0 mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.300    0.199    0.425          0.284    2.600       2011.0             0          0               60
+   oracle  100.0 mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.400    0.286    0.526          0.470    2.800       2011.0             0          0               60
+  unknown    NaN mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.150    0.081    0.261          0.211    2.300       2011.0             0          0               60
+     base    NaN mlx:mlx-community/Qwen3-8B-4bit     30         0           60      0.333    0.227    0.459          0.337    2.667       2011.0             0          0               60
+   oracle  100.0 mlx:mlx-community/Qwen3-8B-4bit     10         0           10      0.200    0.057    0.510          0.327    2.200       2011.0             0          0               10
+wrote reports/figures/c0_c0_gate_8b_think.png
+=== all done Mon Oct 19 18:26:09 PDT 2026

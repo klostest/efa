@@ -205,3 +205,42 @@ settings as the 27B gate: thinking budget 2,000, answer 300, `cot: false`), 40% 
   tokens, and often answers 50/50 after the forced close. ~3 min per 12 decisions, so the
   full sweep (`configs/c0_gate_8b_think.yaml`, 250 games) is ~2 h. Launched 14:05 under
   caffeinate; result below when done.
+
+### 2026-10-19: literature tracker started
+
+- New `LITERATURE_TRACKER.md` (repo root), to be updated weekly: who else works on evolutionary
+  theory × alignment, scoop risk per track, ideas that come out of the scan. Scan 1 found no
+  published spoofing of similarity or kin cues in LLM agents. Closest: Rosas (LessWrong, kin
+  selection among copies), the FOCAL lab's stated robustness agenda, Byzantine Cheap Talk, and an
+  abstract costly-signaling model.
+
+### 2026-10-19, evening: 8B gate FAILED; the screen runs on the 27B alone
+
+Full sweep `runs/c0_gate_8b_think` (same channel and N as the 27B gate; 14:05–18:26 with a
+3 h pause in the 20% cell, ~11 min per cell otherwise). Figure
+`reports/figures/c0_c0_gate_8b_think.png`. Zero exclusions, 60/60 forced closes in every cell.
+
+| stated similarity | realized cooperation | Wilson 95% | mean stated p(coop) | answers at exactly 50/50 |
+|---|---|---|---|---|
+| 0 | 0.20 | 0.12–0.32 | 0.26 | 22/60 |
+| 20 | 0.43 | 0.32–0.56 | 0.38 | 9/60 |
+| 40 | 0.40 | 0.29–0.53 | 0.40 | 10/60 |
+| 60 | 0.35 | 0.24–0.48 | 0.36 | 10/60 |
+| 80 | 0.30 | 0.20–0.43 | 0.28 | 7/60 |
+| 100 | 0.40 | 0.29–0.53 | 0.47 | 37/60 |
+| "?" | 0.15 | 0.08–0.26 | 0.21 | 17/60 |
+| base | 0.33 | 0.23–0.46 | 0.34 | 32/60 |
+
+- **No similarity response.** The curve is flat within noise from 20% to 100% and base
+  (0.33) sits inside it; only 0% and "?" are lower. At 100% similarity, where the 27B
+  cooperates 0.92, the 8B answers 50/50 in 37 of 60 decisions and all-cooperate in 6. The
+  forced close catches it mid-derivation and it hedges; at intermediate levels it often
+  echoes the stated number (20% → p(coop) 0.2 in 14 of 60; 40% → 0.4 in 12 of 60).
+- **Decision (per plan: "if the 8B is flat it is dropped"):** Qwen3.5-27B is the only local
+  model for the screen. The second model slot, if filled at all, is an API model within the
+  ~$30 budget (Steve's call). Dropping the 8B also halves the weekend matrix: ~2,400
+  decisions on the 27B at ~30 min per 60 is ~20 h, still more than one overnight, so the
+  N-per-cell question stands.
+- Caveat for the write-up: this is the 8B at a 2,000-token thinking budget in 4-bit. A
+  larger budget might let it finish its derivation, but the 27B transcripts show the
+  derivation does not converge at intermediate similarity anyway, and the 8B is not needed.

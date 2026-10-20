@@ -1,0 +1,19 @@
+# 8B gate in the paper's reasoning channel, identical settings to the 27B gate
+# (configs/c0_gate_27b_think.yaml): native thinking at a 2,000-token budget, forced close and
+# prefilled JSON answer if the model has not closed by then, no visible chain-of-thought
+# instruction. The earlier 8B result (c0_gate_8b_long: 0.26 -> 0.72, flat middle) was measured
+# with thinking off and a 2,500-token cap, so it is not comparable with the 27B gate.
+# Pilot: configs/c0_pilot_8b_think.yaml (24 decisions at 40/60%), see the research log.
+seed: 0
+n_games: 30
+max_tokens: 300
+thinking_budget: 2000
+cot: false
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3-8B-4bit"]
+client: {completion_batch_size: 32, prefill_batch_size: 8, stage2_prefill_batch_size: 4}
+conditions:
+  - {name: oracle, levels: [0, 20, 40, 60, 80, 100]}
+  - {name: unknown}
+  - {name: base}
+  - {name: oracle, levels: [100], policies: [llm, always_defect], n_games: 10}
