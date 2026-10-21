@@ -1,0 +1,27 @@
+=== start Thu Oct 15 16:45:24 PDT 2026
+cells:   0%|          | 0/9 [00:00<?, ?it/s]
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s][AFetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 2157.05it/s]
+                                            cells:   0%|          | 0/9 [14:33<?, ?it/s]cells:  11%|█         | 1/9 [14:33<1:56:24, 873.06s/it]                                                       cells:  11%|█         | 1/9 [32:47<1:56:24, 873.06s/it]cells:  22%|██▏       | 2/9 [32:47<1:57:02, 1003.22s/it]                                                        cells:  22%|██▏       | 2/9 [50:58<1:57:02, 1003.22s/it]cells:  33%|███▎      | 3/9 [50:58<1:44:20, 1043.35s/it]                                                        cells:  33%|███▎      | 3/9 [16:19:40<1:44:20, 1043.35s/it]cells:  44%|████▍     | 4/9 [16:19:40<31:25:49, 22629.98s/it]                                                             cells:  44%|████▍     | 4/9 [16:36:27<31:25:49, 22629.98s/it]cells:  56%|█████▌    | 5/9 [16:36:27<16:28:50, 14832.51s/it]                                                             cells:  56%|█████▌    | 5/9 [16:52:23<16:28:50, 14832.51s/it]cells:  67%|██████▋   | 6/9 [16:52:23<8:25:43, 10114.42s/it]                                                             cells:  67%|██████▋   | 6/9 [17:09:06<8:25:43, 10114.42s/it]cells:  78%|███████▊  | 7/9 [17:09:06<3:57:51, 7135.68s/it]                                                            cells:  78%|███████▊  | 7/9 [17:19:50<3:57:51, 7135.68s/it]cells:  89%|████████▉ | 8/9 [17:19:50<1:24:28, 5068.95s/it]                                                           cells:  89%|████████▉ | 8/9 [17:19:50<1:24:28, 5068.95s/it]cells: 100%|██████████| 9/9 [17:19:50<00:00, 6932.24s/it]  
+{"cell": "oracle_0__Qwen3.5-27B-4bit", "games": 30, "ok": 23, "seconds": 869.0}
+{"cell": "oracle_20__Qwen3.5-27B-4bit", "games": 30, "ok": 0, "seconds": 1094.3}
+{"cell": "oracle_40__Qwen3.5-27B-4bit", "games": 30, "ok": 0, "seconds": 1091.1}
+{"cell": "oracle_60__Qwen3.5-27B-4bit", "games": 30, "ok": 0, "seconds": 55722.3}
+{"cell": "oracle_80__Qwen3.5-27B-4bit", "games": 30, "ok": 0, "seconds": 1006.8}
+{"cell": "oracle_100__Qwen3.5-27B-4bit", "games": 30, "ok": 16, "seconds": 955.8}
+{"cell": "unknown__Qwen3.5-27B-4bit", "games": 30, "ok": 11, "seconds": 1003.0}
+{"cell": "base__Qwen3.5-27B-4bit", "games": 30, "ok": 30, "seconds": 643.7}
+{"cell": "oracle_100_vs_always_defect__Qwen3.5-27B-4bit", "games": 10, "ok": 7, "seconds": 0.0}
+=== run done Fri Oct 16 10:05:15 PDT 2026
+wrote runs/c0_gate_27b_long/summary.csv
+condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated
+   oracle    0.0 mlx:mlx-community/Qwen3.5-27B-4bit     30         7           46      0.000   -0.000    0.077          0.000    2.000     1379.804             0          7
+   oracle   20.0 mlx:mlx-community/Qwen3.5-27B-4bit     30        30            0        NaN      NaN      NaN            NaN      NaN          NaN             0         58
+   oracle   40.0 mlx:mlx-community/Qwen3.5-27B-4bit     30        30            0        NaN      NaN      NaN            NaN      NaN          NaN             0         58
+   oracle   60.0 mlx:mlx-community/Qwen3.5-27B-4bit     30        30            0        NaN      NaN      NaN            NaN      NaN          NaN             0         57
+   oracle   80.0 mlx:mlx-community/Qwen3.5-27B-4bit     30        30            0        NaN      NaN      NaN            NaN      NaN          NaN             0         56
+   oracle  100.0 mlx:mlx-community/Qwen3.5-27B-4bit     30        14           32      0.875    0.719    0.950          0.875    3.750     1511.562             0         16
+  unknown    NaN mlx:mlx-community/Qwen3.5-27B-4bit     30        19           22      0.091    0.025    0.278          0.091    2.182     1433.682             0         24
+     base    NaN mlx:mlx-community/Qwen3.5-27B-4bit     30         0           60      0.000   -0.000    0.060          0.000    2.000      968.483             0          0
+   oracle  100.0 mlx:mlx-community/Qwen3.5-27B-4bit     10         3            7      0.857    0.487    0.974          0.857    2.857     1293.571             0          3
+wrote reports/figures/c0_qwen3.5_27b.png
+=== all done Fri Oct 16 10:05:17 PDT 2026

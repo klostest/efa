@@ -1,0 +1,12 @@
+# Week-1 gate: replicate Kundu et al. RQ1 (oracle similarity sweep) on the local models.
+seed: 0
+n_games: 30
+max_tokens: 800
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3-8B-4bit", "mlx:mlx-community/Qwen3.5-27B-4bit"]
+conditions:
+  - {name: oracle, levels: [0, 20, 40, 60, 80, 100]}
+  - {name: unknown}
+  - {name: base}
+  # pipeline controls: the LLM plays against a scripted partner; only the LLM's choices count
+  - {name: oracle, levels: [100], policies: [llm, always_defect], n_games: 10}

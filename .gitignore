@@ -8,3 +8,6 @@ runs/*/*.jsonl
 .ruff_cache/
 *.egg-info/
 .DS_Store
+literature_tracker.md
+.idea/
+

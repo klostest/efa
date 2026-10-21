@@ -1,0 +1,9 @@
+# Pipeline check with scripted players; no model calls. Expected: threshold50 cooperates at
+# 60/80/100 only; always_a0 ≈ 50% cooperation (A0 is cooperate in half the variants).
+seed: 0
+n_games: 40
+models: ["fake:threshold50", "fake:always_a0", "fake:garbage"]
+conditions:
+  - {name: oracle, levels: [0, 20, 40, 60, 80, 100]}
+  - {name: unknown}
+  - {name: base}
