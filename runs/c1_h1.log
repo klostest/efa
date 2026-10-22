@@ -1,0 +1,77 @@
+=== start Wed Oct 21 17:32:20 PDT 2026 config=configs/c1_h1.yaml
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+RuntimeError: [metal::malloc] Resource limit (499000) exceeded.
+=== run done Wed Oct 21 21:53:55 PDT 2026
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/steve/Documents/Projects/Onboarding/Alignment/efa/src/efa/cli.py:33   │
+│ in summarize                                                                 │
+│                                                                              │
+│   30 │   if csv:                                                             │
+│   31 │   │   df.to_csv(run_dir / "summary.csv", index=False)                 │
+│   32 │   │   typer.echo(f"wrote {run_dir / 'summary.csv'}")                  │
+│ ❱ 33 │                                                                       │
+│      typer.echo(df.drop(columns=["cell"]).round(3).to_string(index=False))   │
+│   34                                                                         │
+│   35                                                                         │
+│   36 @app.command()                                                          │
+│                                                                              │
+│ /Users/steve/Documents/Projects/Onboarding/Alignment/efa/.venv/lib/python3.1 │
+│ 2/site-packages/pandas/core/frame.py:6302 in drop                            │
+│                                                                              │
+│    6299 │   │   falcon  speed   320.0   250.0                                │
+│    6300 │   │   │   │   weight  1.0     0.8                                  │
+│    6301 │   │   """                                                          │
+│ ❱  6302 │   │   return super().drop(                                         │
+│    6303 │   │   │   labels=labels,                                           │
+│    6304 │   │   │   axis=axis,                                               │
+│    6305 │   │   │   index=index,                                             │
+│                                                                              │
+│ /Users/steve/Documents/Projects/Onboarding/Alignment/efa/.venv/lib/python3.1 │
+│ 2/site-packages/pandas/core/generic.py:4632 in drop                          │
+│                                                                              │
+│    4629 │   │                                                                │
+│    4630 │   │   for axis, labels in axes.items():                            │
+│    4631 │   │   │   if labels is not None:                                   │
+│ ❱  4632 │   │   │   │   obj = obj._drop_axis(labels, axis, level=level,      │
+│         errors=errors)                                                       │
+│    4633 │   │                                                                │
+│    4634 │   │   if inplace:                                                  │
+│    4635 │   │   │   self._update_inplace(obj)                                │
+│                                                                              │
+│ /Users/steve/Documents/Projects/Onboarding/Alignment/efa/.venv/lib/python3.1 │
+│ 2/site-packages/pandas/core/generic.py:4674 in _drop_axis                    │
+│                                                                              │
+│    4671 │   │   │   │   │   raise AssertionError("axis must be a             │
+│         MultiIndex")                                                         │
+│    4672 │   │   │   │   new_axis = axis.drop(labels, level=level,            │
+│         errors=errors)                                                       │
+│    4673 │   │   │   else:                                                    │
+│ ❱  4674 │   │   │   │   new_axis = axis.drop(labels, errors=errors)          │
+│    4675 │   │   │   indexer = axis.get_indexer(new_axis)                     │
+│    4676 │   │                                                                │
+│    4677 │   │   # Case for non-unique axis                                   │
+│                                                                              │
+│ /Users/steve/Documents/Projects/Onboarding/Alignment/efa/.venv/lib/python3.1 │
+│ 2/site-packages/pandas/core/indexes/base.py:7268 in drop                     │
+│                                                                              │
+│   7265 │   │   mask = indexer == -1                                          │
+│   7266 │   │   if mask.any():                                                │
+│   7267 │   │   │   if errors != "ignore":                                    │
+│ ❱ 7268 │   │   │   │   raise KeyError(f"{labels[mask].tolist()} not found in │
+│        axis")                                                                │
+│   7269 │   │   │   indexer = indexer[~mask]                                  │
+│   7270 │   │   return self.delete(indexer)                                   │
+│   7271                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+KeyError: "['cell'] not found in axis"
+wrote runs/c1_h1/summary.csv
+=== all done Wed Oct 21 21:53:56 PDT 2026
+=== start Wed Oct 21 22:31:56 PDT 2026 config=configs/c1_h1.yaml (chunked cache, 64 per batch)
+{"cell": "oracle_attributed_80__Qwen3.5-27B-4bit", "games": 100, "ok": 99, "seconds": 5330.4}
+{"cell": "claim_80__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5335.6}
+=== run done Thu Oct 22 01:29:46 PDT 2026
+wrote runs/c1_h1/summary.csv
+        condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+oracle_attributed     80 mlx:mlx-community/Qwen3.5-27B-4bit    100         1          198      0.662    0.593    0.724          0.657    3.323     2028.030             0          1              196
+            claim     80 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.635    0.566    0.699          0.656    3.270     2030.075             0          0              195
+=== all done Thu Oct 22 01:29:47 PDT 2026

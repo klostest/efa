@@ -1,0 +1,3 @@
+cell,condition,level,model,games,excluded,n_decisions,coop_rate,coop_lo,coop_hi,stated_p_coop,welfare,mean_tokens,format_fixed,truncated,thinking_forced
+oracle_attributed_80__Qwen3.5-27B-4bit,oracle_attributed,80,mlx:mlx-community/Qwen3.5-27B-4bit,100,1,198,0.6616161616161617,0.5931909680892282,0.7238893562839437,0.6568181818181819,3.323232323232323,2028.030303030303,0,1,196
+claim_80__Qwen3.5-27B-4bit,claim,80,mlx:mlx-community/Qwen3.5-27B-4bit,100,0,200,0.635,0.5663157405897017,0.6985958378123518,0.6564,3.27,2030.075,0,0,195

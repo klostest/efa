@@ -34,7 +34,10 @@ model has not closed its thinking by the budget, the harness closes it and prefi
 opening of the JSON answer; the forced-close rate is reported per cell. The prompt carries no
 visible chain-of-thought instruction (with thinking on it made the model re-derive its answer
 twice). Answers cut by the token cap are excluded, never format-fixed, and the exclusion rate
-is reported per cell; a cell above 5% is rerun or flagged.
+is reported per cell; a cell above 5% is rerun or flagged. The 2,000-token budget is a fixed,
+untested parameter of the design; a sensitivity check (one intermediate-similarity cell at
+1,000 and at 4,000 tokens) is planned if time allows and its outcome, or its absence, is
+reported in the limitations.
 Carrier model: Qwen3.5-27B 4-bit (mlx); second model Qwen3-8B 4-bit if it passes the gate.
 Validation model: Claude Haiku 4.5 via API on the headline cells.
 Counterbalancing: action label order and outcome-line order alternate across samples. Fixed

@@ -39,6 +39,12 @@ class Cell:
     temperature: float = 1.0
     cot: bool = True
     thinking_budget: int | None = None  # native thinking on, cut at this many tokens
+    # Added to the game index for the sample seed and the counterbalancing variant. Two
+    # cells whose LLM prompts are byte-identical (e.g. honest vs honest and honest vs a
+    # scripted invader: the honest player cannot see the partner) would otherwise share
+    # cache keys, so the second cell would replay the first cell's decisions. An offset
+    # makes them independent draws.
+    sample_offset: int = 0
 
 
 def expand_cells(cfg: dict) -> list[Cell]:
@@ -64,6 +70,7 @@ def expand_cells(cfg: dict) -> list[Cell]:
                         temperature=cfg.get("temperature", 1.0),
                         cot=cfg.get("cot", True),
                         thinking_budget=cfg.get("thinking_budget"),
+                        sample_offset=cond.get("sample_offset", 0),
                     )
                 )
     return cells
@@ -84,7 +91,7 @@ def build_requests(cell: Cell) -> list[tuple[int, int, Request | None, pd.Varian
     out = []
     twist = twist_for(cell)
     for g in range(cell.n_games):
-        v = pd.Variant.for_sample(g)
+        v = pd.Variant.for_sample(g + cell.sample_offset)
         for p in (0, 1):
             if cell.policies[p] != "llm":
                 out.append((g, p, None, v))
@@ -94,7 +101,7 @@ def build_requests(cell: Cell) -> list[tuple[int, int, Request | None, pd.Varian
                 user=pd.full_prompt(v, p, twist, cot=cell.cot),
                 max_tokens=cell.max_tokens,
                 temperature=cell.temperature,
-                sample=g,
+                sample=g + cell.sample_offset,
                 thinking_budget=cell.thinking_budget,
                 tags={"coop_token": v.coop_token, "cell": cell.cell_id, "player": p},
             )
@@ -150,7 +157,7 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
     # second pass: sample actions, score, log
     n_ok = 0
     for g in range(cell.n_games):
-        v = pd.Variant.for_sample(g)
+        v = pd.Variant.for_sample(g + cell.sample_offset)
         recs = [parsed[(g, 0)], parsed[(g, 1)]]
         actions = []
         for p, rec in enumerate(recs):

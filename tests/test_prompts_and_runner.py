@@ -85,3 +85,19 @@ def test_pilot_then_full_cell_is_not_double_counted(tmp_path: Path):
         run_config(cfg, out)
     games = load_games(out)
     assert len(games) == 5 and sorted(g["game"] for g in games) == [0, 1, 2, 3, 4]
+
+
+def test_sample_offset_gives_independent_draws():
+    """Honest-vs-honest and honest-vs-invader share the honest prompt; an offset keeps the
+    second cell from replaying the first cell's cached decisions."""
+    from efa.llm.cache import request_key
+    from efa.run import Cell, build_requests
+
+    hh = Cell("hh", "claim_symmetric", 100, "fake", 3, ("llm", "llm"), thinking_budget=2000)
+    hi = Cell("hi", "claim_symmetric", 100, "fake", 3, ("llm", "always_defect"),
+              thinking_budget=2000, sample_offset=100)
+    hi0 = Cell("hi0", "claim_symmetric", 100, "fake", 3, ("llm", "always_defect"), thinking_budget=2000)
+    keys = lambda c: {request_key("fake", r) for _, _, r, _ in build_requests(c) if r is not None}
+    assert keys(hi0) <= keys(hh)          # without the offset the invader cell replays
+    assert keys(hi).isdisjoint(keys(hh))  # with it, fresh draws
+    assert [v.coop_token for _, p, _, v in build_requests(hi) if p == 0] == ["A0", "A1", "A0"]

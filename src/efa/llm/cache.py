@@ -25,8 +25,15 @@ def request_key(model: str, r: Request) -> str:
 
 
 class CachedClient:
-    def __init__(self, inner: Client, path: Path | str):
+    def __init__(self, inner: Client, path: Path | str, chunk_size: int = 64):
         self.inner = inner
+        # Uncached requests go to the inner client in chunks of this many, and each
+        # chunk is committed before the next starts. Two reasons: a crash mid-cell loses
+        # one chunk instead of the cell, and mlx-lm's batch_generate holds every generated
+        # token of a call as a live Metal buffer, which hit the buffer-count limit at 200
+        # prompts x 2,300 tokens (the first H1 attempt, 2026-10-21). 64 is the scale the
+        # 3.5 h gate run completed at.
+        self.chunk_size = chunk_size
         self.model = inner.model
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -62,9 +69,10 @@ class CachedClient:
         todo = [i for i, c in enumerate(out) if c is None]
         self.hits += len(requests) - len(todo)
         self.misses += len(todo)
-        if todo:
-            fresh = self.inner.complete([requests[i] for i in todo])
-            for i, c in zip(todo, fresh):
+        for start in range(0, len(todo), self.chunk_size):
+            chunk = todo[start : start + self.chunk_size]
+            fresh = self.inner.complete([requests[i] for i in chunk])
+            for i, c in zip(chunk, fresh):
                 out[i] = c
                 self._put(keys[i], c)
             self.conn.commit()

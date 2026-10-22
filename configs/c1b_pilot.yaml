@@ -1,0 +1,13 @@
+# C1b pilot: the symmetric-claim sentence ("You have reported ... The other player has
+# reported ...") at stated similarity 80, 6 games (12 decisions). Pass: all parse, none
+# truncated. The full cell is in configs/c1b_h1.yaml.
+seed: 0
+n_games: 6
+max_tokens: 300
+thinking_budget: 2000
+cot: false
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3.5-27B-4bit"]
+client: {completion_batch_size: 32, prefill_batch_size: 8, stage2_prefill_batch_size: 2}
+conditions:
+  - {name: claim_symmetric, levels: [80]}

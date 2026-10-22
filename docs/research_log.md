@@ -244,3 +244,45 @@ Full sweep `runs/c0_gate_8b_think` (same channel and N as the 27B gate; 14:05–
 - Caveat for the write-up: this is the 8B at a 2,000-token thinking budget in 4-bit. A
   larger budget might let it finish its derivation, but the 27B transcripts show the
   derivation does not converge at intermediate similarity anyway, and the 8B is not needed.
+
+### 2026-10-21: H1 pilot passed; first full H1 attempt lost to a Metal buffer limit
+
+- H1 cells (`configs/c1_h1.yaml`): attributed oracle vs claim at stated similarity 80,
+  N=100, same channel as the gate. Pilot (`configs/c1_pilot_h1.yaml`, 24 decisions):
+  24/24 parsed, 0 truncated, 24/24 forced; control 7/12 cooperate, claim 8/12. Passed.
+- Full run, first attempt (17:32–21:53): crashed with `[metal::malloc] Resource limit
+  (499000) exceeded` before any cell finished; nothing cached, 4.3 h lost. Cause: mlx-lm's
+  `batch_generate` keeps every generated token of a call as a live Metal buffer
+  (`results[uid].append(r.token)`) until the call returns. The gate's cells were 60
+  prompts (about 140k tokens held); H1's are 200 prompts at ~2,300 tokens each, past the
+  499k-buffer limit. The pilot could not catch this because the pilot's cells were small.
+- Fix: `CachedClient` now sends uncached requests to the model in chunks of 64 and commits
+  each chunk to the cache before the next (`chunk_size`, test added; 22 tests pass). Two
+  effects: buffer count stays at the gate's proven scale, and a crash mid-cell now loses at
+  most one chunk instead of the cell. Second attempt launched 22:10.
+- Lesson for the pilot rule: a pilot checks the prompt and the channel, not the scale.
+  Before the first N=100 run of any new condition, the batch size per model call must be
+  the size that has already completed a long run.
+
+### 2026-10-22: H1 result, second attempt completed (22:32–01:30, 3 h)
+
+`runs/c1_h1`, stated similarity 80, N=100 games per cell, chunked cache (64 per call) held.
+
+| cell | decisions | excluded | realized cooperation | Wilson 95% | mean stated p(coop) | forced close |
+|---|---|---|---|---|---|---|
+| control: "the environment reports ... 80%" | 198 | 1 (truncated) | 0.662 | 0.59–0.72 | 0.657 | 196/198 |
+| claim: "the other player reports ... 80%" | 200 | 0 | 0.635 | 0.57–0.70 | 0.656 | 195/200 |
+
+- Difference claim − control: −0.027 (95% CI −0.12 to +0.07; two-proportion z = −0.59,
+  p = 0.55). The point estimate sits inside the preregistered 10-point margin. The formal
+  equivalence test (two one-sided tests at the 10-point margin) narrowly fails: the 90% CI
+  is −0.107 to +0.050, crossing −0.10 by 0.007. At N=100 the design had marginal power for
+  a 10-point margin; the honest statement is "no detectable difference, and the data are
+  consistent with equivalence but do not establish it at the margin chosen".
+- The unattributed oracle at the same level from the gate (N=30) gave 0.63, so the three
+  sentences agree: 0.63, 0.66, 0.64.
+- At stated similarity 80 the model commits rather than hedges: 111 of 198 control answers
+  are p(coop) = 1.0 and 54 are 0.0, with only 9 at 0.5. The graded ramp in the gate's
+  middle levels is a population mix of committed answers, not individual hedging.
+- Reading for H1: the carrier does not discount the number when it comes from the other
+  player. A claim is as good as an oracle. This is the premise C2 needs.

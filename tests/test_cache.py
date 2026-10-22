@@ -24,3 +24,25 @@ def test_thinking_budget_is_part_of_the_key(tmp_path):
     assert inner.calls == 3
     c.complete([Request("", "hi", thinking_budget=100)])
     assert inner.calls == 3 and c.hits == 1
+
+
+def test_cached_client_commits_each_chunk(tmp_path):
+    """Uncached requests go to the inner client in chunks, each committed before the next."""
+    from efa.llm.cache import CachedClient
+    from efa.llm.fake import FakeClient
+
+    class Counting(FakeClient):
+        sizes: list[int] = []
+
+        def complete(self, requests):
+            self.sizes.append(len(requests))
+            return super().complete(requests)
+
+    inner = Counting(lambda r: "x")
+    cc = CachedClient(inner, tmp_path / "c.sqlite", chunk_size=2)
+    reqs = [Request(system="", user=f"q{i}", max_tokens=50, temperature=1.0, sample=i) for i in range(5)]
+    out = cc.complete(reqs)
+    assert len(out) == 5 and inner.sizes == [2, 2, 1]
+    assert cc.conn.execute("SELECT COUNT(*) FROM completions").fetchone()[0] == 5
+    inner.sizes.clear()
+    assert all(c.cached for c in cc.complete(reqs)) and inner.sizes == []

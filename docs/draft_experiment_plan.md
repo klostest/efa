@@ -23,6 +23,23 @@ payoffs.
 two decisions. A game between a model-driven player and a scripted player is one decision,
 because the scripted player's action is fixed in advance and no model is called.
 
+**Reasoning channel, and what a decision measures.** The model runs in its native thinking
+mode: it writes reasoning inside a thinking block, then the answer. The harness stops the
+thinking at 2,000 tokens if the model has not closed it, inserts the close and the opening
+of the JSON answer, and lets the model complete the answer (details and history:
+`preregistration.md`, Design; `research_log.md`, 2026-10-16). So every decision in this
+project is, precisely, "the model's decision after at most 2,000 tokens of thinking". At
+intermediate stated similarity the carrier never closes its thinking on its own, so nearly
+every decision there is a forced one; the forced-close rate is reported per cell. This is
+the local analog of the paper's "low reasoning effort" setting, whose exact token budget
+on the hosted service is unknown. The prompt omits the paper's visible "think step by
+step" sentence, because with thinking on it made the model re-derive everything a second
+time in the answer. Answers cut by the answer-stage cap (300 tokens) are excluded, never
+repaired. The budget itself is an untested parameter: all cells so far use 2,000, and a
+sensitivity check (one middle-level cell at 1,000 and at 4,000, about an hour each) is on
+the list for a free evening, not the critical path; the limitations section states
+whether it was done.
+
 **Counterbalancing.** The prompt never says "cooperate" or "defect". The two actions are
 called A0 and A1, and the payoff lines tell the model what each pair of choices earns.
 Two arbitrary presentation choices are therefore baked into every prompt: which label
@@ -127,10 +144,21 @@ first scenario and 315 the second, so the expectation is (2/3)(8/7) + (1/3)(12/7
 The formula with q = 3/9 gives (6/9)(2) + (3/9)(0) = 4/3. Same number. The 1.4 from using
 f = 0.3 directly is the large-population answer.
 
+*The advantage is a straight line.* Write HH for the mean honest payoff against an honest
+partner, HI for the mean honest payoff against an invader, IH for the mean invader payoff
+against an honest partner, and II = 1 for invader against invader. Then
+
+    honest(q)    = (1 − q)·HH + q·HI
+    invader(q)   = (1 − q)·IH + q·II
+    advantage(q) = invader(q) − honest(q) = (IH − HH) + q·[(II − HI) − (IH − HH)]
+
+a constant plus a constant times q. With q = f (large population) or q = f·N/(N − 1), the
+advantage is a straight line in f, fixed by its two end values. Its intercept at q = 0,
+IH − HH, is the rare-invader advantage.
+
 *Which f to report.* The classical invasion question is whether a *rare* invader gains:
-the limit f → 0, where the invader advantage is simply (invader payoff vs honest) minus
-(honest payoff vs honest). Both expected payoffs are straight lines in f, so the advantage
-is a straight line, and its two end values say everything (table in the H2 section). The
+the limit f → 0, where the advantage is IH − HH, two numbers measured directly. Because the
+advantage is a straight line, its two end values say everything (table in the H2 section). The
 preregistration currently names f = 0.1 and 0.3; those were picked as "rare" and
 "substantial minority", not derived. The proposal is to state H2 at f → 0 and report the
 critical fraction f* where one exists. This is a wording change to H2 and is Steve's
@@ -572,12 +600,28 @@ each fits in an evening).
 The first needs the D1 claim decision to exist, so it comes after D1 is built. The other
 two are config changes on the current harness and could run this week.
 
-## 8. Decisions for Steve
+## 8. Decisions (status as of 2026-10-22)
 
-1. C1b wording as written in the table, or something else.
-2. The C2 cue value (stated similarity 100 proposed).
-3. H2 restated at f → 0 with f* reported, instead of f = 0.1 and 0.3.
-4. D1: strategy method (one call) or two calls.
-5. How to fit 28 hours: smaller N on D1, fewer c values, or API for one block.
-6. Whether C1c (contradiction) is worth 100 decisions.
-7. Which of the three cheap extensions in section 7, if any, join the matrix.
+**Resolved**
+- H1 ran as registered (2026-10-22): claim 0.635 vs attributed oracle 0.662 at stated
+  similarity 80, N=100 each; no detectable difference; formal equivalence at the 10-point
+  margin narrowly short. Not extended, not re-margined (research log).
+- C1b wording: as written in the table. Piloted (12/12 parsed, cooperation 0.67). Its role
+  is the C2 sentence, not a third H1 arm; the N=100 C1b cell is dropped.
+- Batch scale: every model call is at most 64 prompts (`CachedClient.chunk_size`), after
+  the first H1 attempt was lost to the Metal buffer limit at 200.
+
+**Open, with recommendation**
+1. C2 cue value: stated similarity 100 (recommended; config written).
+2. H2 restated at f → 0 with f* reported where it exists, in place of f = 0.1 and 0.3
+   (recommended; see section 3, H2).
+3. C2 sample size: keep N=100 (see discussion 2026-10-22).
+4. D1: strategy method, one call per agent (recommended).
+5. Fitting the remaining hours: D1 at c in {0, 1, 2} first, 0.5 and 1.5 if a night is free.
+6. C1c (contradiction): skip (recommended).
+7. Extensions in section 7: mention-only spoof and the same-model test, only if a night is
+   free, after C2 and the defenses.
+8. Equivalence margins for cells not yet run: state margins N=100 can support (about 15
+   points), since H1 showed 10 points is marginal at this N. Forward-looking only.
+9. Budget sensitivity check (one middle-level cell at 1,000 and 4,000 thinking tokens):
+   free-evening list, reported either way in the limitations.

@@ -36,6 +36,17 @@ def claim(similarity: int) -> str:
     )
 
 
+def claim_symmetric(similarity: int) -> str:
+    """C1b: both sides' claims stated explicitly; replaces the oracle's common-knowledge
+    tail ("the other agent is seeing this information as well") with what each side said.
+    Also the C2 sentence, at the C2 cue value."""
+    return (
+        f"You have reported to the other player that your decision-making is {similarity}% "
+        f"similar to theirs. The other player has reported to you that its decision-making is "
+        f"{similarity}% similar to yours, " + _TAIL.split(" Remember,")[0]
+    )
+
+
 def unknown() -> str:
     return (
         "A similarity score between you and the other agent has been computed, "
@@ -52,4 +63,5 @@ TWISTS = {
     "oracle": oracle,
     "oracle_attributed": oracle_attributed,
     "claim": claim,
+    "claim_symmetric": claim_symmetric,
 }
