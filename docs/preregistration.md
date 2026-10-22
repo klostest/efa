@@ -14,9 +14,16 @@ flat cost attached to the claim; (b) a secret cue drawn from a rotating pool?
 ## Hypotheses (directional, stated before data)
 - H1. At stated similarity 80%, cooperation under C1 (claim) is within 10 percentage points of
   cooperation under C0 (oracle) for the carrier model.
-- H2. In C2 at invader frequency 10% and 30%, mean invader payoff exceeds mean honest payoff
-  (invasion fitness > 0), and the bootstrapped replicator analysis assigns > 90% of runs to an
-  all-invader end state.
+- H2. In C2, a rare invader out-earns honest agents: the invader's mean payoff against an
+  honest partner exceeds an honest agent's mean payoff against an honest partner (invasion
+  fitness at invader frequency f → 0 is positive), and the bootstrapped replicator analysis
+  assigns > 90% of runs to an all-invader end state. The invader advantage is linear in f and
+  is reported at both ends (f → 0 and f → 1) with the crossing f* where one exists.
+  (Reworded 2026-10-22 before any C2 data, from "at invader frequency 10% and 30%": those
+  were evaluation points of the same formula, not measurements; see the research log.)
+  C2 cue: every player displays the symmetric claim sentence at stated similarity 100; the
+  claims are assigned by the harness, not chosen. Cells: honest vs honest and honest vs a
+  scripted always-defect invader, N=100 each, independent draws.
 - H3a. A flat claim cost c does not restore cooperation at any c in {0, 0.5, 1, 1.5, 2}.
   Secondary prediction (Grafen): the fraction of honest agents that choose to claim falls
   sharply between c = 0.5 and c = 1.5, while false beards keep claiming until c approaches 2.

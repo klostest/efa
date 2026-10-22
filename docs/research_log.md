@@ -286,3 +286,18 @@ Full sweep `runs/c0_gate_8b_think` (same channel and N as the 27B gate; 14:05–
   middle levels is a population mix of committed answers, not individual hedging.
 - Reading for H1: the carrier does not discount the number when it comes from the other
   player. A claim is as good as an oracle. This is the premise C2 needs.
+
+### 2026-10-22, afternoon: C2 design confirmed; H2 reworded before any C2 data
+
+- Preregistration H2 reworded from "at invader frequency 10% and 30%" to the rare-invader
+  form (f → 0) with both end signs and f* reported. Reason: the invader advantage is a
+  straight line in f fixed by the three measured cell means (draft plan, section 1), so
+  0.1 and 0.3 were evaluation points of the same formula, not measurements. Changed before
+  any C2 game was run.
+- C2 design: symmetric claim sentence at stated similarity 100 as the template for C2 and
+  the defenses (claims assigned by the harness; commitment confound noted for the
+  limitations); N=100 per cell; the invader cell draws fresh decisions via a new
+  `sample_offset` (without it the honest player's byte-identical prompt would have replayed
+  the H–H cell's cached decisions, as the gate's control cell did). 23 tests pass.
+- C1b pilot at 80 (12 decisions): 12/12 parsed, cooperation 0.67; the N=100 C1b cell is
+  dropped, the wording lives on as the C2 sentence.

@@ -249,7 +249,22 @@ hypothesis, just reported.
 **Question.** If an invader displays the same similarity cue as everyone else and always
 defects, does it out-earn honest agents, and does the replicator predict it takes over?
 
-**Cells.** On the carrier, C1b wording at the C2 cue value (stated similarity 100 proposed):
+**The sentence, and why it is the symmetric one.** Every player is told "You have reported
+to the other player that your decision-making is 100% similar to theirs. The other player
+has reported to you that its decision-making is 100% similar to yours ...". The claims are
+assigned by the harness, not chosen by the agent. The minimal claim sentence would serve
+C2 on its own, but the symmetric one is used because D1 needs a template that can state
+each side's realized claim separately, and using it here makes the C2 honest–honest cell
+and D1's c = 0 baseline the same sentence. It also drops the oracle's "the other agent is
+seeing this information as well" tail, which under a claim could read as the environment
+vouching for the number. The known confound: being told "you reported 100%" may add
+consistency pressure on top of trust in the partner, raising honest cooperation and with
+it the invader's payoff. For H2 only the level of honest cooperation matters, not its
+cause; for the defenses the template is common to all arms and the effect cancels in
+comparisons. Its size is not cleanly measured (pilot at 80: 0.67 on 12 decisions, against
+0.64 and 0.66 for the other sentences); this goes in the limitations.
+
+**Cells.** On the carrier, the symmetric sentence at stated similarity 100:
 
 | Cell | Players | Decisions per game | N | What it gives |
 |---|---|---|---|---|
@@ -611,17 +626,20 @@ two are config changes on the current harness and could run this week.
 - Batch scale: every model call is at most 64 prompts (`CachedClient.chunk_size`), after
   the first H1 attempt was lost to the Metal buffer limit at 200.
 
+- C2 design (confirmed 2026-10-22, before the run): cue value stated similarity 100; the
+  symmetric claim sentence as the template for C2 and the defenses, with claims assigned by
+  the harness; N=100 per cell; the invader cell draws fresh decisions (`sample_offset`);
+  H2 restated at f → 0 with both end signs and f* reported (preregistration updated).
+
 **Open, with recommendation**
-1. C2 cue value: stated similarity 100 (recommended; config written).
-2. H2 restated at f → 0 with f* reported where it exists, in place of f = 0.1 and 0.3
-   (recommended; see section 3, H2).
-3. C2 sample size: keep N=100 (see discussion 2026-10-22).
-4. D1: strategy method, one call per agent (recommended).
-5. Fitting the remaining hours: D1 at c in {0, 1, 2} first, 0.5 and 1.5 if a night is free.
-6. C1c (contradiction): skip (recommended).
-7. Extensions in section 7: mention-only spoof and the same-model test, only if a night is
+1. D1: strategy method, one call per agent (recommended).
+2. Fitting the remaining hours: D1 at c in {0, 1, 2} first, 0.5 and 1.5 if a night is free.
+3. C1c (contradiction): skip (recommended).
+4. Extensions in section 7: mention-only spoof and the same-model test, only if a night is
    free, after C2 and the defenses.
-8. Equivalence margins for cells not yet run: state margins N=100 can support (about 15
+5. Equivalence margins for cells not yet run: state margins N=100 can support (about 15
    points), since H1 showed 10 points is marginal at this N. Forward-looking only.
-9. Budget sensitivity check (one middle-level cell at 1,000 and 4,000 thinking tokens):
+6. Budget sensitivity check (one middle-level cell at 1,000 and 4,000 thinking tokens):
    free-evening list, reported either way in the limitations.
+7. Commitment effect of the symmetric sentence: a clean estimate needs one more N=100 cell
+   (minimal claim at stated similarity 100, ~1.7 h). Recommended: limitations note only.
