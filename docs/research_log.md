@@ -301,3 +301,75 @@ Full sweep `runs/c0_gate_8b_think` (same channel and N as the 27B gate; 14:05–
   the H–H cell's cached decisions, as the gate's control cell did). 23 tests pass.
 - C1b pilot at 80 (12 decisions): 12/12 parsed, cooperation 0.67; the N=100 C1b cell is
   dropped, the wording lives on as the C2 sentence.
+
+**What the C2 sentence is and why (plain version, for re-reading later).** The three
+"twist" sentences the model has seen, each inserted after the game rules under the heading
+"Here is the twist:". X is the stated similarity.
+
+- Paper's oracle (C0): *"The other agent's decision-making is X% similar to yours, meaning,
+  this is how similarly you and the other agent reason and come to conclusions when facing
+  the same strategic problem. Note, however, you and the other agent are independently
+  trying to maximize your own total points. Remember, the other agent is seeing this
+  information as well."*
+- Minimal claim (C1a): the same with the first clause replaced by *"The other player
+  reports that its decision-making is X% similar to yours, ..."*. The H1 control replaced it
+  with *"The environment reports that the other agent's decision-making is X% similar to
+  yours, ..."*.
+- Symmetric claim (C1b, and the C2 sentence at X = 100): *"You have reported to the other
+  player that your decision-making is X% similar to theirs. The other player has reported
+  to you that its decision-making is X% similar to yours, meaning, ... maximize your own
+  total points."* The "Remember, the other agent is seeing this information as well" tail
+  is dropped, because under a claim it could read as the environment vouching for the
+  number; common knowledge now follows from the content.
+
+Why the symmetric one is the template: the paper's sentence comes from the environment and
+nobody claims anything, so "who said what" never arises there. Once claims can be true or
+false (C2 onward) the sentence has to carry each side's claim separately. D1 needs that
+(agents choose whether to claim, so the two sides can differ), and using it in C2 makes the
+C2 honest–honest cell and D1's c = 0 baseline the same sentence, so the wording's own effect
+is common to every arm and cancels in comparisons.
+
+"Claims assigned by the harness": in C2 no agent decides anything about claiming. The
+harness writes "you have reported 100%" into every honest player's prompt, and "the other
+player has reported 100%" whether the partner is honest or a scripted invader. The agent is
+told it made a claim it never made. By design: every player displays the cue, and honest vs
+invader differ only in what they do afterwards. The write-up must say this.
+
+"Commitment confound": being told "you have reported 100% similar" may make the agent
+cooperate partly out of consistency with its own stated position, not only out of trust in
+the partner's claim. Call p the probability that an honest agent cooperates (measured 0.87
+in C2). H2 is unaffected, because both payoffs it compares are functions of p alone: the
+invader earns 3 when the honest agent cooperates and 1 when it defects, and the honest
+agent's payoff against another honest agent is likewise fixed by p. Why the honest agent
+cooperates does not enter. What the confound affects is interpretation: if part of p comes
+from consistency with the agent's own words, then "the cue induces trust" overstates what
+we showed. The effect is also not an artifact of the harness assigning the claim: a
+deployed agent that genuinely sent a claim would know it had, and the same consistency
+effect would operate. Evidence on its size so far: pilot at 80, symmetric sentence 0.67
+(12 decisions) against 0.64 and 0.66 for the two sentences without the "you reported"
+clause. Steve asked (2026-10-26) to measure it directly: the minimal claim sentence at
+stated similarity 100, N=100, against the C2 honest–honest cell. Run `runs/c2_confound`.
+
+### 2026-10-22, evening: C2 false beards (H2) completed — invaders win at every frequency
+
+Pilot (12 decisions, H–H at stated similarity 100): 12/12 parsed, cooperation 1.00. Full
+run `runs/c2_false_beards`, 14:46–17:14 (2.5 h), chunked cache, zero exclusions.
+
+| cell | decisions | honest cooperation | Wilson 95% | mean payoffs |
+|---|---|---|---|---|
+| honest vs honest (HH) | 200 | 0.870 | 0.82–0.91 | honest 1.87 |
+| honest vs scripted invader (HI / IH), fresh draws | 100 | 0.850 | 0.77–0.91 | honest 0.15, invader 2.70 |
+
+- Payoff matrix [[HH, HI], [IH, II]] = [[1.87, 0.15], [2.70, 1.00]].
+- Invader advantage at f → 0: +0.83 (bootstrap 95% CI 0.66–1.01). At f → 1: +0.85
+  (0.78–0.92). Both ends positive: row one of the sign table, invaders win at every
+  frequency, no f*. Honest is not an ESS; invader is.
+- Bootstrapped replicator (1,000 resampled matrices × 20 starts): 100% of runs end
+  all-invader. H2's > 90% criterion met.
+- The honest agent cooperates with the invader at the same rate as with an honest partner
+  (0.85 vs 0.87), as it must: its prompt is identical in both cells. Exploitation rate
+  (honest cooperates against a defector) is therefore 0.85, and every such game pays 0 / 3.
+- Compared with the oracle at the same level in the gate (0.92 on 60 decisions), the
+  symmetric claim at 100 gives 0.87 on 200; no sign that the model discounts the claim.
+- Next on the critical path: D1 (costly claim) and D2 (rotating secret); decision pending on
+  the D1 strategy method.

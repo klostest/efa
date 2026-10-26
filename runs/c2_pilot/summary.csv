@@ -1,0 +1,2 @@
+cell,condition,level,model,games,excluded,n_decisions,coop_rate,coop_lo,coop_hi,stated_p_coop,welfare,mean_tokens,format_fixed,truncated,thinking_forced
+claim_symmetric_100__Qwen3.5-27B-4bit,claim_symmetric,100,mlx:mlx-community/Qwen3.5-27B-4bit,6,0,12,1.0,0.7574992425007574,1.0,1.0,4.0,2011.0,0,0,12

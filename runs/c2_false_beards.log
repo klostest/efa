@@ -1,0 +1,9 @@
+=== start Thu Oct 22 14:46:14 PDT 2026 config=configs/c2_false_beards.yaml
+{"cell": "claim_symmetric_100__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5905.2}
+{"cell": "claim_symmetric_100_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 2956.1}
+=== run done Thu Oct 22 17:14:00 PDT 2026
+wrote runs/c2_false_beards/summary.csv
+      condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+claim_symmetric    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200       0.87    0.816    0.910          0.867     3.74      2017.41             0          0              197
+claim_symmetric    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100       0.85    0.767    0.907          0.845     2.85      2018.85             0          0               99
+=== all done Thu Oct 22 17:14:01 PDT 2026

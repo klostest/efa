@@ -193,11 +193,12 @@ Names match the plan, the study guide, and the hypotheses.
 | C0 oracle | "The other agent's decision-making is X% similar to yours ..." (paper's sentence) | H–H | Done (gate) |
 | C0 "?" | "A similarity score ... has been computed ... not available for display" | H–H | Done (gate) |
 | C0 base | Nothing about similarity | H–H | Done (gate) |
-| C1a claim, minimal | "The other player reports that its decision-making is X% similar to yours ..." (rest of the sentence unchanged) | H–H | Wired, not run |
-| C1a control | "The environment reports that the other agent's decision-making is X% similar to yours ..." | H–H | Wired, not run |
-| C1b claim, symmetric | "You have reported to the other player that your decision-making is X% similar to theirs. The other player has reported to you that its decision-making is X% similar to yours." | H–H | Not written |
-| C1c contradiction | Partner claims stated similarity 100, environment says 0 | H–H | Not written (exploratory) |
-| C2 false beards | C1b wording at stated similarity 100 (proposed) | H–H and H–I | Not written |
+| C1a claim, minimal | "The other player reports that its decision-making is X% similar to yours ..." (rest of the sentence unchanged) | H–H | Done at 80, N=100 (H1, 2026-10-22): 0.635 |
+| C1a control | "The environment reports that the other agent's decision-making is X% similar to yours ..." | H–H | Done at 80, N=100 (H1): 0.662 |
+| C1b claim, symmetric | "You have reported to the other player that your decision-making is X% similar to theirs. The other player has reported to you that its decision-making is X% similar to yours." | H–H | Piloted at 80 (12 decisions, 0.67); N=100 cell dropped; it is the C2 sentence |
+| C1c contradiction | Partner claims stated similarity 100, environment says 0 | H–H | Dropped |
+| C2 false beards | C1b wording at stated similarity 100 | H–H and H–I | Done, N=100 each (H2 confirmed, 2026-10-22) |
+| C2 confound check | C1a minimal claim at stated similarity 100, to size the "you reported" commitment effect against the C2 H–H cell | H–H | Running 2026-10-26 |
 | D1 costly claim | As C2, plus: claiming costs c points; the agent chooses whether to claim | H–H and H–I, five values of c | Not written |
 | D2 rotating secret | "Agents of your kind were issued the code word W this round. The other player presented the code word W′." | H–H and H–I | Not written |
 | D3 reciprocity | Five rounds with the same partner, history shown | H–H and H–I | After the event |
