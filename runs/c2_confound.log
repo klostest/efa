@@ -1,0 +1,7 @@
+=== start Mon Oct 26 11:44:21 PDT 2026 config=configs/c2_confound.yaml
+{"cell": "claim_100__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5897.4}
+=== run done Mon Oct 26 13:22:43 PDT 2026
+wrote runs/c2_confound/summary.csv
+condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+    claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200       0.93    0.886    0.958          0.935     3.86     1996.255             0          0              191
+=== all done Mon Oct 26 13:22:44 PDT 2026

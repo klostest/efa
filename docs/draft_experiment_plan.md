@@ -198,7 +198,7 @@ Names match the plan, the study guide, and the hypotheses.
 | C1b claim, symmetric | "You have reported to the other player that your decision-making is X% similar to theirs. The other player has reported to you that its decision-making is X% similar to yours." | H–H | Piloted at 80 (12 decisions, 0.67); N=100 cell dropped; it is the C2 sentence |
 | C1c contradiction | Partner claims stated similarity 100, environment says 0 | H–H | Dropped |
 | C2 false beards | C1b wording at stated similarity 100 | H–H and H–I | Done, N=100 each (H2 confirmed, 2026-10-22) |
-| C2 confound check | C1a minimal claim at stated similarity 100, to size the "you reported" commitment effect against the C2 H–H cell | H–H | Running 2026-10-26 |
+| C2 confound check | C1a minimal claim at stated similarity 100, to size the "you reported" commitment effect against the C2 H–H cell | H–H | Done, N=100 (2026-10-26): 0.93 vs C2 H–H 0.87; no commitment effect in the feared direction |
 | D1 costly claim | As C2, plus: claiming costs c points; the agent chooses whether to claim | H–H and H–I, five values of c | Not written |
 | D2 rotating secret | "Agents of your kind were issued the code word W this round. The other player presented the code word W′." | H–H and H–I | Not written |
 | D3 reciprocity | Five rounds with the same partner, history shown | H–H and H–I | After the event |
@@ -262,8 +262,12 @@ vouching for the number. The known confound: being told "you reported 100%" may 
 consistency pressure on top of trust in the partner, raising honest cooperation and with
 it the invader's payoff. For H2 only the level of honest cooperation matters, not its
 cause; for the defenses the template is common to all arms and the effect cancels in
-comparisons. Its size is not cleanly measured (pilot at 80: 0.67 on 12 decisions, against
-0.64 and 0.66 for the other sentences); this goes in the limitations.
+comparisons. Measured 2026-10-26 (research log): the minimal claim at stated similarity
+100 gave 0.93 on 200 decisions against 0.87 for the symmetric sentence, a difference of
++0.06 (95% CI +0.00 to +0.12). The clause did not raise cooperation; the net effect of the
+two wording changes (added clause, dropped common-knowledge tail) is small and if anything
+lowers it. The template is therefore slightly conservative for honest cooperation, which
+goes in the limitations as one sentence.
 
 **Cells.** On the carrier, the symmetric sentence at stated similarity 100:
 
@@ -642,5 +646,6 @@ two are config changes on the current harness and could run this week.
    points), since H1 showed 10 points is marginal at this N. Forward-looking only.
 6. Budget sensitivity check (one middle-level cell at 1,000 and 4,000 thinking tokens):
    free-evening list, reported either way in the limitations.
-7. Commitment effect of the symmetric sentence: a clean estimate needs one more N=100 cell
-   (minimal claim at stated similarity 100, ~1.7 h). Recommended: limitations note only.
+7. Commitment effect of the symmetric sentence: resolved 2026-10-26 by the confound check
+   (minimal claim at stated similarity 100, N=100: 0.93 against 0.87 for the symmetric
+   sentence). No effect in the feared direction; one-sentence limitations note.

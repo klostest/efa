@@ -373,3 +373,47 @@ run `runs/c2_false_beards`, 14:46–17:14 (2.5 h), chunked cache, zero exclusion
   symmetric claim at 100 gives 0.87 on 200; no sign that the model discounts the claim.
 - Next on the critical path: D1 (costly claim) and D2 (rotating secret); decision pending on
   the D1 strategy method.
+
+### 2026-10-26: confound check completed — the "you have reported" clause did not raise cooperation
+
+Question: how much of the C2 honest cooperation rate comes from the symmetric sentence
+telling the agent what it itself reported, rather than from the partner's claim. Design: the
+minimal claim sentence ("The other player reports that its decision-making is 100% similar
+to yours, ..." with the paper's full tail) at stated similarity 100, N=100 games, honest vs
+honest, fresh draws, compared with the C2 honest–honest cell. Configs
+`configs/c2_confound_pilot.yaml` and `configs/c2_confound.yaml`. Pilot 11:36–11:44 (6
+games, 12/12 parsed, cooperation 0.75); full run 11:44–13:23 (1.6 h), zero exclusions,
+zero truncations, forced close on 191/200. Run `runs/c2_confound`.
+
+| cell | sentence | decisions | cooperation | Wilson 95% | stated 1.0 / 0.0 / 0.5 |
+|---|---|---|---|---|---|
+| confound check | minimal claim, with the "Remember..." tail | 200 | 0.930 | 0.89–0.96 | 185 / 11 / 4 |
+| C2 honest–honest | symmetric claim, tail dropped | 200 | 0.870 | 0.82–0.91 | 171 / 24 / 2 |
+| gate oracle (reference) | oracle | 60 | 0.917 | | |
+
+- Difference, minimal minus symmetric: +0.06 (95% CI +0.00 to +0.12; two-proportion
+  z = 2.0, p = 0.046; Fisher exact p = 0.066). The direction is the opposite of the
+  confound as stated: the sentence with the "you have reported" clause gave slightly *less*
+  cooperation, not more. The consistency-pressure story is not supported.
+- The minimal claim at 100 (0.93) matches the oracle at 100 from the gate (0.92): with the
+  tail present, attribution to the partner costs nothing even at the top of the scale.
+  This extends the H1 result at 80 (0.635 vs 0.662) to the C2 cue value.
+- The two sentences differ in two things, not one: the added "you have reported" clause and
+  the dropped common-knowledge tail ("the other agent is seeing this information as well").
+  The check measures their net effect, which is small and if anything negative. Which of the
+  two carries the −0.06 is not separable from this cell; the dropped tail is the natural
+  suspect, since it is the only line that tells the agent the partner is reasoning from the
+  same information. A keyword scan of the defectors' thinking (lie / bluff / deceive in
+  9 of 11 here against 19 of 24 in C2) gives no sign that the symmetric sentence prompts
+  more suspicion of the claim; the symmetric defectors do restate the "you have reported"
+  clause, but so does the prompt, so that is not evidence of anything.
+- Consequences. H2 was never at risk (both payoffs it compares are functions of the honest
+  cooperation rate alone). The write-up's limitation note shrinks to: "the symmetric
+  sentence gave cooperation 0.87 against 0.93 for the minimal claim at the same level; the
+  template used for C2 and the defenses is, if anything, slightly conservative for honest
+  cooperation." Had the symmetric sentence been used in the H1 comparison, it would have
+  sat 6 points below the oracle; the registered H1 used the minimal claim, so H1 stands.
+- The C2 invader cell is unchanged (the invader's payoff is fixed by the honest rate under
+  the C2 sentence, 0.85–0.87). No rerun needed.
+- Next on the critical path, unchanged: D1 (costly claim) once the strategy-method decision
+  is made, then D2 (rotating secret).

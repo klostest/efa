@@ -1,0 +1,2 @@
+cell,condition,level,model,games,excluded,n_decisions,coop_rate,coop_lo,coop_hi,stated_p_coop,welfare,mean_tokens,format_fixed,truncated,thinking_forced
+claim_100__Qwen3.5-27B-4bit,claim,100,mlx:mlx-community/Qwen3.5-27B-4bit,6,0,12,0.75,0.46768966087934005,0.9110599603710386,0.75,3.5,2012.8333333333333,0,0,12
