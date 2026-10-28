@@ -1,0 +1,4 @@
+cell,condition,level,model,games,excluded,n_decisions,coop_rate,coop_lo,coop_hi,stated_p_coop,welfare,mean_tokens,format_fixed,truncated,thinking_forced,cost,n_claims,claim_rate,claim_lo,claim_hi,claim_truncated
+costly_claim_c2__Qwen3.5-27B-4bit,costly_claim,100,mlx:mlx-community/Qwen3.5-27B-4bit,6,3,6,0.3333333333333333,0.09676933255921683,0.7000116786584712,0.3333333333333333,1.3333333333333333,2011.0,0,0,6,2.0,6,0.3333333333333333,0.09676933255921683,0.7000116786584712,3
+costly_claim_c0.5__Qwen3.5-27B-4bit,costly_claim,100,mlx:mlx-community/Qwen3.5-27B-4bit,6,5,2,1.0,0.34237195288961925,1.0,1.0,3.0,2011.0,0,0,2,0.5,2,1.0,0.34237195288961925,1.0,5
+costly_claim_c2_vs_always_defect__Qwen3.5-27B-4bit,costly_claim,100,mlx:mlx-community/Qwen3.5-27B-4bit,6,4,2,1.0,0.34237195288961925,1.0,1.0,1.0,2011.0,0,0,2,2.0,2,0.0,0.0,0.6576280471103807,4

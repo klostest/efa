@@ -40,7 +40,22 @@ def _threshold(r: Request) -> str:
     return f'Similarity {sim}.\n{{"{coop}": {p}, "{other}": {100 - p}}}'
 
 
+def _costly(r: Request) -> str:
+    """D1 stand-in: report iff the cost is at most 1; cooperate iff the partner reported."""
+    import re
+
+    if '{"REPORT"' in r.user:
+        c = float(re.search(r"costs ([\d.]+) point", r.user).group(1))
+        p = 100 if c <= 1 else 0
+        return f'Cost {c}.\n{{"REPORT": {p}, "DECLINE": {100 - p}}}'
+    coop = r.tags.get("coop_token", "A0")
+    other = "A1" if coop == "A0" else "A0"
+    p = 100 if "The other player has reported" in r.user else 0
+    return f'Partner report seen: {p == 100}.\n{{"{coop}": {p}, "{other}": {100 - p}}}'
+
+
 rules = {
+    "costly": _costly,
     "always_a0": _always(100),
     "always_a1": _always(0),
     "coin": lambda r: 'hm\n{"A0": 50, "A1": 50}',

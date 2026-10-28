@@ -48,11 +48,18 @@ def summarize(games: list[dict]) -> pd.DataFrame:
         c = gs[0]["cell"]
         llm_players = [p for p in range(2) if c["policies"][p] == "llm"]
         acts, pc, welfare, excl, n_tokens, n_fixed, n_len, n_forced = [], [], [], 0, [], 0, 0, 0
+        claims, n_claim_len = [], 0
         for g in gs:
             n_len += sum(bool(g["players"][p].get("truncated")) for p in llm_players)
+            n_claim_len += sum(bool(g["players"][p].get("claim_truncated")) for p in llm_players)
             n_forced += sum(bool(g["players"][p].get("thinking_forced")) for p in llm_players)
             if g["excluded"]:
                 excl += 1
+                continue
+            for p in llm_players:
+                if g["players"][p].get("claim") is not None:
+                    claims.append(bool(g["players"][p]["claim"]))
+            if c.get("claim_only"):
                 continue
             welfare.append(sum(g["payoffs"]))
             for p in llm_players:
@@ -62,7 +69,7 @@ def summarize(games: list[dict]) -> pd.DataFrame:
                 n_fixed += bool(g["players"][p].get("fixed"))
         k, n = int(sum(acts)), len(acts)
         lo, hi = wilson(k, n)
-        rows.append({
+        row = {
             "cell": cell_id, "condition": c["condition"], "level": c["level"], "model": c["model"],
             "games": len(gs), "excluded": excl, "n_decisions": n,
             "coop_rate": k / n if n else float("nan"), "coop_lo": lo, "coop_hi": hi,
@@ -70,7 +77,13 @@ def summarize(games: list[dict]) -> pd.DataFrame:
             "welfare": float(np.mean(welfare)) if welfare else float("nan"),
             "mean_tokens": float(np.mean(n_tokens)) if n_tokens else float("nan"),
             "format_fixed": n_fixed, "truncated": n_len, "thinking_forced": n_forced,
-        })
+        }
+        if c["condition"] == "costly_claim":
+            kc, nc = int(sum(claims)), len(claims)
+            clo, chi = wilson(kc, nc)
+            row |= {"cost": c.get("cost"), "n_claims": nc, "claim_rate": kc / nc if nc else float("nan"),
+                    "claim_lo": clo, "claim_hi": chi, "claim_truncated": n_claim_len}
+        rows.append(row)
     return pd.DataFrame(rows)
 
 

@@ -24,6 +24,11 @@ class Request:
     # and the answer is forced (the local analog of an API "reasoning effort" setting).
     # `max_tokens` then caps the answer that follows the thinking.
     thinking_budget: int | None = None
+    # The keys of the JSON answer the prompt asks for. When thinking is forced closed, the
+    # answer is prefilled with the opening of this object ('{"<first key>": '), so the
+    # prefill must match the question: the D1 claim call asks for REPORT / DECLINE, and
+    # prefilling it with the game's A0 key produced unusable answers (2026-10-26 pilot).
+    answer_keys: tuple[str, ...] = ("A0", "A1")
     tags: dict = field(default_factory=dict, compare=False, hash=False)
 
 

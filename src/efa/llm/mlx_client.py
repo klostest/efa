@@ -8,8 +8,9 @@ Two reasoning channels:
   closed its thinking block and finished, that is the answer. If it closed the block but the
   answer was cut, stage 2 continues it for `max_tokens` more. If it never closed the block,
   stage 2 appends `FORCED_CLOSE` (the wording Qwen documents for its thinking budget) and
-  generates the answer for up to `max_tokens`, with the answer prefilled with `ANSWER_PREFILL`
-  (the opening of the JSON object the prompt asks for). Without the prefill the model starts a
+  generates the answer for up to `max_tokens`, with the answer prefilled with the opening of
+  the JSON object the prompt asks for (`answer_prefill(request.answer_keys)`; the game call's
+  is '{"A0": ', the D1 claim call's '{"REPORT": '). Without the prefill the model starts a
   fresh visible derivation instead of answering. An answer is produced in every case; the
   local analog of an API "reasoning effort" setting.
 
@@ -22,11 +23,18 @@ from __future__ import annotations
 from efa.llm.base import Completion, Request
 
 THINK_CLOSE = "</think>"
-ANSWER_PREFILL = '{"A0": '
 FORCED_CLOSE = (
     "\n\nConsidering the limited time by the user, I have to give the solution based on the "
     "thinking directly now.\n</think>\n\n"
 )
+
+
+def answer_prefill(keys: tuple[str, ...]) -> str:
+    """The opening of the JSON answer the prompt asks for, e.g. '{"A0": '."""
+    return '{"' + keys[0] + '": '
+
+
+ANSWER_PREFILL = answer_prefill(("A0", "A1"))  # the game call's prefill, kept for tests
 
 
 def thinking_stage(text: str, finish: str) -> str:
@@ -107,12 +115,13 @@ class MlxClient:
                 if what == "done":
                     out[idxs[j]] = Completion(text, self.model, len(prompts[j]), len(ids), "stop")
                     continue
-                extra = self._tok.encode(FORCED_CLOSE + ANSWER_PREFILL, add_special_tokens=False) if what == "force" else []
-                todo.append((j, what))
+                forced = FORCED_CLOSE + answer_prefill(requests[idxs[j]].answer_keys) if what == "force" else ""
+                extra = self._tok.encode(forced, add_special_tokens=False) if forced else []
+                todo.append((j, forced))
                 todo_prompts.append(prompts[j] + ids + list(extra))
             if todo:
-                for (j, what), (text2, ids2, finish2) in zip(todo, self._generate(todo_prompts, max_tokens, temp, self.stage2_prefill_batch_size)):
+                for (j, forced), (text2, ids2, finish2) in zip(todo, self._generate(todo_prompts, max_tokens, temp, self.stage2_prefill_batch_size)):
                     text1, ids1, _ = stage1[j]
-                    full = text1 + (FORCED_CLOSE + ANSWER_PREFILL if what == "force" else "") + text2
+                    full = text1 + forced + text2
                     out[idxs[j]] = Completion(full, self.model, len(prompts[j]), len(ids1) + len(ids2), finish2)
         return out  # type: ignore[return-value]

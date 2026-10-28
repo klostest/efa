@@ -16,9 +16,12 @@ from efa.llm.base import Client, Completion, Request
 
 
 def request_key(model: str, r: Request) -> str:
+    # answer_keys enters the key only when it is not the game default, so every key written
+    # before the field existed (C0 through the confound check) still matches.
     payload = json.dumps(
         [model, r.system, r.user, r.max_tokens, r.temperature, r.sample]
-        + ([r.thinking_budget] if r.thinking_budget else []),
+        + ([r.thinking_budget] if r.thinking_budget else [])
+        + ([list(r.answer_keys)] if tuple(r.answer_keys) != ("A0", "A1") else []),
         ensure_ascii=False,
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()

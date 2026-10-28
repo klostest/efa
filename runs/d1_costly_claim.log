@@ -1,0 +1,61 @@
+=== level costly_claim_c0.5 start Mon Oct 26 18:49:35 PDT 2026
+{"cell": "costly_claim_c0.5__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 11509.8}
+{"cell": "costly_claim_c0.5_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5614.7}
+=== level costly_claim_c0.5 done Mon Oct 26 23:35:04 PDT 2026
+wrote runs/d1_costly_claim/summary.csv
+   condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced  cost  n_claims  claim_rate  claim_lo  claim_hi  claim_tr
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.565    0.496    0.632          0.568    2.465     2027.375             0          0              199   0.5       200       0.665     0.597     0.727          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.750    0.657    0.825          0.747    1.925     2022.070             1          0               98   0.5       100       0.650     0.553     0.736          
+=== level costly_claim_c1.5 start Mon Oct 26 23:35:05 PDT 2026
+{"cell": "costly_claim_c1.5__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 10870.5}
+{"cell": "costly_claim_c1.5_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5356.5}
+=== level costly_claim_c1.5 done Tue Oct 27 04:05:36 PDT 2026
+wrote runs/d1_costly_claim/summary.csv
+   condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced  cost  n_claims  claim_rate  claim_lo  claim_hi  claim_tr
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.565    0.496    0.632          0.568    2.465     2027.375             0          0              199   0.5       200       0.665     0.597     0.727          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.750    0.657    0.825          0.747    1.925     2022.070             1          0               98   0.5       100       0.650     0.553     0.736          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.205    0.155    0.266          0.217    1.690     2023.075             0          0              198   1.5       200       0.240     0.186     0.304          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.700    0.604    0.781          0.708    0.810     2026.110             0          0              100   1.5       100       0.260     0.184     0.354          
+=== level costly_claim_c0_ start Tue Oct 27 04:05:37 PDT 2026
+{"cell": "costly_claim_c0__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 10528.9}
+{"cell": "costly_claim_c0_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 11639.7}
+=== level costly_claim_c0_ done Tue Oct 27 10:15:10 PDT 2026
+wrote runs/d1_costly_claim/summary.csv
+   condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced  cost  n_claims  claim_rate  claim_lo  claim_hi  claim_tr
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.565    0.496    0.632          0.568    2.465     2027.375             0          0              199   0.5       200       0.665     0.597     0.727          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.750    0.657    0.825          0.747    1.925     2022.070             1          0               98   0.5       100       0.650     0.553     0.736          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.205    0.155    0.266          0.217    1.690     2023.075             0          0              198   1.5       200       0.240     0.186     0.304          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.700    0.604    0.781          0.708    0.810     2026.110             0          0              100   1.5       100       0.260     0.184     0.354          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.830    0.772    0.876          0.832    3.660     2008.750             0          0              196   0.0       200       0.945     0.904     0.969          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.890    0.814    0.937          0.887    2.890     2017.260             0          0               99   0.0       100       0.910     0.838     0.952          
+=== level costly_claim_c2 start Tue Oct 27 10:15:11 PDT 2026
+{"cell": "costly_claim_c2__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 11879.9}
+{"cell": "costly_claim_c2_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5981.2}
+=== level costly_claim_c2 done Tue Oct 27 15:12:56 PDT 2026
+wrote runs/d1_costly_claim/summary.csv
+   condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced  cost  n_claims  claim_rate  claim_lo  claim_hi  claim_tr
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.565    0.496    0.632          0.568    2.465     2027.375             0          0              199   0.5       200       0.665     0.597     0.727          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.750    0.657    0.825          0.747    1.925     2022.070             1          0               98   0.5       100       0.650     0.553     0.736          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.205    0.155    0.266          0.217    1.690     2023.075             0          0              198   1.5       200       0.240     0.186     0.304          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.700    0.604    0.781          0.708    0.810     2026.110             0          0              100   1.5       100       0.260     0.184     0.354          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.830    0.772    0.876          0.832    3.660     2008.750             0          0              196   0.0       200       0.945     0.904     0.969          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.890    0.814    0.937          0.887    2.890     2017.260             0          0               99   0.0       100       0.910     0.838     0.952          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.160    0.116    0.217          0.157    1.600     2019.345             1          0              199   2.0       200       0.180     0.133     0.239          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.730    0.636    0.807          0.724    0.290     2032.220             0          0               99   2.0       100       0.220     0.150     0.311          
+=== level costly_claim_c1_ start Tue Oct 27 15:12:57 PDT 2026
+{"cell": "costly_claim_c1__Qwen3.5-27B-4bit", "games": 100, "ok": 99, "seconds": 11873.0}
+{"cell": "costly_claim_c1_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 7979.8}
+=== level costly_claim_c1_ done Tue Oct 27 20:43:55 PDT 2026
+wrote runs/d1_costly_claim/summary.csv
+   condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced  cost  n_claims  claim_rate  claim_lo  claim_hi  claim_tr
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.565    0.496    0.632          0.568    2.465     2027.375             0          0              199   0.5       200       0.665     0.597     0.727          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.750    0.657    0.825          0.747    1.925     2022.070             1          0               98   0.5       100       0.650     0.553     0.736          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.205    0.155    0.266          0.217    1.690     2023.075             0          0              198   1.5       200       0.240     0.186     0.304          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.700    0.604    0.781          0.708    0.810     2026.110             0          0              100   1.5       100       0.260     0.184     0.354          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.830    0.772    0.876          0.832    3.660     2008.750             0          0              196   0.0       200       0.945     0.904     0.969          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.890    0.814    0.937          0.887    2.890     2017.260             0          0               99   0.0       100       0.910     0.838     0.952          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.160    0.116    0.217          0.157    1.600     2019.345             1          0              199   2.0       200       0.180     0.133     0.239          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.730    0.636    0.807          0.724    0.290     2032.220             0          0               99   2.0       100       0.220     0.150     0.311          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         1          198      0.485    0.416    0.554          0.487    1.929     2029.111             0          0              197   1.0       198       0.520     0.451     0.589          
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.740    0.646    0.816          0.741    1.330     2024.680             2          0               98   1.0       100       0.410     0.319     0.508          
+=== all done Tue Oct 27 20:43:56 PDT 2026

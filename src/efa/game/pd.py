@@ -94,14 +94,14 @@ def full_prompt(v: Variant, player_id: int, twist: str | None, cot: bool = True)
     return "\n\n".join(parts)
 
 
-def format_fix_prompt(original: str, response: str) -> str:
+def format_fix_prompt(original: str, response: str, instruction: str = OUTPUT_INSTRUCTION) -> str:
     return (
         original
         + "\n\nYour previous response was:\n"
         + response
         + "\n\nThe reasoning was fine; only the format failed. "
         "Re-output ONLY the final-answer block, in the exact required format below.\n"
-        + OUTPUT_INSTRUCTION.split("Format requirement:")[1].strip()
+        + instruction.split("Format requirement:")[1].strip()
     )
 
 

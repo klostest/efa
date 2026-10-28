@@ -417,3 +417,174 @@ zero truncations, forced close on 191/200. Run `runs/c2_confound`.
   the C2 sentence, 0.85–0.87). No rerun needed.
 - Next on the critical path, unchanged: D1 (costly claim) once the strategy-method decision
   is made, then D2 (rotating secret).
+
+### 2026-10-26, afternoon: D1 method decided; what the confound check leaves open
+
+**D1 asks the model twice.** Steve chose two calls per agent over the one-call strategy
+method, for credibility over cost: one decision per call matches the paper's format across
+the whole screen, the agent reacts to the partner's realized claim rather than a
+hypothetical one, and the honest claim rate (Grafen's secondary prediction) is a choice the
+agent made, not a stated plan. Cost: a D1 decision is two calls, so a value of c (H–H plus
+H–I, N=100 each) is about 4.5 h and c in {0, 1, 2} about 13.5 h. The strategy method is kept
+as a methods check at c = 1 only (about 2.25 h, pre-event, free evening): does the model's
+stated plan match its sequential play? Build order: claim-call prompt, the four
+claim-combination game templates, payoff bookkeeping with c, config; pilot 24 decisions at
+c = 2 and review transcripts before any full cell.
+
+**Event-day rerun scope.** With the measured throughput (about 45 min per 100 calls) the
+event window (Friday evening to Sunday morning) holds about 19 h of reruns with margin:
+C0 (3 h), C2 (2.5 h), D1 at c in {0, 1, 2} (13.5 h). H1, the confound check, D2 and c in
+{0.5, 1.5} will be pre-event runs, disclosed as such. The preregistration's last paragraph
+needs rewording to say so before it is frozen (plan, section 8, event-day rerun scope).
+
+**Criticisms the confound check does and does not answer.** Recorded so the write-up
+states them rather than a reviewer.
+1. The two sentences differ in two things: the added "you have reported" clause and the
+   dropped common-knowledge line ("the other agent is seeing this information as well").
+   The check measured the net, −0.06 for the symmetric sentence. A positive commitment
+   effect masked by a larger cost from dropping the line cannot be excluded. Two cells
+   complete the two-by-two (minimal without the line; symmetric with it; about 3.2 h);
+   free-evening list, below D1 and D2.
+2. The common-knowledge line is present in both H1 arms. Under a partner claim it can read
+   as the environment confirming that both sides see the same number. If it carries weight,
+   H1 showed "a claim plus an environment-backed common-knowledge line is trusted like an
+   oracle", which is narrower than "a claim is trusted like an oracle". The same two cells
+   test this. Until then the H1 claim is worded with that qualification.
+3. A rewording moved cooperation by about six points, which sets the floor for what counts
+   as an effect. The design mostly neutralizes it: H2 is a payoff result driven by the
+   invader's action policy; H1 compares sentences that differ by one phrase; D1 and D2
+   compare arms sharing a template. Cross-template differences under about six to ten
+   points are not interpreted.
+4. The check was added after C2 was seen; the interval touches zero and the exact test
+   gives p = 0.066. It is reported as exploratory: "no commitment effect in the feared
+   direction", not "the symmetric sentence lowers cooperation". It sits near the ceiling,
+   so a commitment effect at a middle level is untested; acceptable because C2 and the
+   defenses run at stated similarity 100.
+None of this touches H2 or requires rerunning C2.
+
+### 2026-10-26, evening: D1 grid settled at five discrete levels; invader stays scripted
+
+Steve sought two outside opinions on discrete vs continuous c without showing either the
+repo (`docs/cost_plan_2nd_opinions.md`). Both said discrete for the main experiment; they
+disagreed on whether {0, 1, 2} are good levels (one: they are the symbolic ties, honest
+gain 1 against cost 1 and invader gain 2 against cost 2, where framing decides; the
+other: they are the natural reference points). Decision: the five-level grid
+{0, 0.5, 1, 1.5, 2}, which has both the regime interiors (0.5, 1.5) and the ties (1, 2),
+with 0 as the anchor against C2. Priority order when not all fit: 0.5, 1.5, 0, 2, 1. The
+continuous design was not rejected for power (the simulation gave ±0.1 on both
+thresholds) but for legibility: a paired H–H / H–I contrast at one c and model-free
+per-level estimates. The claim-call-only sweep with c drawn per game stays as an extra.
+Rejected from the opinions: scaling payoffs ×10 to make costs integers (breaks
+comparability with C0–C2). Adopted: state the cost as unconditional ("whatever the other
+player reports or does"); and the Grafen point that the real test is flat vs
+type-dependent cost, now the audited-claim extension (plan, section 7 and the section 8
+free-evening queue).
+
+The invader stays scripted (always reports, always defects, no model calls). The
+preregistration's "false beards keep claiming until c approaches 2" could not be observed
+that way, so it was reworded before any D1 data: whether a report pays for an invader at
+each c is computed from the honest agents' responses (twice the rise in honest
+cooperation a report buys, against c), and the replicator scores the invader type as
+reporting only when it pays, so the scripted invader's wasted reports at high c cannot
+pass for a working defense. Giving the invader its own claim call measures something
+else, whether the model spoofs on its own when told it will defect, with a refusal risk
+from the prompt; it is an extension at two levels (about 3 h), not a registered cell.
+
+Prompt wording fixes applied (`src/efa/mech/costly.py`): the cost sentence ends "whatever
+the other player reports or does"; the "meaning, this is how similarly..." clause is shown
+once per call (in the claim call's description of the report; in the game call only on
+the partner's report sentence, which is the C2 wording). Configs: `d1_pilot.yaml` (H–H at
+c = 2 and 0.5, H–I at c = 2, about 60 calls) and `d1_costly_claim.yaml` (five levels, H–H
+and H–I, N=100, about 22.5 h). 28 tests pass. Section 7 of the plan now defines fee,
+compute cost, stake, posting, slashing and "a credential nobody checks" (the 2022 paid
+checkmark) and states the design rule: a flat cost on an identity claim separates types
+only when the impostor gains less from the claim than the member. Pilot not yet launched.
+
+### 2026-10-26, 17:20: D1 pilot invalid; prefill bug found and fixed
+
+The first D1 pilot (`runs/d1_pilot_invalid_prefill`, 16:40–17:20) excluded 12 of 30
+decisions, all at the claim stage, and the 18 that "parsed" were not answers either.
+Cause: when the harness forces the thinking closed it prefills the answer with the
+opening of the JSON object, and that prefill was the game call's `{"A0": ` for every
+request. The claim call asks for `{"REPORT": ..., "DECLINE": ...}`, so the model was
+pushed to answer with the wrong keys: some wrote `{"A0": 50, "A1": 50}` then "Wait, the
+prompt asks for REPORT vs DECLINE" and ran to the token limit (excluded); the rest
+produced an A0/A1 object, which the parser rejected, and then picked up a draft
+`{"REPORT": ..}` the model had written inside its thinking. No earlier cell is affected:
+every earlier call asked for A0/A1, so the prefill matched, and no earlier cell had a
+truncated answer for a draft to stand in for.
+
+Fix (28 → 30 tests): `Request.answer_keys` (default A0/A1) and the prefill built from it
+(`mlx_client.answer_prefill`); the claim call sets REPORT/DECLINE; the cache key includes
+the keys only when they are not the default, so every existing cache entry still matches;
+and the runner parses only the text after the last closed thinking block (`run.answer_text`),
+so a draft inside the thinking can never stand in for a missing answer. The invalid pilot
+is kept under its new name for the record. Pilot relaunched with the fixed harness.
+
+### 2026-10-27, 20:44: D1 costly claim completed — a flat cost never stops the invaders
+
+Rerun pilot passed 18:49 on 2026-10-26 (30/30 parsed, zero truncation). Full run
+`runs/d1_costly_claim`, 18:49 to 20:44 the next day (26 h, including a sleep of about ten
+minutes on battery during Steve's commute; the chunked cache resumed with nothing lost).
+Five levels in priority order 0.5, 1.5, 0, 2, 1; H–H (200 decisions) and H–I (100 honest
+decisions) per level; one exclusion in 1,500 decisions (a claim call at c = 1 that ran
+past the limit), zero truncated answers otherwise. Analysis: `scripts/d1_analysis.py`
+(writes `runs/d1_costly_claim/analysis.csv` and `reports/figures/d1_costly_claim.png`).
+
+| c | honest report rate (Wilson 95%) | honest cooperation, partner reported | honest cooperation, partner silent | HH | HI (invader reports) | invader break-even 2(pR − pN) |
+|---|---|---|---|---|---|---|
+| 0 | 0.93 (0.90–0.96) | 0.89 | 0.52 (11 games) | 1.83 | 0.11 | 0.74 |
+| 0.5 | 0.66 (0.61–0.71) | 0.75 | 0.29 | 1.23 | −0.08 | 0.93 |
+| 1 | 0.48 (0.43–0.54) | 0.74 | 0.19 | 0.97 | −0.15 | 1.10 |
+| 1.5 | 0.25 (0.20–0.30) | 0.70 | 0.06 | 0.85 | −0.09 | 1.27 |
+| 2 | 0.19 (0.15–0.24) | 0.73 | 0.06 | 0.80 | −0.17 | 1.34 |
+
+HH is the honest agent's mean net payoff per game against an honest partner; HI the same
+against the reporting invader (negative: it pays for reports and then gets exploited).
+"Partner silent" is the honest agent's cooperation in H–H games whose partner did not
+report, averaged over its own report; since the prompt depends only on the two reports,
+this is also its play against an invader that stays silent.
+
+**Invader advantage under the rational-invader rule** (the invader type reports only when
+2(1 − f)(pR − pN) > c; bootstrap 95% over games, 2,000 resamples):
+
+| c | invader reports when rare? | advantage, f → 0 | advantage, f → 1 | bootstrapped end state |
+|---|---|---|---|---|
+| 0 | yes | +0.95 (0.82–1.09) | +0.52 (0.20–0.88) | all-invader 99.6% |
+| 0.5 | yes | +0.77 (0.59–0.94) | +0.62 (0.52–0.73) | all-invader 100% |
+| 1 | yes | +0.52 (0.38–0.70) | +0.68 (0.58–0.77) | all-invader 100% |
+| 1.5 | no | +0.28 (0.21–0.37) | +0.43 (0.35–0.53) | all-invader 100% |
+| 2 | no | +0.32 (0.23–0.41) | +0.45 (0.34–0.55) | all-invader 100% |
+
+- **H3a confirmed.** The invader advantage is positive at both ends at every c, so the
+  replicator ends all-invader at every level; no c in the grid restores cooperation.
+- **The ordering prediction held, with a narrower band than the symbolic bounds.** Honest
+  reporting crosses one half at c ≈ 0.95 (bootstrap 0.84–1.07), the symbolic honest
+  break-even of 1. The invader's report stops paying at c ≈ 1.15 (0.82–1.37), not near 2:
+  a report buys about 0.65 extra cooperation rather than the 0.87 that C2 suggested,
+  because honest agents already cooperate at 0.06–0.29 with a silent partner at low c
+  (own report, no answer) and the C2-style ceiling against a reporter is 0.70–0.75 here
+  rather than 0.85–0.89. So the band where only spoofers report runs from about 1 to about
+  1.15, and the honest curve is already down to 0.48 at its lower edge.
+- **Why the invader still wins above its own break-even.** At c = 1.5 and 2 a rational
+  invader stays silent and defects. Honest agents cooperate with a silent partner only
+  about 0.06 of the time, so the silent invader earns about 1.12 against them; but the
+  honest agents are still paying for reports (0.19–0.25 of them) that buy little, which
+  pulls HH down to 0.80–0.85, below the no-mechanism 1.0 of mutual defection. The flat cost
+  makes the honest type worse off than having no claim at all, and the invader's edge at
+  high c (+0.3) is the honest agents' own wasted fees plus their residual exploitation.
+- **Honest cooperation with a reporting partner barely moves with c** (0.89 at c = 0,
+  then 0.70–0.75 for every c > 0): the model does not read "they paid 2 to report" as
+  stronger evidence than "they paid 0.5". Paying more does not buy more trust from this
+  model, which is the other half of why the cost cannot separate the types.
+- The dotted line in panel C of the figure shows what the scripted always-report invader
+  would score; at c = 2 it is −0.34, which is the reading the rational-invader rule exists
+  to prevent (preregistration H3a as reworded 2026-10-26).
+- c = 0 against C2 (free symmetric claim, same sentence plus the cost paragraph with cost
+  zero): HH 1.83 vs 1.87, honest cooperation against the invader 0.89 vs 0.85. The extra
+  paragraph and the claim call change nothing measurable; D1 c = 0 is a replication of C2.
+- Caveat: the "partner silent" rate at c = 0 rests on 11 games (nearly everyone reports)
+  and its interval is wide; it matters only for the f → 1 end at c = 0, where the invader
+  wins by margin anyway.
+- Next: D2 (rotating secret), then the free-evening queue with the audited-claim arm first,
+  the type-dependent cost that the theory says should work where this one did not.

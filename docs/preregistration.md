@@ -26,7 +26,16 @@ flat cost attached to the claim; (b) a secret cue drawn from a rotating pool?
   scripted always-defect invader, N=100 each, independent draws.
 - H3a. A flat claim cost c does not restore cooperation at any c in {0, 0.5, 1, 1.5, 2}.
   Secondary prediction (Grafen): the fraction of honest agents that choose to claim falls
-  sharply between c = 0.5 and c = 1.5, while false beards keep claiming until c approaches 2.
+  sharply between c = 0.5 and c = 1.5, while a claim remains profitable for a false beard
+  until c approaches 2, so there is a band of costs where only false beards claim.
+  (Reworded 2026-10-26 before any D1 data. False beards are scripted to always claim and
+  always defect, as in C2, so their claiming is not observed; whether a claim pays for
+  them at each c is computed from the honest agents' measured responses, twice the rise in
+  honest cooperation a claim buys against c, and the replicator scores the false-beard
+  type as claiming only when it pays. Honest agents decide whether to claim in a separate
+  model call before the game, then play the game seeing both sides' realized claims; the
+  cost is stated as paid whatever the partner claims or does. Levels run in the priority
+  order 0.5, 1.5, 0, 2, 1 when not all fit.)
 - H3b. With a rotating secret cue, cooperation among honest agents rises with pool size k in
   {1, 4, 16} and the invader advantage falls with k; with invaders that reuse observed tokens,
   the k = 1 case collapses to the C2 level.

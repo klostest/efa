@@ -199,7 +199,7 @@ Names match the plan, the study guide, and the hypotheses.
 | C1c contradiction | Partner claims stated similarity 100, environment says 0 | H–H | Dropped |
 | C2 false beards | C1b wording at stated similarity 100 | H–H and H–I | Done, N=100 each (H2 confirmed, 2026-10-22) |
 | C2 confound check | C1a minimal claim at stated similarity 100, to size the "you reported" commitment effect against the C2 H–H cell | H–H | Done, N=100 (2026-10-26): 0.93 vs C2 H–H 0.87; no commitment effect in the feared direction |
-| D1 costly claim | As C2, plus: claiming costs c points; the agent chooses whether to claim | H–H and H–I, five values of c | Not written |
+| D1 costly claim | As C2, plus: reporting costs c points, paid whatever the partner does; the honest agent chooses whether to report (a separate call before the game); the invader is scripted to report | H–H and H–I, c in {0, 0.5, 1, 1.5, 2}, priority 0.5, 1.5, 0, 2, 1 | Done, N=100 per cell at all five levels (H3a confirmed, 2026-10-27): invader advantage positive at both ends at every c; honest reporting halves at c ≈ 0.95, the invader's report stops paying at c ≈ 1.15 |
 | D2 rotating secret | "Agents of your kind were issued the code word W this round. The other player presented the code word W′." | H–H and H–I | Not written |
 | D3 reciprocity | Five rounds with the same partner, history shown | H–H and H–I | After the event |
 | D4 endogenous similarity | Agent judges similarity from the partner's reasoning; invaders mimic | H–H and H–I | After the event |
@@ -240,8 +240,8 @@ between claim and control with a two-proportion test. H1 says the claim is withi
 of the control. C1b vs C1a tells whether telling the agent about its own claim changes
 anything (commitment effect).
 
-**Optional C1c** (N=50): partner claims stated similarity 100, environment says 0. Which source wins. No
-hypothesis, just reported.
+**C1c** (partner claims stated similarity 100, environment says 0; which source wins) was
+optional and is dropped (section 8).
 
 **Cost.** 600 decisions, ~5 h on the carrier.
 
@@ -314,35 +314,83 @@ matrices that end all-invader; H2 predicts above 90%.
 
 **Question.** If claiming similarity costs c points, paid by anyone who claims, does honest
 cooperation survive the invaders? Grafen's result predicts no: a cost everyone pays the
-same does not separate types. The secondary prediction is where honest agents stop
-claiming (between c = 0.5 and 1.5).
+same does not separate types. The secondary prediction is the order in which the two
+types are priced out. An honest agent gains at most 1 point from a report that works
+(mutual cooperation 2 against mutual defection 1); an invader gains at most 2 (3 against
+1). So honest agents should stop reporting around c = 1 while a report still pays for an
+invader until c approaches 2, leaving a band where only spoofers claim. Empirically the
+gains are smaller than the symbolic bounds, since a report induces cooperation about 87%
+of the time (C2), so the measured crossings should sit a little below 1 and 2.
 
-**The new ingredient.** Honest agents now make a choice before the game: claim or not.
-Invaders always claim. The game prompt then tells each player what was claimed on each
-side, and c is subtracted from each claimer's payoff.
+**The new ingredient.** Honest agents now make a choice before the game: report or not,
+in a separate model call. Invaders are scripted (decided 2026-10-26): they always report
+and always defect, and make no model calls, exactly as in C2. The game prompt then tells
+each player what was reported on each side, and c is subtracted from each reporter's
+payoff. Whether a report pays for an invader at each c is not observed but computed from
+the honest agents' measured responses: a report is worth twice the rise in honest
+cooperation it buys (each extra cooperating partner turns 1 point into 3), against c. For
+the replicator analysis the invader type is scored as reporting only when that pays, so
+the scripted invader's wasted reports at high c do not masquerade as a working defense.
+Letting the invader choose for itself (a model told it will defect, asked whether to pay
+for the report) is a different question, whether this model spoofs on its own, and is an
+extension (section 7), not a registered cell.
 
-**Two ways to ask the model, to be decided.**
+**How the model is asked (decided 2026-10-26: two calls per agent).**
 
-- *Two calls per agent.* First "claiming costs c; do you claim?" (answered as a probability,
-  sampled), then the game prompt built from the realized claims. Faithful but doubles the
-  calls, and the first call still burns the 2,000-token thinking budget.
-- *One call per agent, strategy method.* Ask once for the whole plan: the probability of
-  claiming, and the cooperation probability for each of the partner's possible claims
-  (claimed / did not claim). Sample everything afterwards. Half the calls, and a standard
-  technique in experimental economics. Departs from the paper's single-question format,
-  which is acceptable for a defense condition but should be stated.
+- *Two calls per agent* (chosen). First call: the game is described, the claim and its
+  cost c are explained, and the agent answers "do you claim?" as a probability, which is
+  sampled. Second call: the game prompt, built from the realized claims on both sides, in
+  the paper's one-question format. Doubles the calls (the first call burns the same
+  2,000-token thinking budget), but keeps one decision per call across the whole screen,
+  lets the agent react to the partner's real claim rather than a hypothetical one, and
+  reads the Grafen claim-rate prediction directly off a choice the agent made.
+- *One call per agent, strategy method* (not used for the registered cells). Ask once for
+  the whole plan: the probability of claiming, and the cooperation probability for each of
+  the partner's possible claims (claimed / did not claim); sample everything afterwards.
+  The strategy method is a standard technique in experimental economics (a participant
+  states a complete plan for every situation instead of playing step by step); it halves
+  the calls but changes the answer format, so a D1 effect could not be separated from a
+  format effect. Kept as a methods check: run at c = 1 only (the Grafen threshold), about
+  2.25 h, pre-event on a free evening, to see whether the model's stated plan matches its
+  sequential play. Not part of the preregistered matrix.
 
-I recommend the strategy method for cost; your call.
+Steve's reason (2026-10-26): scientific credibility over fitting the event window.
 
-**Cells.** For each c in {0, 0.5, 1, 1.5, 2}: H–H (N=100, 200 decisions) and H–I (N=100,
-100 decisions). Payoffs are computed from sampled claims and actions with c applied.
+**Cells.** For each c in {0, 0.5, 1, 1.5, 2}: H–H (N=100, 200 decisions, 400 calls) and
+H–I (N=100, 100 decisions, 200 calls). Payoffs are computed from sampled reports and
+actions with c applied. The grid (settled 2026-10-26 after two outside opinions,
+`docs/cost_plan_2nd_opinions.md`): 0.5 and 1.5 are the interiors of the two predicted
+regimes (both types report; only invaders report), 1 and 2 are the symbolic ties where a
+model reasoning exactly computes a break-even and framing decides, and 0 is the anchor
+against C2 (one sentence longer than the C2 prompt, so its own baseline). Priority order
+if not all five fit: 0.5, 1.5, 0, 2, 1. Continuous c was considered and rejected for the
+registered cells (research log, same date): the paired H–H / H–I contrast at one c and
+per-level model-free estimates matter more than resolution in c; a claim-call-only sweep
+with c drawn per game stays as a cheap extra for the threshold (section 8, free-evening
+queue). Prompt
+wording: the cost is stated as paid whatever the other player reports or does, and the
+"meaning" clause is shown once per call.
 
-**Readout per c.** Honest claim rate (with interval), realized cooperation, invader
-advantage at f = 0.3, bootstrapped replicator end state. One figure: invader advantage and
-honest claim rate against c, with Grafen's threshold c ≈ 1 marked.
+**Readout per c.** Honest report rate (with interval), realized cooperation, honest
+cooperation against a reporting and against a non-reporting partner, invader advantage
+at f → 0 and f → 1 with the rational-invader rule, bootstrapped replicator end state. One
+figure: invader advantage and honest report rate against c, with the two predicted
+crossings marked.
 
-**Cost.** 1,500 decisions with the strategy method, ~12.5 h. The expensive block. Options
-if it does not fit: c in {0, 1, 2} first (7.5 h), or N=60 (7.5 h), then fill in.
+**Cost.** 3,000 calls, ~22.5 h, the expensive block, pre-event over week 3. The event
+rerun takes the levels in priority order; three (13.5 h) are expected to fit.
+
+**Result (2026-10-27, research log; figure `reports/figures/d1_costly_claim.png`).**
+Confirmed at every level: the invader advantage is positive at both ends for all five c
+(f → 0: +0.95, +0.77, +0.52, +0.28, +0.32; f → 1: +0.52 to +0.68), and the bootstrapped
+replicator ends all-invader in every resample. The ordering held but the band is narrow:
+honest reporting crosses one half at c ≈ 0.95 (bootstrap 0.84–1.07) and the invader's
+report stops paying at c ≈ 1.15 (0.82–1.37), not near 2, because a report buys about 0.65
+extra cooperation here rather than C2's 0.87. Above its break-even the rational invader
+goes silent and still wins by about +0.3, since honest agents keep paying for reports that
+buy little (HH falls to 0.80, below mutual defection's 1.0). Honest cooperation with a
+reporting partner is flat in c (0.70–0.75 for every c > 0): paying more does not buy more
+trust from this model. c = 0 replicates C2 (HH 1.83 vs 1.87).
 
 ### H3b: a rotating secret cue restores cooperation
 
@@ -385,14 +433,18 @@ the C2 result.
 | C0 (done; rerun from a cleared cache during the event) | 500 | 4 |
 | C1 (H1) | 600 | 5 |
 | C2 (H2) | 300 | 2.5 |
-| D1 (H3a), strategy method | 1,500 | 12.5 |
+| D1 (H3a), two calls per agent, c in {0, 0.5, 1, 1.5, 2} | 1,500 decisions, 3,000 calls | 22.5 |
 | D2 (H3b) | 400 | 3.5 |
-| Total | 3,300 | ~28 |
+| Total | 3,300 decisions, ~4,500 calls | ~38 |
 
-Twenty-eight hours is three overnights, not one. The pre-event run can be spread over
-week 3. The event-day rerun from a cleared cache cannot, so one of these has to give:
-smaller N on D1, fewer values of c, a faster channel, or the API for one block (~$10 per
-1,000 decisions on the hosted 27B). Decision needed before week 3.
+Hours are per model call (~45 min per 100 calls); a D1 decision takes two calls. The
+pre-event run is spread over week 3. The event window (Friday evening to Sunday morning,
+36–40 h of machine time) cannot hold a rerun of everything, so the event-day rerun from a
+cleared cache is limited to the cells that carry the story: C0 (3 h), C2 (2.5 h) and D1
+levels in priority order (0.5, 1.5, 0, 2, 1; 4.5 h each), three expected, about 19 h,
+leaving margin for one crash. H1, the confound check, D2 and the D1 levels that do not fit
+are reported from the pre-event runs, disclosed as such. The preregistration's "What was
+built before the event" paragraph needs rewording to say this (section 8, open item 1).
 
 API validation on a hosted model (preregistration: three cells at N=50): C0 at stated
 similarity 100, C1a claim at stated similarity 80, C2 H–I. About 250 decisions. See
@@ -409,7 +461,8 @@ section 6 for what this buys beyond validation.
 3. Invader advantage with bootstrap intervals in `metrics.py`; a function that turns three
    cells into a payoff matrix and feeds `replicator.py`.
 4. C2 config and run.
-5. D1: the claim question (strategy method or two calls), payoff bookkeeping with c, config.
+5. D1 (in build 2026-10-26): the claim call, the four claim-combination game templates,
+   payoff bookkeeping with c, config; pilot 24 decisions at c = 2 before any full cell.
 6. D2: the code-word sentence, the offline rotation simulator, config.
 7. Positive and negative scripted controls in every config.
 8. Figures: H1 bars, H2 invader advantage vs f with the replicator end-state distribution,
@@ -574,9 +627,9 @@ cue is cheap to display.
 
 **The mechanism creates its own attack.** Without a cue, models defect against strangers
 (base cooperation on the carrier: 0.00). A cue that unlocks cooperation is precisely what
-a defector can exploit, since exploiting a cooperator pays 3 where mutual defection pays
-1. Spoofing has no value until someone deploys cue-gated cooperation; the moment they do,
-every origin below has a payoff.
+a defector can exploit, since exploiting a cooperator pays 3 where mutual defection
+pays 1. Spoofing has no value until someone deploys cue-gated cooperation; the moment
+they do, every origin below has a payoff.
 
 **Where a spoofer comes from.** Five origins, in order of how much intent they need.
 
@@ -608,19 +661,72 @@ variant. If a lone spoofer does not profit, none of the five paths grows. If it 
 question becomes whether the swarm reaches f*, which coordinated injection could do and
 drift probably would not.
 
+**What a claim cost is in practice.** D1 charges every reporter the same c points for the
+claim. The same idea is the first thing anyone deploys when identity claims start being
+abused, because it needs no verification infrastructure: make the claim expensive and
+hope that only those with something real to claim will pay. In agent systems the cost
+takes a few forms. Definitions, since the terms are borrowed from several fields:
+
+- *A fee.* Money or tokens paid per claim. An agent marketplace that charges to list an
+  agent as a member of a named provider's fleet is charging a fee for an identity claim.
+- *A compute cost.* The claimer must spend computation before the claim is accepted.
+  Anti-spam schemes do this to email senders: a small calculation per message that an
+  ordinary sender never notices and a bulk sender cannot afford. "Proof of work" is the
+  general name.
+- *A stake.* A deposit the claimer puts up before making the claim. "Posting" a stake
+  means handing the deposit to a third party who holds it. If the deposit is simply held
+  and later returned, the cost is flat and small, the lost use of the money for a while.
+  If it is *slashed*, meaning destroyed or forfeited when the claimer is caught
+  misbehaving, the cost becomes conditional and falls only on cheaters. The term comes
+  from proof-of-stake blockchains, where a validator posts a deposit that is destroyed if
+  it signs two conflicting blocks.
+- *A credential nobody checks.* A badge or certificate the claimer pays for, which the
+  other side trusts without checking who issued it or what it attests. The clearest
+  real case is Twitter's November 2022 relaunch of the blue verification checkmark as a
+  purchase at about eight dollars a month, with no identity check. Accounts impersonating
+  companies and public figures bought the badge within days (one posing as a drug maker
+  announced free insulin), and the program was suspended inside the week. The fee was
+  flat, the badge was the claim, and the impersonators gained more from it than ordinary
+  users did.
+
+The last line is the whole D1 result in advance. A flat cost separates honest claimers
+from spoofers only when the spoofer gains less from the claim than the honest claimer
+does. Proof of work against spam works because a spammer's gain per message is tiny.
+Paid checkmarks failed because an impersonator's gain per badge was large. In the
+Prisoner's Dilemma the spoofer's gain is larger, up to 2 points against the honest
+agent's 1, so the theory predicts a fee prices out the honest agents first, and D1
+measures both gains directly. The design rule for a swarm is then: before charging for
+an identity claim, work out who gains more from a successful claim, a member or an
+impostor. If the impostor does, the fee is a tax on members.
+
+One caveat, outside what a pairwise game can show. A per-claim cost multiplies across
+copies. An invader that spoofs at volume, as a self-copying agent would, pays c on every
+claim, so a flat cost can still bite a mass-copier whose gain per claim is low, by the
+same logic as proof of work against spam. That is a volume effect, not a per-claim one.
+
+The costs that do separate types are the differential ones, where a true claim is cheap
+and a false one is expensive: a slashable stake, which is an audit with a penalty (the
+audited-claim extension below); a shared secret that only members were issued (D2); a
+signed statement from the agent's model provider or hardware that it is what it claims,
+which a spoofer cannot forge unless the key leaks (real infrastructure, not tested
+here); and a behavioural demonstration, a probe only the claimed kind of agent passes,
+where mimicry is the attack (D4). The screen tests the two cheapest, D2 and the audited
+claim, and D1 is the control that shows the obvious fix failing for a stated reason.
+
 **Cheap extensions that test the origins directly** (all on the carrier; kept because
 each fits in an evening).
 
-| Idea | What it tests | Cells | Decisions | Hours |
+| Idea | What it tests | Cells | Calls | Hours |
 |---|---|---|---|---|
-| Model-driven invader: replace the scripted defector with an agent told only to maximise its points and given the option to claim | Origin 2: does the model spoof on its own | 1 at N=100 | 100 | ~1 |
-| Mention-only spoof: "a similarity assessment exists" with no number (the "?" cell gave 0.37 against 0.00 for base) | Whether a false beard needs a number at all | 1 at N=100 | 200 | ~1.7 |
+| Audited claim: a reporter who then defects forfeits a penalty (a slashable stake) | The differential cost Grafen says works; the positive control for the cost mechanism, and whether an honest agent trusts an audited report more | H–H and H–I at one c, N=100 | 600 | ~4.5 |
+| Invader claim call: the scripted defector gets the D1 claim call (told it will defect, asked whether to pay for the report) | Origin 2: does the model spoof on its own when it would pay, and does it refuse | H–I at c = 0.5 and 1.5, N=100 | 400 | ~3 |
+| Mention-only spoof: "a similarity assessment exists" with no number (the "?" cell gave 0.37 against 0.00 for base) | Whether a false beard needs a number at all | 1 at N=100 | 200 | ~1.5 |
 | Partner described as the same model, a different model, or unknown, with no score (Rosas's proposed test) | Kin-type cooperation vs number-driven cooperation; origin 3's substrate | 3 at N=30 | 180 | ~1.5 |
 
-The first needs the D1 claim decision to exist, so it comes after D1 is built. The other
-two are config changes on the current harness and could run this week.
+The first two need the D1 harness, which now exists. The other two are config changes.
+Order after D2: audited claim first, since it closes the D1 story.
 
-## 8. Decisions (status as of 2026-10-22)
+## 8. Decisions (status as of 2026-10-27)
 
 **Resolved**
 - H1 ran as registered (2026-10-22): claim 0.635 vs attributed oracle 0.662 at stated
@@ -628,24 +734,65 @@ two are config changes on the current harness and could run this week.
   margin narrowly short. Not extended, not re-margined (research log).
 - C1b wording: as written in the table. Piloted (12/12 parsed, cooperation 0.67). Its role
   is the C2 sentence, not a third H1 arm; the N=100 C1b cell is dropped.
+- C1c (partner claim contradicting the environment): dropped (section 2 table).
 - Batch scale: every model call is at most 64 prompts (`CachedClient.chunk_size`), after
   the first H1 attempt was lost to the Metal buffer limit at 200.
-
+- Equivalence margins for cells not yet run: state the margin N=100 can support (about
+  15 points), since H1 showed 10 points is marginal at this N. Forward-looking only.
 - C2 design (confirmed 2026-10-22, before the run): cue value stated similarity 100; the
   symmetric claim sentence as the template for C2 and the defenses, with claims assigned by
   the harness; N=100 per cell; the invader cell draws fresh decisions (`sample_offset`);
   H2 restated at f → 0 with both end signs and f* reported (preregistration updated).
+- Commitment effect of the symmetric sentence (2026-10-26): measured by the confound check,
+  minimal claim at stated similarity 100, N=100: 0.93 against 0.87 for the symmetric
+  sentence (+0.06, 95% CI +0.00 to +0.12, exploratory). No effect in the feared direction.
+  What the check leaves open is the wording two-by-two (free-evening queue below).
+- Wording sensitivity as a stated limit (2026-10-26): a rewording moved cooperation by
+  about six points, so cross-template differences under about six to ten points are not
+  interpreted. Within-template comparisons (H1, D1 arms, D2 arms) and the payoff result
+  H2 are unaffected. Goes in the limitations as written.
+- D1 method (2026-10-26): two calls per agent, for credibility over cost (section 3, H3a).
+  The strategy method runs once, at c = 1, as a pre-event methods check only.
+- D1 values of c (2026-10-26, after `docs/cost_plan_2nd_opinions.md`): the five-level grid
+  {0, 0.5, 1, 1.5, 2}, all registered and run pre-event; at the event the levels rerun in
+  priority order 0.5, 1.5, 0, 2, 1, as many as fit.
+- Continuous c (Steve's question, 2026-10-26; settled the same day, research log): not for
+  the registered cells. Discrete levels give the paired H–H / H–I contrast at one c and
+  model-free per-level estimates, and two outside opinions agreed
+  (`docs/cost_plan_2nd_opinions.md`). A power simulation (`scripts/d1_power_sim.py`)
+  showed the continuous design would have located both thresholds to about ±0.1, so it
+  was not rejected for lack of power. Its cheap remnant, a claim-call-only sweep, is in
+  the free-evening queue.
+- D1 invader (2026-10-26): scripted, always reports and always defects, as in C2. Whether
+  its report pays at each c is computed from the honest responses; the replicator scores
+  the invader type as reporting only when it pays. The invader claim call is an extension.
+- D1 wording (2026-10-26): the cost is stated as paid whatever the other player reports
+  or does (Codex's point); the "meaning" clause appears once per call.
 
-**Open, with recommendation**
-1. D1: strategy method, one call per agent (recommended).
-2. Fitting the remaining hours: D1 at c in {0, 1, 2} first, 0.5 and 1.5 if a night is free.
-3. C1c (contradiction): skip (recommended).
-4. Extensions in section 7: mention-only spoof and the same-model test, only if a night is
-   free, after C2 and the defenses.
-5. Equivalence margins for cells not yet run: state margins N=100 can support (about 15
-   points), since H1 showed 10 points is marginal at this N. Forward-looking only.
-6. Budget sensitivity check (one middle-level cell at 1,000 and 4,000 thinking tokens):
-   free-evening list, reported either way in the limitations.
-7. Commitment effect of the symmetric sentence: resolved 2026-10-26 by the confound check
-   (minimal claim at stated similarity 100, N=100: 0.93 against 0.87 for the symmetric
-   sentence). No effect in the feared direction; one-sentence limitations note.
+**Open**
+1. Event-day rerun scope (Steve's to settle before freezing the preregistration): reword
+   "the reported matrix is rerun from a cleared cache during the event" to name the rerun
+   cells (C0, C2, D1 levels in priority order, three expected) and state that H1, the
+   confound check, D2 and the remaining D1 levels are pre-event runs.
+2. The free-evening queue. Everything below runs only if a night is free after D1 and D2,
+   in this recommended order; none is a registered cell.
+   1. *Audited-claim arm* (from the second opinions): a reporter who then defects forfeits
+      a penalty, the slashable-stake version of a differential cost. One c, H–H and H–I,
+      4.5 h. First because it is the positive control showing the cost mechanism can work
+      when the cost is type-dependent.
+   2. *Wording two-by-two.* The confound check compared sentences that differ in two
+      things at once: the "you have reported" clause and the paper's common-knowledge line
+      ("the other agent is seeing this information as well"). Two cells complete the
+      two-by-two: minimal claim without the line, and symmetric claim with the line, each
+      N=100 at stated similarity 100, about 3.2 h together. They would (a) separate the
+      commitment effect from the common-knowledge line, and (b) test whether the H1 result
+      depends on that line, which under a partner claim can read as the environment
+      confirming the number. Until run, both points are stated as limitations and the H1
+      claim is worded with the qualification.
+   3. *Claim-call sweep* (the remnant of continuous c): draw c per game uniformly on
+      (0, 2], run the claim call only, fit the honest report rate against c; about 200
+      calls, 1.5 h (`configs/d1_claim_sweep.yaml`).
+   4. *Strategy-method check at c = 1*: reported as a methods note.
+   5. *Budget sensitivity check*: one middle-level cell at 1,000 and 4,000 thinking
+      tokens; reported either way in the limitations.
+   6. *Section 7 extensions*: the mention-only spoof and the same-model test.
