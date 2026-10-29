@@ -620,4 +620,67 @@ this is also its play against an invader that stays silent.
   leakage, staleness or forgery. The word is read as a proof of similarity and nothing
   more, which is the C2 reading with a code word in place of a report.
 - If the pilot rates hold, pX ≈ 0 and ρ* ≈ 0.5. Next: the full three cells (400
-  decisions, ~3 h), pilot games reused from the cache.
+  decisions, ~3 h) in their own run directory, so the pilot games are not reused. Full run
+  launched 17:10.
+
+### 2026-10-29: frontier-model validation started (Sonnet 5.5, Opus 5.5)
+
+- Decision (Steve, after planning the write-up): validate the headline on a frontier model
+  so the result is not "one 27B model". Claude rather than GPT, because Kundu et al. found
+  GPT never cooperates under the similarity signal, so there would be nothing to spoof.
+  Work API key (AE Studio Console organization) in the gitignored `.env`.
+- Channel: `api_client.py` rewritten for the Claude 5.5 models. Adaptive thinking at
+  effort "low", which is the paper's own setting; no answer prefill (not supported), so the
+  JSON is parsed from the plain response; the raw reasoning is never returned, only a
+  summary, logged in <think> tags. The local answer cap does not apply; the API call has
+  its own 8,000-token cap for thinking plus answer. Refusals are excluded like any
+  unparseable answer; no fallback model.
+- Pilot (`runs/api_pilot`, 28 s, 24 calls): C2 honest vs honest, 6 games per model.
+  Sonnet 5.5 cooperated 11 of 12 (stated mean 0.97), Opus 5.5 12 of 12 (1.00); Qwen's rate
+  in the same cell was 0.87. No exclusions. Every transcript reasons as Qwen did: defection
+  dominates, but an identically reasoning partner mirrors my choice, so mutual cooperation
+  at 2 beats mutual defection at 1; Opus says "my twin" and "superrationality". Sonnet twice
+  noted that the similarity "is only reported, and may not be perfectly reliable" and
+  cooperated anyway. The one Sonnet defection was a sampled 10% tail of a stated 0.90.
+- Both models write their reasoning visibly before the JSON even without a chain-of-thought
+  instruction (about 350 output tokens per call), so the transcripts are readable; Opus
+  also returned thinking summaries, Sonnet none at low effort.
+- Slice (`configs/api_slice.yaml`) launched 17:40 with Steve's go: per model, base rate
+  (50 games), C2 both cells, D2 three cells, D1 honest vs invader at c = 0.5 and 2. About
+  1,100 calls per model, roughly $6 on Sonnet and $12 on Opus at the pilot's token counts.
+
+### 2026-10-29, 18:45: frontier-model slice completed (`runs/api_slice`, 50 min)
+
+Analysis `scripts/api_slice_analysis.py`, numbers in `runs/api_slice/headline.csv` and
+`cells_<model>.csv`, figures `reports/figures/d2_secret_claude-{sonnet,opus}-5-5.png`.
+No exclusions in 2,200 calls. Cooperation rates (Qwen local for comparison):
+
+| Cell | Qwen | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| base, no twist | 0.00 | 0.00 | 0.00 |
+| C2 claim, H–H | 0.87 | 0.99 | 1.00 |
+| C2 claim, H–I | 0.85 | 1.00 | 1.00 |
+| D2 match, H–H (pM) | pending | 0.835 (0.79–0.89) | 1.00 |
+| D2 match, H–I (check) | pending | 0.88 | 1.00 |
+| D2 mismatch (pX) | pending | 0.00 | 0.00 |
+| D1 report rate r, c = 0.5 / 2 | 0.66 / 0.19 | 0.11 / 0.01 | 0.32 / 0.00 |
+| D1 coop vs reporting invader pR, c = 0.5 / 2 | 0.75 / 0.73 | 0.56 / 0.57 | 0.39 / 0.34 |
+
+- **H1/H2 replicate and sharpen.** Both models cooperate with the claimed-similar invader
+  every time after cooperating zero times with no claim. C2 invader advantage when rare:
+  Sonnet +1.01, Opus +1.00 (Qwen +0.83); 100% of bootstrap resamples all-invader.
+- **D2 separates perfectly on both.** pX = 0 on both; pM = 0.835 (Sonnet) and 1.00 (Opus).
+  ρ* = 0.47 (0.43–0.52) on Sonnet and 0.50 on Opus: the honest population holds while
+  fewer than half of replays succeed. Bistable at ρ = 1/16 and 1/4 in every resample,
+  all-invader at ρ = 1. Sonnet's harness check: H–I match 0.88 vs H–H 0.835, difference
+  +0.045 (−0.04 to +0.12), consistent.
+- **Cost insensitivity replicates**: pR flat in c on Sonnet (0.56 → 0.57) and Opus
+  (0.39 → 0.34). But the frontier models stop reporting far sooner than Qwen: Sonnet reports
+  11% at c = 0.5, Opus 32%, both ~0 at c = 2. pR here is mostly "I declined, partner
+  reported" decisions, a different prompt from C2's symmetric claim, which is why it is
+  below C2's 1.00: cooperation given own report is 0.91–1.00, given declined 0.52 (Sonnet)
+  and 0.10 / 0.34 (Opus, c = 0.5 / 2). No D1 H–H cells were run on the API, so pN, HH and
+  the D1 invader advantage are not available for the frontier models.
+- Channel note: Sonnet returned no thinking summaries at low effort and reasons visibly in
+  the answer; Opus returns summaries and also reasons visibly. Output ~350–560 tokens per
+  call.

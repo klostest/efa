@@ -53,11 +53,12 @@ RHO_GRID = np.unique(np.concatenate([np.round(np.linspace(0.0, 1.0, 101), 4), li
 CELLS = {"hh": "secret_match__", "him": "secret_match_vs_always_defect", "hix": "secret_mismatch_vs_always_defect"}
 
 
-def cell_arrays(games: list[dict]) -> dict[str, dict[str, np.ndarray]]:
-    """Per cell: per-game payoffs of both players and the honest cooperation indicators."""
+def cell_arrays(games: list[dict], model: str | None = None) -> dict[str, dict[str, np.ndarray]]:
+    """Per cell: per-game payoffs of both players and the honest cooperation indicators.
+    `model` restricts to cells whose model spec contains it (runs with several models)."""
     out = {k: {"pay": [], "coop": []} for k in CELLS}
     for g in games:
-        if g["excluded"]:
+        if g["excluded"] or (model and model not in g["cell"]["model"]):
             continue
         cid = g["cell"]["cell_id"]
         key = next((k for k, tag in CELLS.items() if tag in cid), None)
@@ -91,7 +92,9 @@ def estimates(d: dict[str, dict[str, np.ndarray]], idx: dict[str, np.ndarray] | 
     g1 = 1.0 - HI
     with np.errstate(divide="ignore", invalid="ignore"):
         f_star = np.where((g0 < 0) & (g1 > 0), g0 / (g0 - g1), np.nan)
-    rho_star = crossing(rho, g0, 0.0)  # measured curve; g0 rises with rho
+    # rho*: the largest replay success with g(0) < 0 on the measured curve (g0 rises with rho).
+    # Every rho safe -> 1; no rho safe -> undefined.
+    rho_star = 1.0 if g0[-1] < 0 else float("nan") if g0[0] >= 0 else crossing(rho, g0, 0.0)
     rho_star_closed = (pM - 2 * pX) / (2 * (pM - pX)) if pM > 2 * pX else float("nan")
     return dict(pM=pM, pM_check=pM_check, pM_diff=pM_check - pM, pX=pX, HH=HH, HI_M=HI_M, IH_M=IH_M,
                 HI_X=HI_X, IH_X=IH_X, rho_star=rho_star, rho_star_closed=rho_star_closed,
@@ -126,9 +129,11 @@ def main() -> None:
     ap.add_argument("--run", type=Path, default=Path("runs/d2_secret"))
     ap.add_argument("--boot", type=int, default=2000)
     ap.add_argument("--fig", type=Path, default=Path("reports/figures/d2_secret.png"))
+    ap.add_argument("--model", default=None, help="substring of the model spec, for multi-model runs")
+    ap.add_argument("--title", default="Qwen3.5-27B")
     args = ap.parse_args()
 
-    d = cell_arrays(load_games(args.run))
+    d = cell_arrays(load_games(args.run), args.model)
     n = {k: len(d[k]["pay"]) for k in d}
     rng = np.random.default_rng(0)
     point = estimates(d)
@@ -154,8 +159,9 @@ def main() -> None:
     for cls in ["all-invader", "bistable", "all-honest", "interior"]:
         grid[f"frac_{cls}"] = (states == cls).mean(axis=0)
 
-    grid.to_csv(args.run / "analysis.csv", index=False)
-    cells.to_csv(args.run / "cells.csv")
+    suffix = f"_{args.model}" if args.model else ""
+    grid.to_csv(args.run / f"analysis{suffix}.csv", index=False)
+    cells.to_csv(args.run / f"cells{suffix}.csv")
     pd.set_option("display.width", 200)
     print(f"games per cell: {n}")
     print(cells.round(3).to_string())
@@ -163,12 +169,12 @@ def main() -> None:
     marks["label"] = marks.rho.map(RHO_MARKS)
     print(marks[["rho", "label", "g0", "g0_lo", "g0_hi", "g1", "g1_lo", "g1_hi", "f_star", "end_state",
                  "frac_all-invader", "frac_bistable"]].round(3).to_string(index=False))
-    print(f"wrote {args.run / 'analysis.csv'} and {args.run / 'cells.csv'}")
-    make_figure(grid, cells, n, args.fig)
+    print(f"wrote {args.run / f'analysis{suffix}.csv'} and {args.run / f'cells{suffix}.csv'}")
+    make_figure(grid, cells, n, args.fig, args.title)
     print(f"wrote {args.fig}")
 
 
-def make_figure(grid: pd.DataFrame, cells: pd.DataFrame, n: dict[str, int], out: Path) -> None:
+def make_figure(grid: pd.DataFrame, cells: pd.DataFrame, n: dict[str, int], out: Path, title: str = "Qwen3.5-27B") -> None:
     blue, orange, aqua, yellow = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
     ink, muted, gridc, surface = "#0b0b0b", "#898781", "#e1e0d9", "#fcfcfb"
     plt.rcParams.update({"font.family": "sans-serif", "axes.edgecolor": muted, "xtick.color": muted,
@@ -234,7 +240,7 @@ def make_figure(grid: pd.DataFrame, cells: pd.DataFrame, n: dict[str, int], out:
                      (rho_star, 1.0), fontsize=7.5, color=muted, ha="left", va="top", xytext=(4, 0), textcoords="offset points")
     else:
         ax1.annotate("no ρ* : invaders win at every ρ", (0.5, 1.0), fontsize=8, color=muted, ha="center", va="top")
-    fig.suptitle(f"D2: a rotating code word, Qwen3.5-27B, N = {n['hh']} / {n['him']} / {n['hix']} games per cell",
+    fig.suptitle(f"D2: a rotating code word, {title}, N = {n['hh']} / {n['him']} / {n['hix']} games per cell",
                  fontsize=10, color=muted, x=0.02, ha="left")
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True)

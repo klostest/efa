@@ -1,0 +1,16 @@
+# Frontier-model pilot (2026-10-29): does the C2 claim induce cooperation on Claude at all?
+# Honest vs honest with the symmetric claim at stated similarity 100, 6 games (12 decisions)
+# per model on Sonnet 5.5 and Opus 5.5. Channel: adaptive thinking at low effort (the
+# paper's own setting), no prefill, summarised reasoning logged in <think> tags. Pass: all
+# parse, and cooperation is clearly above the model's base rate. Only then the full slice
+# (configs/api_slice.yaml). No thinking_budget here: that field is the local channel's.
+# Cost: about 24 calls, well under a dollar.
+seed: 0
+n_games: 6
+max_tokens: 300
+cot: false
+temperature: 1.0
+models: ["anthropic:claude-sonnet-5-5", "anthropic:claude-opus-5-5"]
+client: {effort: low, workers: 4, max_tokens: 8000}
+conditions:
+  - {name: claim_symmetric, levels: [100]}

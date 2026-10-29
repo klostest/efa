@@ -4,7 +4,7 @@
 # word at all? Honest vs honest with matching words (6 games, 12 decisions): does the match
 # read as the C2 claim did (cooperation near 0.87)? About 24 calls, ~20 min. Pass: all
 # parse, none truncated, and the transcripts mention the code words. Full cells:
-# configs/d2_secret.yaml (same seed and offsets, so the pilot games are reused from cache).
+# configs/d2_secret.yaml (its own run directory and cache, so it draws its games fresh).
 seed: 0
 max_tokens: 300
 thinking_budget: 2000

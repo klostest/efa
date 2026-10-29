@@ -1,0 +1,24 @@
+# Frontier-model validation slice (2026-10-29), run only after configs/api_pilot.yaml
+# passes on a model. Per model, the cells that carry the story:
+#   C2  honest vs honest and honest vs always-defect at stated similarity 100   (300 decisions)
+#   D2  the three code-word cells                                               (400 decisions)
+#   D1  honest vs always-defect at c = 0.5 and c = 2, two calls per decision    (200 decisions)
+# About 900 decisions, 1,100 calls per model; roughly $25 on Sonnet 5.5 and $50 on Opus 5.5.
+# Use --only to run one model or one block. Same sample offsets as the local configs so the
+# cells never share a cache key. Base rate (no twist) is included as the control the pilot
+# compares against: 100 decisions per model.
+seed: 0
+n_games: 100
+max_tokens: 300
+cot: false
+temperature: 1.0
+models: ["anthropic:claude-sonnet-5-5", "anthropic:claude-opus-5-5"]
+client: {effort: low, workers: 4, max_tokens: 8000}
+conditions:
+  - {name: base, n_games: 50}
+  - {name: claim_symmetric, levels: [100]}
+  - {name: claim_symmetric, levels: [100], policies: [llm, always_defect], sample_offset: 100}
+  - {name: secret, match: true}
+  - {name: secret, match: true, policies: [llm, always_defect], sample_offset: 100}
+  - {name: secret, match: false, policies: [llm, always_defect], sample_offset: 200}
+  - {name: costly_claim, costs: [0.5, 2], policies: [llm, always_defect], sample_offset: 100}
