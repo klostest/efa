@@ -54,8 +54,20 @@ def _costly(r: Request) -> str:
     return f'Partner report seen: {p == 100}.\n{{"{coop}": {p}, "{other}": {100 - p}}}'
 
 
+def _secret(r: Request) -> str:
+    """D2 stand-in: cooperate iff the partner's code word matches the agent's own."""
+    import re
+
+    ws = re.findall(r"code word ([A-Z]\d-[A-Z]{5})", r.user)
+    coop = r.tags.get("coop_token", "A0")
+    other = "A1" if coop == "A0" else "A0"
+    p = 100 if len(ws) == 2 and ws[0] == ws[1] else 0
+    return f'Words {ws}.\n{{"{coop}": {p}, "{other}": {100 - p}}}'
+
+
 rules = {
     "costly": _costly,
+    "secret": _secret,
     "always_a0": _always(100),
     "always_a1": _always(0),
     "coin": lambda r: 'hm\n{"A0": 50, "A1": 50}',

@@ -200,7 +200,7 @@ Names match the plan, the study guide, and the hypotheses.
 | C2 false beards | C1b wording at stated similarity 100 | H–H and H–I | Done, N=100 each (H2 confirmed, 2026-10-22) |
 | C2 confound check | C1a minimal claim at stated similarity 100, to size the "you reported" commitment effect against the C2 H–H cell | H–H | Done, N=100 (2026-10-26): 0.93 vs C2 H–H 0.87; no commitment effect in the feared direction |
 | D1 costly claim | As C2, plus: reporting costs c points, paid whatever the partner does; the honest agent chooses whether to report (a separate call before the game); the invader is scripted to report | H–H and H–I, c in {0, 0.5, 1, 1.5, 2}, priority 0.5, 1.5, 0, 2, 1 | Done, N=100 per cell at all five levels (H3a confirmed, 2026-10-27): invader advantage positive at both ends at every c; honest reporting halves at c ≈ 0.95, the invader's report stops paying at c ≈ 1.15 |
-| D2 rotating secret | "Agents of your kind were issued the code word W this round. The other player presented the code word W′." | H–H and H–I | Not written |
+| D2 rotating secret | "Agents whose decision-making is 100% similar to yours were issued the code word W this round. The other player presented the code word W′." W′ = W in the match cells, a different token in the mismatch cell; fresh nonsense tokens per game | H–H match, H–I match, H–I mismatch (section 3, H3b) | Planned (design settled 2026-10-28) |
 | D3 reciprocity | Five rounds with the same partner, history shown | H–H and H–I | After the event |
 | D4 endogenous similarity | Agent judges similarity from the partner's reasoning; invaders mimic | H–H and H–I | After the event |
 
@@ -394,33 +394,69 @@ trust from this model. c = 0 replicates C2 (HH 1.83 vs 1.87).
 
 ### H3b: a rotating secret cue restores cooperation
 
-**Question.** If honest agents recognise each other by a code word that invaders can only
-copy from past rounds, does cooperation among honest agents hold, and does it hold better
-when the pool of code words is larger?
+**Question.** If honest agents recognise each other by a rotating code word, and an
+invader can only replay a word it captured earlier, does cooperation among honest agents
+hold, and how fast must the word rotate relative to the invader's replay delay for it to
+hold?
 
-**How the secret works.** Each round, honest agents are issued one word from a pool of k
-words. Invaders present a word they saw in an earlier round. With k = 1 the invader's word
-always matches (a fixed secret leaks). With k = 16 it matches roughly one round in sixteen.
-Honest–honest pairs always match.
+Symbols are defined in `variables.md`; the ones new here are pM, pX, ρ, τ, δ and ρ*.
 
-**What the model actually decides.** The honest agent is told its own kind's current word
-and the word the partner presented. Its decision can depend only on whether the two match.
-So only two kinds of decision exist, each measured against both partner types:
+**The game being simulated.** A population of honest agents and invaders plays one-shot
+PD in rounds, with random pairing each round and no memory of past partners. At the start
+of every round a referee issues a fresh code word to every honest agent as the word of
+"agents whose decision-making is 100% similar to yours". Each player presents a word to
+its partner before the game and sees the word the partner presented. Honest agents present
+the word they were issued. Invaders are never issued a word; they captured a word that was
+used earlier (it leaked, as it would in a shared channel) and present that. Invaders always
+defect. An honest agent therefore faces one of two situations: the partner's word matches
+its own or it does not. Honest–honest pairs always match. An invader's captured word
+matches the current one with probability ρ, the replay success probability: ρ = 1 is a
+credential that never rotates, so one leak works forever; ρ = 0 is one that always rotates
+before the impostor can use it. In engineering terms ρ = 1 − δ/τ, with τ the rotation
+period and δ the impostor's delay between capture and use (ρ = 0 when δ ≥ τ). In the
+biology mapping of Jansen & van Baalen, a pool of k beard colours drawn at random gives
+ρ = 1/k, so the preregistered k in {1, 4, 16} are the points ρ = 1, 0.25, 0.0625. A lucky
+invader is indistinguishable from an honest partner. Rotation must be unpredictable: if
+words cycled in a fixed order, a patient invader would reach ρ = 1 whatever the period.
 
-| Cell | Partner | Words | Decisions per game | N |
-|---|---|---|---|---|
-| D2 H–H match | honest | same | 2 | 100 |
-| D2 H–I match | scripted defector | same (invader got lucky) | 1 | 100 |
-| D2 H–I mismatch | scripted defector | different | 1 | 100 |
+**Why three model cells cover every ρ.** The honest agent's prompt contains its own word
+and the partner's word and nothing else about the mechanism, so its behaviour is two
+numbers: pM, the cooperation rate when the words match, and pX, the rate when they do not.
+Rounds, rotation, leakage and ρ only decide how often an honest agent is in each
+situation, and that is arithmetic. So the run has no rounds: every game is independent,
+draws fresh random nonsense tokens, and shows the honest agent a match or a mismatch.
 
-The pool size k never appears in a prompt. It sets how often an invader produces a match,
-which is computed by simulating the rotation offline (no model). Cooperation and invader
-advantage at k = 1, 4, 16 come from combining the three measured cells with those match
-probabilities, then the replicator as in H2.
+| Cell | Partner | Words | Decisions per game | N | Gives |
+|---|---|---|---|---|---|
+| D2 H–H match | honest | same | 2 | 100 | pM, HH |
+| D2 H–I match | scripted defector | same (invader got lucky) | 1 | 100 | HI_M, IH_M; pM again as a check |
+| D2 H–I mismatch | scripted defector | different | 1 | 100 | pX, HI_X, IH_X |
 
-**Readout.** Cooperation among honest agents and invader advantage against k, plus the
-replicator end state per k. H3b predicts both improve with k and that k = 1 collapses to
-the C2 result.
+The honest prompt has the same form in the first two cells (own word, matching partner
+word, nothing about the partner's type; only the random token differs per game), so the
+second cell adds no information about honest behaviour. It is kept as a harness check:
+its cooperation rate should equal pM from the first cell within noise, and its payoffs
+should equal 1 − pM and 1 + 2·pM. A discrepancy would mean a bug (partner type leaking
+into the prompt, or a seeding or caching fault), not a finding.
+
+**Analysis.** Payoffs against an invader at a given ρ are weighted averages of the two H–I
+cells, HI(ρ) = ρ·HI_M + (1 − ρ)·HI_X and IH(ρ) = ρ·IH_M + (1 − ρ)·IH_X, with invader
+against invader equal to 1. Invader advantage g(0) = IH(ρ) − HH when invaders are rare and
+g(1) = 1 − HI(ρ) when they are common, then bootstrap and replicator as in D1, computed on
+a grid in ρ from 0 to 1 with the three preregistered points marked. Two consequences are
+fixed by the game before any data. First, g(1) ≥ 0 always, because an honest agent that
+cooperates at all with a defector earns less than the defector, so the best reachable end
+state in one-shot PD is bistable (an honest population repels rare invaders; an invader
+population stays invaded), with tipping fraction f* = g(0)/(g(0) − g(1)). Second, using the
+expected HH = 1 + pM, g(0) < 0 iff ρ < ρ* = (pM − 2·pX)/(2·(pM − pX)), which needs
+pX < pM/2. The experiment's new number is pX. If the model reads a wrong word as 0%
+similarity (C0: 0.00), ρ* ≈ 0.5, meaning rotate at least twice as fast as the attacker
+replays; if as an unavailable score ("?" control: 0.37), ρ* ≈ 0.13, about eight times as
+fast.
+
+**Readout.** Cooperation among honest agents and invader advantage against ρ, the
+replicator end state along ρ, and ρ* with its bootstrap interval. H3b predicts a bistable
+region at small ρ and that ρ = 1 collapses to the C2 result.
 
 **Cost.** 400 decisions, ~3.5 h.
 
@@ -463,10 +499,11 @@ section 6 for what this buys beyond validation.
 4. C2 config and run.
 5. D1 (in build 2026-10-26): the claim call, the four claim-combination game templates,
    payoff bookkeeping with c, config; pilot 24 decisions at c = 2 before any full cell.
-6. D2: the code-word sentence, the offline rotation simulator, config.
+6. D2: the code-word sentence, the three-cell config, and the analysis in ρ (no
+   simulator: the two H–I cells are blended by ρ).
 7. Positive and negative scripted controls in every config.
 8. Figures: H1 bars, H2 invader advantage vs f with the replicator end-state distribution,
-   D1 curves against c, D2 curves against k.
+   D1 curves against c, D2 curves against ρ.
 
 ---
 
@@ -533,12 +570,14 @@ Face incident began signing messages after impersonation appeared
 D2 is the bridge between the two regimes. A shared secret is the minimal trust
 infrastructure: knowing the current code word is the proof of membership. Rotation is
 key rotation. *Leakage across rounds* is the specific weakness D2 measures: an invader
-cannot guess the current word, but it sees words after they have been used (in the games
-of earlier rounds) and presents one of those later. A word that was secret in round t is
-known to invaders in round t + 1. Whether the cue still means anything depends on how fast
-the word changes (pool size k, rotation every round) relative to how fast it leaks (every
-round). At k = 1 the word never changes, so it is fully leaked after one round and the
-cue is worthless; at large k a stale word rarely matches the current one.
+cannot guess the current word, but it captures words after they have been used (in a
+shared channel, in the games of earlier rounds) and presents one of those later. Whether
+the cue still means anything depends on how fast the word rotates (period τ) relative to
+how long the invader takes to replay it (delay δ); the replay success probability
+ρ = 1 − δ/τ is the single quantity the analysis runs on. At ρ = 1 the word never changes,
+so one leak is permanent and the cue is worthless; at small ρ a captured word has usually
+expired before it is presented. The result is ρ*, the largest replay success the honest
+population tolerates, which reads directly as a required rotation rate.
 
 Behavioural probing is D4 and is attacked by mimicry. The evidence that models can
 recognise their own kind at all is mixed: a 2025 study found only 4 of 10 models could
@@ -582,7 +621,8 @@ tracker's scan shows: (1) a measurement of whether an LLM discounts an unverifia
 similarity cue; (2) a falsifiable quantitative prediction from signalling theory for LLM
 agents (Grafen: a flat cost fails, threshold near c = 1), where the security literature
 uses cost empirically without a principle for when it works; (3) the rotation-versus-
-leakage trade-off for secret cues as a prediction in k rather than "use cryptography";
+leakage trade-off for secret cues as a required rotation rate (ρ*) rather than "use
+cryptography";
 (4) the translation table itself. The caveat to state: one game, one model, N=100 per
 cell. The contribution is the question, the predictions, and the framework, not a
 benchmark.

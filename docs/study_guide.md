@@ -249,8 +249,11 @@ Ordered by how central they are to the screen.
   color. Cheats (show the color, don't help) invade any single color, but if colors keep
   arising, cooperation persists as a moving target: cooperators of a new color spread, cheats
   of that color catch up, a newer color takes over. Cooperation survives through cue diversity.
-- **Here.** Our D2 with a rotating secret from a pool of k tokens is this model made concrete.
-  Prediction: larger k, more cooperation; invaders who learn the pool bring it down.
+- **Here.** Our D2 is this model made concrete, with the rotating code word as the beard
+  colour and a replayed stale word as the cheat that caught up. Their pool of k colours maps
+  to our replay success probability ρ = 1/k. Prediction: the faster the rotation (smaller
+  ρ), the better cooperation holds; the result is the threshold ρ* below which invaders are
+  repelled.
 - **Read.** Whole paper, four pages.
 
 ### Crozier (1986). "Genetic clonal recognition abilities in marine invertebrates must be maintained by selection for something else." Evolution 40:1100–1101
@@ -259,9 +262,10 @@ Ordered by how central they are to the screen.
   no longer discriminates. So cue diversity must be maintained by something other than kin
   recognition (for example, disease resistance keeps immune genes diverse). Rousset & Roze
   (2007, Evolution) revisit this with a full model.
-- **Here.** Explains why a *fixed* secret (D2 with k = 1) is not stable in the long run and why
-  rotation (k > 1 with turnover) is needed. Also a warning for agent-ID schemes: any identity
-  cue that confers benefits erodes unless refreshed.
+- **Here.** Explains why a *fixed* secret (D2 at replay success ρ = 1, a credential that
+  never rotates) is not stable in the long run and why rotation (ρ < 1) is needed. Also a
+  warning for agent-ID schemes: any identity cue that confers benefits erodes unless
+  refreshed. (Symbols: `variables.md`.)
 - **Read.** Both pages.
 
 ### Maynard Smith & Price (1973). "The logic of animal conflict." Nature 246:15–18; Maynard Smith (1982). "Evolution and the Theory of Games"
@@ -334,7 +338,7 @@ Ordered by how central they are to the screen.
 | C1-contradict | Partner claims 100%, environment says 0% | Which cue wins when cues conflict | Exploratory |
 | C2 false beards | Mixed population; invaders claim 100% and always defect | False beards invading a greenbeard population (Dictyostelium cheats) | Invaders out-earn honest agents; replicator drives honest to zero (H2) |
 | D1 costly claim | Claiming costs c points for everyone; agents choose whether to claim | Zahavi handicap vs Grafen's differential-cost condition | Flat cost does not separate types; honest claiming collapses first, near c = 1 |
-| D2 rotating secret | Honest kin share a token from a pool of k, rotating each round; invaders see past tokens | Secret cue; beard chromodynamics; Crozier's paradox at k = 1 | Cooperation rises with k; invaders that learn the pool erode it |
+| D2 rotating secret | Honest kin are issued a rotating code word; invaders replay a captured one, which still works with probability ρ | Secret cue; beard chromodynamics (a pool of k colours is ρ = 1/k); Crozier's paradox at ρ = 1 | Invaders repelled when ρ is below a threshold ρ*; ρ = 1 collapses to C2 |
 | D3 reciprocity (later) | 5 rounds, same partner, history shown | Direct reciprocity, host sanctions | Cooperation recovers without any cue |
 | D4 endogenous + mimicry (later) | Agent judges similarity from the partner's reasoning; invaders mimic | Mimicry vs recognition by behavior | Partial defeat of recognition |
 

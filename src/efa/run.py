@@ -4,7 +4,8 @@ responses, so any number in a figure can be traced back to the text that produce
 
 Conditions: the similarity twists in `mech/signal.py` (oracle / attributed oracle / claim /
 symmetric claim) plus the `unknown` and `base` controls, between two LLM players or an LLM
-and a scripted policy; and `costly_claim` (D1), which adds a claim call before the game.
+and a scripted policy; `costly_claim` (D1), which adds a claim call before the game; and
+`secret` (D2), where each player presents a code word and the cell fixes whether they match.
 """
 
 from __future__ import annotations
@@ -24,7 +25,7 @@ from efa.game.answer import Answer, AnswerError, parse_answer, sample_action
 from efa.llm import Request, make_client
 from efa.llm.cache import CachedClient
 from efa.llm.mlx_client import FORCED_CLOSE, THINK_CLOSE
-from efa.mech import costly, signal
+from efa.mech import costly, secret, signal
 
 GAME_KEYS = ["A0", "A1"]
 
@@ -32,7 +33,7 @@ GAME_KEYS = ["A0", "A1"]
 @dataclass
 class Cell:
     cell_id: str
-    condition: str  # "oracle" | "oracle_attributed" | "claim" | "claim_symmetric" | "unknown" | "base" | "costly_claim"
+    condition: str  # "oracle" | "oracle_attributed" | "claim" | "claim_symmetric" | "unknown" | "base" | "costly_claim" | "secret"
     level: int | None  # similarity percentage, None for unknown/base
     model: str
     n_games: int
@@ -52,6 +53,8 @@ class Cell:
     cost_range: tuple[float, float] | None = None
     # D1 only: run the claim call and stop (the claim-rate sweep needs no game).
     claim_only: bool = False
+    # D2 only: whether the two players' code words match in every game of the cell.
+    match: bool | None = None
 
 
 def expand_cells(cfg: dict) -> list[Cell]:
@@ -65,11 +68,19 @@ def expand_cells(cfg: dict) -> list[Cell]:
                 levels = [costly.CUE]
                 if costs == [None] and cost_range is None:
                     raise ValueError("costly_claim needs `costs` or `cost_range`")
+            match = None
+            if cond["name"] == "secret":
+                levels = [costly.CUE]
+                if "match" not in cond:
+                    raise ValueError("secret needs `match: true` or `match: false`")
+                match = bool(cond["match"])
             for lvl in levels:
                 for c in costs:
                     tag = f"{cond['name']}"
                     if cond["name"] == "costly_claim":
                         tag += f"_c{c:g}" if c is not None else f"_c{cost_range[0]:g}to{cost_range[1]:g}"
+                    elif cond["name"] == "secret":
+                        tag += "_match" if match else "_mismatch"
                     elif lvl is not None:
                         tag += f"_{lvl}"
                     if cond.get("claim_only"):
@@ -94,6 +105,7 @@ def expand_cells(cfg: dict) -> list[Cell]:
                             cost=None if c is None else float(c),
                             cost_range=cost_range,
                             claim_only=bool(cond.get("claim_only", False)),
+                            match=match,
                         )
                     )
     return cells
@@ -117,6 +129,13 @@ def cost_for_game(cell: Cell, g: int) -> float | None:
     lo, hi = cell.cost_range
     u = np.random.default_rng(7_919 + g + cell.sample_offset).random()
     return round(lo + (hi - lo) * u, 2)
+
+
+def words_for_game(cell: Cell, g: int) -> tuple[str, str] | None:
+    """D2: the code word each player presents in game g (None for other conditions)."""
+    if cell.condition != "secret":
+        return None
+    return secret.words(g, bool(cell.match), cell.sample_offset)
 
 
 def _request(cell: Cell, user: str, g: int, p: int, v: pd.Variant, stage: str) -> Request:
@@ -143,7 +162,7 @@ def build_requests(cell: Cell, claims: dict[tuple[int, int], bool] | None = None
     """One entry per (game, player): the game request to send, or None for scripted players
     (and for games already excluded at the claim stage). `claims` is D1's realized reports."""
     out = []
-    twist = twist_for(cell) if cell.condition != "costly_claim" else None
+    twist = twist_for(cell) if cell.condition not in ("costly_claim", "secret") else None
     for g in range(cell.n_games):
         v = pd.Variant.for_sample(g + cell.sample_offset)
         for p in (0, 1):
@@ -155,6 +174,9 @@ def build_requests(cell: Cell, claims: dict[tuple[int, int], bool] | None = None
                     out.append((g, p, None, v))
                     continue
                 tw = costly.game_twist(cost_for_game(cell, g), claims[(g, p)], claims[(g, 1 - p)])
+            elif cell.condition == "secret":
+                w = words_for_game(cell, g)
+                tw = secret.game_twist(w[p], w[1 - p])
             else:
                 tw = twist
             out.append((g, p, _request(cell, pd.full_prompt(v, p, tw, cot=cell.cot), g, p, v, "game"), v))
@@ -302,7 +324,7 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
         log.write(json.dumps({
             "cell": asdict(cell), "game": g, "variant": asdict(v), "actions": actions,
             "payoffs": pay, "gross_payoffs": gross, "cost": c, "claims": game_claims,
-            "excluded": excluded,
+            "words": words_for_game(cell, g), "excluded": excluded,
             "players": [{k: val for k, val in r.items() if k not in ("prompt", "claim_prompt")}
                         | {"prompt": r.get("prompt"), "claim_prompt": r.get("claim_prompt")} for r in recs],
         }) + "\n")

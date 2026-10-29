@@ -35,7 +35,7 @@ API keys go in `.env` (see `.env.example`). Every model call is cached in
 - `src/efa/run.py` matrix runner; one JSON line per game with both prompts and raw responses
 - `src/efa/analysis/` per-cell metrics with Wilson intervals, replicator dynamics, figures
 - `configs/` one YAML per experiment block
-- `docs/` study guide, preregistration, research log
+- `docs/` study guide, preregistration, research log, master variable list (`variables.md`)
 
 ## Status
 

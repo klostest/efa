@@ -1,0 +1,5 @@
+cells:   0%|          | 0/2 [00:00<?, ?it/s]
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s][AFetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 2658.64it/s]
+                                            cells:   0%|          | 0/2 [08:22<?, ?it/s]cells:  50%|█████     | 1/2 [08:22<08:22, 502.65s/it]                                                     cells:  50%|█████     | 1/2 [17:22<08:22, 502.65s/it]cells: 100%|██████████| 2/2 [17:22<00:00, 524.30s/it]cells: 100%|██████████| 2/2 [17:22<00:00, 521.05s/it]
+{"cell": "secret_match__Qwen3.5-27B-4bit", "games": 6, "ok": 6, "seconds": 497.3}
+{"cell": "secret_mismatch_vs_always_defect__Qwen3.5-27B-4bit", "games": 12, "ok": 12, "seconds": 539.5}

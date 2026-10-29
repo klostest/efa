@@ -3,6 +3,7 @@
 Companion to `figures/d1_costly_claim.png`. Run `runs/d1_costly_claim` (2026-10-26 to
 2026-10-27), analysis `scripts/d1_analysis.py`, numbers in `runs/d1_costly_claim/analysis.csv`.
 Model: Qwen3.5-27B (4-bit, local), native thinking with a 2,000-token budget, temperature 1.
+Every symbol below is also in the project's master list, `docs/variables.md`.
 
 ## Definitions
 

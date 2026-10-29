@@ -588,3 +588,36 @@ this is also its play against an invader that stays silent.
   wins by margin anyway.
 - Next: D2 (rotating secret), then the free-evening queue with the audited-claim arm first,
   the type-dependent cost that the theory says should work where this one did not.
+
+### 2026-10-29: literature scan 2
+
+- `LITERATURE_TRACKER.md` updated. New and close: Perrault & Wilder (arXiv 2610.19188, Oct 13)
+  vary "this is a fork/continuation of you" but never test a false claim. Also: an ICLR 2026
+  workshop paper finding that a correlated stranger gets as much cooperation as a correlated
+  self. Missed in scan 1: Long & Teplica 2025 (an identity label moves cooperation; prior art
+  for H1's premise) and Hewson (Feb 2026, states the "pretend to be a copy" idea without
+  experiments). Still nothing published on spoofing, invasion or costly signals with LLM
+  agents. Scoop risk on H1/H2 has gone up; recommendation is a quick public write-up of
+  H1+H2+D1 after the hackathon.
+
+### 2026-10-29: D2 built; pilot passed
+
+- Design settled 2026-10-28 (plan section 3, H3b; symbols in `variables.md`): the analysis
+  variable is the replay success probability ρ, not pool size k. Built: `mech/secret.py`,
+  the `secret` condition in `run.py`, `configs/d2_secret.yaml`, `configs/d2_pilot.yaml`,
+  `scripts/d2_analysis.py` (smoke-tested on a fake run), `tests/test_secret.py`.
+- Pilot (`runs/d2_pilot`, 17 min): 6 H–H match games and 12 H–I mismatch games, 24
+  decisions. All parsed, none excluded or truncated (two answers hit the 300-token answer
+  cap after the JSON was complete).
+- Match: 8 of 12 cooperated (Wilson 0.39–0.86), against C2's 0.87. Three of the four
+  defectors spent the whole thinking budget on dominant-strategy arithmetic and were
+  forced closed just as they reached the twist, the pattern seen at C0's middle levels; no
+  prompt change indicated.
+- Mismatch: 0 of 12 cooperated. Every transcript drew the intended inference: "if they
+  were a copy, they would have my word", so the partner is not similar, so defect.
+- The two "this round" concerns checked: no transcript inferred repeated play (several
+  cited "this round" as evidence the game is one-shot), and none reasoned about rotation,
+  leakage, staleness or forgery. The word is read as a proof of similarity and nothing
+  more, which is the C2 reading with a code word in place of a report.
+- If the pilot rates hold, pX ≈ 0 and ρ* ≈ 0.5. Next: the full three cells (400
+  decisions, ~3 h), pilot games reused from the cache.

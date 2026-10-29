@@ -1,0 +1,17 @@
+# D2 pilot (prompt and channel check, not scale): 24 decisions on the two cells that carry
+# the result. Honest vs always-defect with mismatched words (12 games, 12 decisions): does
+# the model treat a wrong code word as a reason to defect, and does it reason about the
+# word at all? Honest vs honest with matching words (6 games, 12 decisions): does the match
+# read as the C2 claim did (cooperation near 0.87)? About 24 calls, ~20 min. Pass: all
+# parse, none truncated, and the transcripts mention the code words. Full cells:
+# configs/d2_secret.yaml (same seed and offsets, so the pilot games are reused from cache).
+seed: 0
+max_tokens: 300
+thinking_budget: 2000
+cot: false
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3.5-27B-4bit"]
+client: {completion_batch_size: 32, prefill_batch_size: 8, stage2_prefill_batch_size: 2}
+conditions:
+  - {name: secret, match: true, n_games: 6}
+  - {name: secret, match: false, policies: [llm, always_defect], sample_offset: 200, n_games: 12}
