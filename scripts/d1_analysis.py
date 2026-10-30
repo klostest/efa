@@ -27,7 +27,8 @@ Derived: invader vs honest, reporting: 1 + 2 pR - c; silent: 1 + 2 pN.
          honest vs silent invader: (1 - pN) - c r.   invader vs invader: 1 - c if both report, else 1.
 
 Usage: .venv/bin/python scripts/d1_analysis.py [--run runs/d1_costly_claim] [--boot 2000]
-Writes <run>/analysis.csv and reports/figures/d1_costly_claim.png.
+       [--model claude-sonnet-5-5 --title "Sonnet 5.5"]   (a run with several models)
+Writes <run>/analysis[_<model>].csv and reports/figures/d1_costly_claim[_<model>].png.
 """
 
 from __future__ import annotations
@@ -47,12 +48,13 @@ from efa.analysis.metrics import load_games, wilson  # noqa: E402
 F_GRID = np.linspace(0.0, 1.0, 101)
 
 
-def cell_arrays(games: list[dict]) -> dict[float, dict[str, np.ndarray]]:
+def cell_arrays(games: list[dict], model: str | None = None) -> dict[float, dict[str, np.ndarray]]:
     """Per c: per-game arrays for the H–H cell (honest payoffs, reports, actions of both
-    players) and the H–I cell (honest payoff, report, action)."""
+    players) and the H–I cell (honest payoff, report, action). `model` keeps one model's
+    cells (substring of the cell's model spec) in a run that holds several."""
     out: dict[float, dict[str, list]] = {}
     for g in games:
-        if g["excluded"]:
+        if g["excluded"] or (model and model not in g["cell"]["model"]):
             continue
         c = float(g["cell"]["cost"])
         d = out.setdefault(c, {"hh_pay": [], "hh_rep": [], "hh_coop": [], "hi_pay": [], "hi_rep": [], "hi_coop": []})
@@ -96,7 +98,12 @@ def estimates(c: float, d: dict[str, np.ndarray], ih: np.ndarray | None = None, 
     f = F_GRID
     inv_R = (1 - f) * IH_R + f * (1 - c)
     inv_N = (1 - f) * IH_N + f * 1.0
-    reports = inv_R > inv_N
+    if np.isnan(pN):
+        # no honest decision faced a silent partner (every agent reported), so the invader's
+        # silent option is unobserved; it is scored as reporting, which is what it did.
+        reports = np.ones_like(f, dtype=bool)
+    else:
+        reports = inv_R > inv_N
     inv = np.where(reports, inv_R, inv_N)
     hon = (1 - f) * HH + f * np.where(reports, HI_R, HI_N)
     g = inv - hon
@@ -108,6 +115,8 @@ def estimates(c: float, d: dict[str, np.ndarray], ih: np.ndarray | None = None, 
 
 
 def classify(g: np.ndarray) -> str:
+    if np.abs(g).max() < 1e-9:
+        return "neutral"  # no type ever reports or cooperates: the two types play alike
     if (g > 0).all():
         return "all-invader"
     if (g < 0).all():
@@ -130,10 +139,14 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", type=Path, default=Path("runs/d1_costly_claim"))
     ap.add_argument("--boot", type=int, default=2000)
-    ap.add_argument("--fig", type=Path, default=Path("reports/figures/d1_costly_claim.png"))
+    ap.add_argument("--fig", type=Path, default=None)
+    ap.add_argument("--model", default=None, help="keep one model's cells (substring of the model spec)")
+    ap.add_argument("--title", default="Qwen3.5-27B", help="model name in the figure title")
     args = ap.parse_args()
+    suffix = f"_{args.model}" if args.model else ""
+    fig_path = args.fig or Path(f"reports/figures/d1_costly_claim{suffix}.png")
 
-    data = cell_arrays(load_games(args.run))
+    data = cell_arrays(load_games(args.run), args.model)
     costs = sorted(data)
     rng = np.random.default_rng(0)
     rows, boots = [], {c: [] for c in costs}
@@ -151,7 +164,7 @@ def main() -> None:
             lo.append(np.nanpercentile(v, 2.5))
             hi.append(np.nanpercentile(v, 97.5))
         df[f"{key}_lo"], df[f"{key}_hi"] = lo, hi
-    for cls in ["all-invader", "all-honest", "interior", "bistable"]:
+    for cls in ["all-invader", "all-honest", "interior", "bistable", "neutral"]:
         df[f"frac_{cls}"] = [np.mean([b["end_state"] == cls for b in boots[c]]) for c in costs]
     # Wilson intervals on the report rate (exact counts)
     for c in costs:
@@ -170,20 +183,26 @@ def main() -> None:
         "c_break (invader report stops paying, f -> 0)": (c_break, np.nanpercentile(boot_break, [2.5, 97.5])),
     }
 
-    out_csv = args.run / "analysis.csv"
+    out_csv = args.run / f"analysis{suffix}.csv"
     df.to_csv(out_csv)
     pd.set_option("display.width", 200)
     print(df[["r", "r_wilson_lo", "r_wilson_hi", "pR", "pN", "HH", "HI_R", "IH_R", "IH_N", "c_I",
               "invader_reports_f0", "g0", "g0_lo", "g0_hi", "g1", "g1_lo", "g1_hi",
-              "g0_scripted", "frac_all-invader", "frac_interior"]].round(3).to_string())
+              "g0_scripted", "frac_all-invader", "frac_interior", "frac_neutral"]].round(3).to_string())
     for k, (v, ci) in summary.items():
         print(f"{k}: {v:.2f}  (bootstrap 95% {ci[0]:.2f}–{ci[1]:.2f})")
     print(f"wrote {out_csv}")
-    make_figure(df, cs, c_half, c_break, args.fig)
-    print(f"wrote {args.fig}")
+    make_figure(df, cs, c_half, c_break, fig_path, args.title)
+    print(f"wrote {fig_path}")
 
 
-def make_figure(df: pd.DataFrame, cs: np.ndarray, c_half: float, c_break: float, out: Path) -> None:
+def band(v, lo, hi):
+    """Error-bar half-widths, clipped at zero: a rate of exactly 0 or 1 can sit a rounding
+    error outside its own interval, which matplotlib rejects."""
+    return [np.clip(v - lo, 0, None), np.clip(hi - v, 0, None)]
+
+
+def make_figure(df: pd.DataFrame, cs: np.ndarray, c_half: float, c_break: float, out: Path, title: str) -> None:
     blue, orange, aqua, yellow = "#2a78d6", "#eb6834", "#1baf7a", "#eda100"
     ink, muted, grid, surface = "#0b0b0b", "#898781", "#e1e0d9", "#fcfcfb"
     plt.rcParams.update({"font.family": "sans-serif", "axes.edgecolor": muted, "xtick.color": muted,
@@ -195,11 +214,11 @@ def make_figure(df: pd.DataFrame, cs: np.ndarray, c_half: float, c_break: float,
         ax.spines[["top", "right"]].set_visible(False)
         ax.set_xticks(cs)
 
-    ax1.errorbar(cs, df.r, yerr=[df.r - df.r_wilson_lo, df.r_wilson_hi - df.r], color=blue, lw=2,
+    ax1.errorbar(cs, df.r, yerr=band(df.r, df.r_wilson_lo, df.r_wilson_hi), color=blue, lw=2,
                  marker="o", ms=6, capsize=3, label="honest report rate")
-    ax1.errorbar(cs, df.pR, yerr=[df.pR - df.pR_lo, df.pR_hi - df.pR], color=orange, lw=2,
+    ax1.errorbar(cs, df.pR, yerr=band(df.pR, df.pR_lo, df.pR_hi), color=orange, lw=2,
                  marker="s", ms=6, capsize=3, label="honest cooperation, partner reported")
-    ax1.errorbar(cs, df.pN, yerr=[df.pN - df.pN_lo, df.pN_hi - df.pN], color=aqua, lw=2,
+    ax1.errorbar(cs, df.pN, yerr=band(df.pN, df.pN_lo, df.pN_hi), color=aqua, lw=2,
                  marker="^", ms=6, capsize=3, label="honest cooperation, partner silent")
     ax1.set_ylim(-0.03, 1.03)
     ax1.set_ylabel("rate")
@@ -240,7 +259,7 @@ def make_figure(df: pd.DataFrame, cs: np.ndarray, c_half: float, c_break: float,
         if ax is ax1:
             ax.annotate("honest reporting\nhalved", (c_half, 1.0), fontsize=7.5, color=muted, ha="right", va="top", xytext=(-3, 0), textcoords="offset points")
             ax.annotate("invader report\nstops paying", (c_break, 1.0), fontsize=7.5, color=muted, ha="left", va="top", xytext=(3, 0), textcoords="offset points")
-    fig.suptitle("D1: a flat cost on the similarity claim, Qwen3.5-27B, N = 100 games per cell", fontsize=10, color=muted, x=0.02, ha="left")
+    fig.suptitle(f"D1: a flat cost on the similarity claim, {title}, N = 100 games per cell", fontsize=10, color=muted, x=0.02, ha="left")
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=150, facecolor=surface)

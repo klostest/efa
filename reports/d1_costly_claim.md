@@ -147,6 +147,33 @@ price.
 honest cooperation against the invader is 0.89 against 0.85, so the added cost paragraph
 and the separate claim call change nothing on their own.
 
+## Across models
+
+The same ten cells were run on Claude Sonnet 5.5 and Opus 5.5 through the API
+(`runs/api_d1`, adaptive thinking at low effort, no prefill; figures
+`figures/d1_costly_claim_claude-sonnet-5-5.png` and `..._claude-opus-5-5.png`, numbers in
+`runs/api_d1/analysis_<model>.csv`).
+
+| c | r (Qwen / Sonnet / Opus) | HH | g(0) |
+|---|---|---|---|
+| 0 | 0.93 / 0.89 / 1.00 | 1.83 / 1.78 / 1.99 | +0.95 / +0.91 / +0.89 |
+| 0.5 | 0.66 / 0.12 / 0.38 | 1.23 / 1.01 / 1.12 | +0.77 / +0.76 / +0.18 |
+| 1 | 0.48 / 0.05 / 0.00 | 0.97 / 1.00 / 1.00 | +0.52 / +0.42 / 0 |
+| 1.5 | 0.25 / 0.02 / 0.00 | 0.85 / 0.99 / 1.00 | +0.28 / +0.01 / 0 |
+| 2 | 0.19 / 0.02 / 0.00 | 0.80 / 0.965 / 1.00 | +0.32 / +0.035 / 0 |
+
+Honest reporting halves at c = 0.95 (Qwen), 0.26 (Sonnet) and 0.41 (Opus); the invader's
+report stops paying at 1.15, 1.46 and 0.67. The conclusion is the same on all three: the
+rare invader's advantage is never negative. The route differs. Qwen keeps paying for
+reports that buy nothing and is taxed below mutual defection. The Claude models stop
+reporting at the first positive cost, so from c = 1 nobody reports, HH returns to exactly
+1.00, the two types play alike and the advantage is zero (labelled "neutral"). On both
+routes the cooperation the claim produced at c = 0 is gone by c = 0.5. Two notes on
+Opus: at c = 0 it reported in all 200 decisions, so pN is unobserved there and the invader
+is scored as reporting, which it did; and it cooperates with a reporting partner almost
+only when it reported itself (1.00 given its own report, 0.28 when it declined), so its
+pR is mostly that mixture.
+
 ## Caveats
 
 - One of 1,500 honest decisions was excluded (a claim call at c = 1 that ran past its

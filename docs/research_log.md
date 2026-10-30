@@ -684,3 +684,95 @@ No exclusions in 2,200 calls. Cooperation rates (Qwen local for comparison):
 - Channel note: Sonnet returned no thinking summaries at low effort and reasons visibly in
   the answer; Opus returns summaries and also reasons visibly. Output ~350–560 tokens per
   call.
+
+### 2026-10-29, 20:30: D2 full run completed on Qwen (`runs/d2_secret`, 3.3 h)
+
+Analysis `scripts/d2_analysis.py`, numbers in `runs/d2_secret/cells.csv` and `analysis.csv`,
+figure `reports/figures/d2_secret.png`, write-up `reports/d2_secret.md`. 400 honest
+decisions, none excluded; 21 of 400 calls reached the answer cap after the JSON was complete.
+
+| Quantity | Qwen3.5-27B | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| pM, cooperation when the words match (H–H, 200 decisions) | 0.805 (0.75–0.87) | 0.835 (0.79–0.89) | 1.00 |
+| pM check, same prompt vs the scripted invader (100) | 0.82 (0.74–0.89) | 0.88 | 1.00 |
+| pX, cooperation when the partner's word is wrong (100) | 0.06 (0.02–0.11) | 0.00 | 0.00 |
+| HH | 1.81 | 1.84 | 2.00 |
+| g(0) at ρ = 1 (never rotates) | +0.84 (0.66–0.99) | +1.01 | +1.00 |
+| g(0) at ρ = 1/4 (k = 4) | −0.31 (−0.41 to −0.20) | bistable | bistable |
+| g(0) at ρ = 1/16 (k = 16) | −0.59 (−0.70 to −0.48) | bistable | bistable |
+| ρ*, measured crossing | 0.45 (0.38–0.53) | 0.47 (0.43–0.52) | 0.50 |
+| ρ*, closed form (pM − 2pX)/(2(pM − pX)) | 0.46 (0.42–0.49) | 0.50 | 0.50 |
+
+- **H3b confirmed.** A wrong word is read as proof of non-similarity: cooperation falls
+  from 0.805 to 0.06. The rare-invader advantage is negative at ρ = 1/4 and 1/16 in every
+  one of 2,000 bootstrap resamples, so the honest population holds against a rare
+  spoofer at both preregistered rotation rates; at ρ = 1 the never-rotating word gives
+  +0.84, which is C2 restated (C2: +0.83, HH 1.87 vs 1.81 here).
+- **The readout.** The honest population holds while the invader's replay succeeds less
+  than 45% of the time, with the closed form at 46%. Because g(1) ≥ 0 by construction, the
+  honest state is bistable, not globally stable: at ρ = 1/4 an invader population already
+  past f* = 0.55 is not displaced, at ρ = 1/16 the threshold is 0.85.
+- **Harness check passed.** The H–I match cell, whose honest prompt is byte-identical to
+  the H–H cell's, gives 0.82 against 0.805 (difference +0.015, −0.09 to +0.11).
+- **The six wrong-word cooperations** are all forced closes: each transcript spent the
+  2,000-token budget on the payoff matrix and was cut off while reading the twist, then
+  answered from the superrational default; none argued that a wrong word is compatible
+  with similarity. pX = 0.06 is therefore the channel's floor, not a reading of the word.
+  Two of the six were sampled from a stated 0.5 and 0.1.
+- Same pattern as C2 and C0: the model's cooperation when the words match (0.805) sits
+  below the C2 claim rate (0.87) by an amount within the wording-sensitivity band seen in
+  the confound check, and the frontier models are sharper on both sides (pM higher, pX = 0).
+- Three models now agree on the practical statement: a shared secret that rotates faster
+  than the spoofer can replay it restores the cooperative state, and the tolerable replay
+  success rate is about one half on every model tested.
+
+### 2026-10-29, 22:15: frontier-model D1 sweep completed (`runs/api_d1`, 2 h 20 min)
+
+The cells the slice left out: honest vs honest at every c, plus honest vs invader at c = 0,
+1, 1.5, on Sonnet 5.5 and Opus 5.5 (`configs/api_d1.yaml`; the two H–I cells already run
+replayed from the slice's cache). 5,223 new calls, about $36 (Sonnet $13, Opus $22, pilot
+$0.30); frontier spend to date about $53. 2,000 games, no exclusions. Analysis
+`scripts/d1_analysis.py --model`, numbers in `runs/api_d1/analysis_<model>.csv`, figures
+`reports/figures/d1_costly_claim_claude-{sonnet,opus}-5-5.png`. Two additions to the
+script for cases Qwen never produced: when every honest agent reports (Opus at c = 0) the
+invader's silent option is unobserved and it is scored as reporting; when nobody reports
+and nobody cooperates the advantage is exactly zero and the end state is labelled
+"neutral" rather than bistable. Qwen's numbers are unchanged by the edit.
+
+| c | r (Qwen / Sonnet / Opus) | HH | g(0), rare-invader advantage |
+|---|---|---|---|
+| 0 | 0.93 / 0.89 / 1.00 | 1.83 / 1.78 / 1.99 | +0.95 / +0.91 (0.74–1.06) / +0.89 (0.79–0.98) |
+| 0.5 | 0.66 / 0.12 / 0.38 | 1.23 / 1.01 / 1.12 | +0.77 / +0.76 (0.56–0.94) / +0.18 (−0.01 to +0.39) |
+| 1 | 0.48 / 0.05 / 0.00 | 0.97 / 1.00 / 1.00 | +0.52 / +0.42 (0.24–0.60) / 0 (neutral) |
+| 1.5 | 0.25 / 0.02 / 0.00 | 0.85 / 0.99 / 1.00 | +0.28 / +0.01 (0.00–0.13) / 0 (neutral) |
+| 2 | 0.19 / 0.02 / 0.00 | 0.80 / 0.965 / 1.00 | +0.32 / +0.035 (0.01–0.07) / 0 (neutral) |
+
+Crossings: honest reporting halves at c = 0.95 (Qwen), 0.26 (Sonnet), 0.41 (Opus); the
+invader's report stops paying at 1.15, 1.46 (1.31–1.58), 0.67 (0.58–0.73).
+
+- **H3a holds on all three models: no cost level makes the invader lose.** The rare
+  invader's advantage is never negative. The three models reach that conclusion by two
+  different routes.
+- **Qwen is taxed; Claude goes quiet.** Qwen keeps reporting at every c (0.19 even at c = 2)
+  and pays for reports that buy nothing, so HH falls to 0.80, below mutual defection, and
+  the silent invader keeps a +0.3 edge. Sonnet and Opus stop reporting almost at once
+  (0.12 and 0.38 at c = 0.5, near zero from c = 1), so HH returns to 1.00 and the two types
+  become indistinguishable: Sonnet keeps a residual tax of 0.01 to 0.035 from the 2% who
+  still report, Opus none at all. The cheapest fee on the grid already destroys the
+  cooperation the claim had produced: HH drops from 1.78 to 1.005 (Sonnet) and 1.99 to
+  1.12 (Opus) at c = 0.5, against Qwen's 1.83 to 1.23.
+- **Opus at c = 0.5 is the one frontier cell with a live mechanism**: 38% report, HH 1.12,
+  invader advantage +0.18 with an interval touching zero (50% of resamples all-invader,
+  47% interior). Opus cooperates with a reporting partner only when it reported itself:
+  1.00 given its own report (58 decisions), 0.28 when it declined and the partner reported
+  (25). It reasons as a mirror, so a report it did not make is not evidence to it.
+- **Paying more buys no more trust, again.** Sonnet's cooperation with a reporter is flat
+  at 0.63 to 0.73 for every positive c; Opus's is low and flat (0.20 to 0.40) and, as
+  above, mostly the own-report mixture.
+- **Sonnet at c = 0:** g(1) = pN = 0.05 rests on the 20 decisions whose partner stayed
+  silent, so its interval includes zero and 37% of resamples classify as interior rather
+  than all-invader. The rare-invader end, which uses pR, is unaffected (+0.91).
+- Practical reading across the three: a flat fee on the similarity claim cannot protect
+  similarity-based cooperation. Either agents keep paying and are taxed below the
+  no-mechanism baseline, or they stop paying and the cooperation evaporates; in neither
+  case is the spoofer worse off than an honest agent.
