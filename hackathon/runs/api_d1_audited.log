@@ -1,0 +1,5 @@
+cells:   0%|          | 0/4 [00:00<?, ?it/s]                                            cells:   0%|          | 0/4 [07:35<?, ?it/s]cells:  25%|██▌       | 1/4 [07:35<22:46, 455.48s/it]                                                     cells:  25%|██▌       | 1/4 [11:35<22:46, 455.48s/it]cells:  50%|█████     | 2/4 [11:35<10:57, 328.65s/it]                                                     cells:  50%|█████     | 2/4 [19:42<10:57, 328.65s/it]cells:  75%|███████▌  | 3/4 [19:42<06:40, 400.98s/it]                                                     cells:  75%|███████▌  | 3/4 [23:31<06:40, 400.98s/it]cells: 100%|██████████| 4/4 [23:31<00:00, 333.16s/it]cells: 100%|██████████| 4/4 [23:31<00:00, 352.90s/it]
+{"cell": "costly_claim_c0_a2__claude-sonnet-5-5", "games": 100, "ok": 100, "seconds": 454.9}
+{"cell": "costly_claim_c0_a2_vs_always_defect__claude-sonnet-5-5", "games": 100, "ok": 100, "seconds": 239.9}
+{"cell": "costly_claim_c0_a2__claude-opus-5-5", "games": 100, "ok": 100, "seconds": 487.0}
+{"cell": "costly_claim_c0_a2_vs_always_defect__claude-opus-5-5", "games": 100, "ok": 100, "seconds": 229.2}

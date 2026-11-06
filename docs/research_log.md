@@ -857,3 +857,50 @@ invader's report stops paying at 1.15, 1.46 (1.31–1.58), 0.67 (0.58–0.73).
 - Status: plan section 2 row and section 8 queue updated; nothing committed. Next, with
   Steve's go: the frontier replay (Sonnet 5.5, Opus 5.5, ~600 calls each) and his
   preregistration H3c sentence.
+
+### 2026-11-06, 11:00: hackathon started; event reruns launched; frontier audited arm piloted
+
+- Kickoff rules (transcript in `../Hackathon/Kickoff_presentation/`): only the weekend's
+  work is judged; prior work is allowed if the README and the report say exactly what was
+  built before; PDF on the official template, 8 pages, 150–250 word abstract, required
+  limitations / dual-use appendix; deadline Sunday 11:59 PM AoE. Steve submits to the
+  global sprint only (not prize-eligible at the LA hub); no video.
+- Separation: git tag `pre-hackathon` on commit a79d9fb (Steve's Friday-morning commit of
+  the whole pre-event state). Everything made this weekend lives under `hackathon/`; the
+  edits outside it are listed in `hackathon/README.md` (this entry, the top-level README
+  section).
+- `hackathon/scripts/run_event.sh` started 11:03 PST: the Qwen matrix rerun from a cleared
+  cache (generation is unseeded, so fresh samples) in priority order C2, audited, D2, D1
+  at c = 2, 0.5, 0, 1.5, 1, C0 gate, H1, confound; about 44 h. Any cell not done in time
+  is reported from the pre-event run, flagged.
+- Frontier audited-claim pilot (`hackathon/runs/api_d1_audited_pilot`, 24 games): passed.
+  Opus reported 12/12 and cooperated 12/12 (invader 3 − 2 = 1 every time); Sonnet reported
+  15/18, one one-sided H–H game ended D,D, and its two silent honest agents in H–I both
+  cooperated with the reporting invader (invader took 3). Forfeit named in 36/36
+  responses; no payment-to-partner reading. Full run launched (`hackathon/runs/api_d1_audited`).
+- `hackathon/scripts/headline.py` written: pre-event beside event for every headline
+  quantity (`hackathon/runs/headline.md`, `hackathon/figures/event_replication.png`).
+  `hackathon/numbers.md`, `outline.md`, `submission.md` drafted for Steve's writing.
+
+### 2026-11-06, 11:35: audited claim on Sonnet 5.5 and Opus 5.5 done; H3c holds on all three models
+
+- `hackathon/runs/api_d1_audited`, 600 calls per model, about 20 min, 0 exclusions.
+  Analysis per model with `scripts/d1_audited_analysis.py --run hackathon/runs/api_d1_audited
+  --d1 runs/api_d1 --model <m>`; figures in `hackathon/figures/`; cross-model section added
+  to `reports/d1_audited.md` (a weekend edit outside `hackathon/`, listed in its README).
+- Sonnet: r 0.87 (0.83–0.91), p_RR 1.00 (91/91 and 148/148), p_NR 0.11 (1 of 9), pN 0 of
+  29, HH 1.745, IH_R 1.02, IH_N 1.00, g(0) = −0.73 (−0.82 to −0.64), g(1) = 0, bistable
+  in 100% of resamples. D1 at c = 2 on Sonnet had given +0.035.
+- Opus: everyone reports (300/300 claim calls at stated 1.0) and every pair cooperates:
+  HH 2.00, HI_R 0.00, IH_R 1.00, g(0) = −1.00. No silent partner was ever observed, so the
+  invader is scored as reporting at every f, giving g(1) = −1 and "all-honest"; with
+  defection against a silent partner (Opus's pN at D1 c = 2 was 0 of 200) the corner would
+  be neutral. Either way the honest population wins by a full point per game.
+- Sonnet's declines are mostly tail samples of hedged report probabilities (0.90–0.97 in
+  222 of 300 claim calls; 7 decided declines at 0.1), unlike Qwen's decided declines; the
+  silent agents still defect against a reporter and reporters defect against silent
+  partners, so the route closes by the same reasoning. Corrected prediction-3 bound on
+  Sonnet: 2·(1 − r)·(p_NR − pN) = 0.03; measured gain from reporting +0.02.
+- Reading for the report: the same two points as a flat fee left the invader level or
+  ahead on all three models; as a stake forfeited only by a defector that reported to a
+  reporter, they put it 0.7 to 1.0 behind on all three.

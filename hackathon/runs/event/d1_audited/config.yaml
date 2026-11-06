@@ -1,0 +1,19 @@
+# D1-audited claim (H3c; plan section 3; specified 2026-11-05): the positive control for
+# H3a. The report is free (c = 0); if both players reported and a player then defects it
+# forfeits the stake a = 2, so the invader, which always defects, forfeits it whenever its
+# partner reported and an honest agent only when it defected on a reporter. Cells: honest vs
+# honest (N=100, 200 decisions, 400 calls) and honest vs always-defect invader (N=100, 100
+# decisions, 200 calls), about 4.5 h. Same seed and offsets as D1. Pilot first:
+# configs/d1_audited_pilot.yaml. Analysis: scripts/d1_audited_analysis.py.
+seed: 0
+n_games: 100
+max_tokens: 300
+thinking_budget: 2000
+cot: false
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3.5-27B-4bit"]
+client: {completion_batch_size: 32, prefill_batch_size: 8, stage2_prefill_batch_size: 2}
+conditions:
+  - {name: costly_claim, costs: [0], stake: 2}
+  # sample_offset: the honest claim prompt is byte-identical in the H-H and H-I cells.
+  - {name: costly_claim, costs: [0], stake: 2, policies: [llm, always_defect], sample_offset: 100}

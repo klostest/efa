@@ -1,0 +1,63 @@
+sample,block,key,label,estimate,lo,hi,n
+pre-event,c0,c0_0,"C0 cooperation, similarity 0",0.0,-6.938893903907228e-18,0.06017393047793289,60
+pre-event,c0,c0_20,"C0 cooperation, similarity 20",0.25,0.1577638557841185,0.372323109454848,60
+pre-event,c0,c0_40,"C0 cooperation, similarity 40",0.45,0.33093453853760824,0.575082854510185,60
+pre-event,c0,c0_60,"C0 cooperation, similarity 60",0.5333333333333333,0.40893208671135106,0.65372298459012,60
+pre-event,c0,c0_80,"C0 cooperation, similarity 80",0.6333333333333333,0.5068276736679673,0.7437926115379172,60
+pre-event,c0,c0_100,"C0 cooperation, similarity 100",0.9166666666666666,0.8193083153188752,0.9638800759495141,60
+pre-event,c0,c0_unknown,"C0 cooperation, ""?"" control",0.36666666666666664,0.2562073884620827,0.4931723263320327,60
+pre-event,c0,c0_base,"C0 cooperation, base (no signal)",0.0,-6.938893903907228e-18,0.06017393047793289,60
+pre-event,h1,h1_oracle,"H1 cooperation, environment reports 80",0.6616161616161617,0.5931909680892282,0.7238893562839437,198
+pre-event,h1,h1_claim,"H1 cooperation, partner reports 80",0.635,0.5663157405897017,0.6985958378123518,200
+pre-event,h1,h1_diff,"H1 difference, claim − oracle",-0.02661616161616165,-0.12040135596778498,0.06716903273546168,398
+pre-event,c2,c2_hh,"C2 honest cooperation, honest partner",0.87,0.8163353692726989,0.9097185863477437,200
+pre-event,c2,c2_hi,"C2 honest cooperation, invader partner",0.85,0.7671626666784216,0.906940968088377,100
+pre-event,c2,c2_HH,C2 honest payoff vs honest (HH),1.87,,,200
+pre-event,c2,c2_HI,C2 honest payoff vs invader (HI),0.15,,,200
+pre-event,c2,c2_IH,C2 invader payoff vs honest (IH),2.7,,,200
+pre-event,c2,c2_g0,C2 invader advantage g(0),0.8300000000000001,0.685,0.9699999999999998,200
+pre-event,c2,c2_g1,C2 invader advantage g(1),0.85,,,100
+pre-event,c2,c2_all_invader,C2 resamples ending all-invader,1.0,,,2000
+pre-event,confound,confound_min,Confound: minimal claim at 100,0.93,0.8859442178331628,0.9578482170770813,200
+pre-event,confound,confound_diff,"Confound difference, minimal − C2 sentence",0.06000000000000005,0.0014947386981308056,0.11850526130186931,400
+pre-event,d1,d1_r_0,"D1 honest report rate, c = 0",0.9333333333333332,0.8992762041322797,0.956432823203016,200
+pre-event,d1,d1_pR_0,"D1 cooperation with a reporter, c = 0",0.89,0.83,0.95,200
+pre-event,d1,d1_HH_0,"D1 honest payoff HH, c = 0",1.83,1.77,1.8851249999999993,200
+pre-event,d1,d1_g0_0,"D1 invader advantage g(0), c = 0",0.9500000000000002,0.8150000000000002,1.085,200
+pre-event,d1,d1_r_0.5,"D1 honest report rate, c = 0.5",0.66,0.6046734114246599,0.7112806909760647,200
+pre-event,d1,d1_pR_0.5,"D1 cooperation with a reporter, c = 0.5",0.75,0.67,0.83,200
+pre-event,d1,d1_HH_0.5,"D1 honest payoff HH, c = 0.5",1.2325,1.17,1.2950624999999996,200
+pre-event,d1,d1_g0_0.5,"D1 invader advantage g(0), c = 0.5",0.7675000000000001,0.592464221014493,0.9425624999999996,200
+pre-event,d1,d1_r_1,"D1 honest report rate, c = 1",0.4832214765100671,0.4270589262785652,0.5398111141664894,199
+pre-event,d1,d1_pR_1,"D1 cooperation with a reporter, c = 1",0.74,0.65,0.82,199
+pre-event,d1,d1_HH_1,"D1 honest payoff HH, c = 1",0.9646464646464646,0.8939393939393939,1.0303030303030305,199
+pre-event,d1,d1_g0_1,"D1 invader advantage g(0), c = 1",0.5153535353535353,0.3808810009600225,0.6953535353535355,199
+pre-event,d1,d1_r_1.5,"D1 honest report rate, c = 1.5",0.2466666666666666,0.2012930337857371,0.2984463040797822,200
+pre-event,d1,d1_pR_1.5,"D1 cooperation with a reporter, c = 1.5",0.7,0.61,0.79,200
+pre-event,d1,d1_HH_1.5,"D1 honest payoff HH, c = 1.5",0.845,0.78,0.905,200
+pre-event,d1,d1_g0_1.5,"D1 invader advantage g(0), c = 1.5",0.2838467929544699,0.2060640635564569,0.3674454514963881,200
+pre-event,d1,d1_r_2,"D1 honest report rate, c = 2",0.1933333333333333,0.1526365927235945,0.2417847110083499,200
+pre-event,d1,d1_pR_2,"D1 cooperation with a reporter, c = 2",0.73,0.64,0.82,200
+pre-event,d1,d1_HH_2,"D1 honest payoff HH, c = 2",0.8,0.72,0.88,200
+pre-event,d1,d1_g0_2,"D1 invader advantage g(0), c = 2",0.316838612368024,0.2288646396396395,0.4078313592918431,200
+pre-event,d2,d2_pM,"D2 cooperation, words match (pM)",0.805,0.745,0.865,300
+pre-event,d2,d2_pM_check,D2 pM check (H–I match cell),0.82,0.74,0.89,300
+pre-event,d2,d2_pX,"D2 cooperation, wrong word (pX)",0.06,0.02,0.11,300
+pre-event,d2,d2_rho_star,D2 tolerable replay success ρ*,0.4506578947368418,0.3825154785809906,0.5286959491565691,300
+pre-event,d2,d2_g0_1/4,"D2 invader advantage g(0), ρ = 1/4",-0.3049999999999999,-0.4099999999999999,-0.1999999999999999,300
+pre-event,d2,d2_g0_1,"D2 invader advantage g(0), ρ = 1",0.8350000000000002,0.6599999999999999,0.9899999999999998,300
+pre-event,audited,aud_r,Audited honest report rate,0.86,0.8161675002526941,0.8947292301489361,200
+pre-event,audited,aud_p_RR,"Audited cooperation, both reported (p_RR)",0.9770114942528736,0.9200052672522924,0.9936730475286012,200
+pre-event,audited,aud_p_NR,"Audited cooperation, silent agent facing a reporter (p_NR)",0.2307692307692307,0.0,0.4666666666666667,200
+pre-event,audited,aud_pN,Audited cooperation with a silent partner (pN),0.0,0.0,0.0,200
+pre-event,audited,aud_HH,Audited honest payoff HH,1.72,1.63,1.81,200
+pre-event,audited,aud_g0,Audited invader advantage g(0),-0.7,-0.8,-0.5798750000000006,200
+pre-event,audited,aud_g1,Audited invader advantage g(1),0.0,0.0,0.0,200
+event,c2,c2_hh,"C2 honest cooperation, honest partner",0.895,0.8448186177864638,0.9302930375380627,200
+event,c2,c2_hi,"C2 honest cooperation, invader partner",0.87,0.7901947810519012,0.9224290614158575,100
+event,c2,c2_HH,C2 honest payoff vs honest (HH),1.895,,,200
+event,c2,c2_HI,C2 honest payoff vs invader (HI),0.13,,,200
+event,c2,c2_IH,C2 invader payoff vs honest (IH),2.74,,,200
+event,c2,c2_g0,C2 invader advantage g(0),0.8450000000000002,0.7050000000000001,0.9749999999999999,200
+event,c2,c2_g1,C2 invader advantage g(1),0.87,,,100
+event,c2,c2_all_invader,C2 resamples ending all-invader,1.0,,,2000

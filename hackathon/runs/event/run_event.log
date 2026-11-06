@@ -1,0 +1,9 @@
+=== run_event start Fri Nov  6 11:03:34 PST 2026
+=== [c2] start Fri Nov  6 11:03:34 PST 2026  config=configs/c2_false_beards.yaml only=all
+{"cell": "claim_symmetric_100__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 6813.5}
+{"cell": "claim_symmetric_100_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 3201.1}
+=== [c2] done Fri Nov  6 13:50:35 PST 2026 exit=0
+wrote hackathon/runs/event/c2_false_beards/summary.csv
+      condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+claim_symmetric    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.895    0.845    0.930          0.898     3.79     1999.385             1          0              194
+claim_symmetric    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.870    0.790    0.922          0.882     2.87     1984.130             0          0               96

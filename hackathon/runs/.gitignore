@@ -1,0 +1,3 @@
+# Same policy as the top-level runs/: per-game records and caches stay local; summaries and logs are committed.
+**/cache.sqlite
+**/*.jsonl

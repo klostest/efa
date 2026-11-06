@@ -248,8 +248,53 @@ arrived at from the costly-signalling side, and the write-up should say so.
 
 ## Across models
 
-Not yet run. The plan is to replay the same two cells on Claude Sonnet 5.5 and Opus 5.5
-(about 600 calls per model) as for every arm; the table will go here.
+*Added 2026-11-06 during the hackathon.* The same two cells were run on Claude Sonnet 5.5
+and Opus 5.5 through the API (`hackathon/runs/api_d1_audited`, adaptive thinking at low
+effort, 600 calls per model, 0 exclusions; figures
+`hackathon/figures/d1_audited_claude-sonnet-5-5.png` and `..._claude-opus-5-5.png`,
+numbers in `hackathon/runs/api_d1_audited/analysis_<model>.csv`, with each model's own
+D1 c = 0 and c = 2 cells from `runs/api_d1` beside them in `comparison_<model>.csv`).
+
+| Quantity | Qwen3.5-27B | Sonnet 5.5 | Opus 5.5 |
+|---|---|---|---|
+| r | 0.86 (0.82–0.89) | 0.87 (0.83–0.91) | 1.00 (0.99–1.00) |
+| p_RR | 0.977 (H–I); 0.979 (H–H) | 1.00 (91 of 91); 1.00 (148 of 148) | 1.00 (100 of 100); 1.00 (200 of 200) |
+| p_NR | 0.23 (3 of 13); 0.28 (7 of 25) | 0.11 (1 of 9); 0.04 (1 of 23) | undefined (no silent agent) |
+| pN | 0 of 29 | 0 of 29 | undefined (no silent partner) |
+| HH | 1.72 | 1.745 | 2.00 |
+| HI_R, IH_R | 0.08, 1.02 | 0.08, 1.02 | 0.00, 1.00 |
+| g(0) | −0.70 (−0.80 to −0.58) | −0.73 (−0.82 to −0.64) | −1.00 |
+| g(1) | 0.00 | 0.00 | −1.00 (see note) |
+| end state, resamples | bistable, 100% | bistable, 100% | all-honest, 100% (see note) |
+| D1 at c = 2, same model: g(0) | +0.32 | +0.035 | 0 (neutral) |
+
+**H3c holds on all three models.** On Sonnet the picture is Qwen's: 87% report, every
+reporting pair cooperates, every reporter facing a silent partner defects, and the
+reporting invader's 3 becomes 1 against the 87% of partners that reported. On Opus every
+honest agent reports and every pair cooperates (HH = 2.00, the maximum), so the invader
+earns exactly 1 and the honest agent facing it 0. The same two points as a flat fee left
+the invader level or ahead on all three models (D1, c = 2); as a stake they put it
+0.7 to 1.0 points behind.
+
+**Two notes on the frontier numbers.**
+
+- *Sonnet's declines are mostly hedges, not decisions.* Its stated probability of
+  reporting was 0.90 to 0.97 in 222 of 300 claim calls and 1.0 in 26; only 7 answers
+  were a decided decline (0.1). So its 13% silence is largely tail sampling of a hedged
+  answer, unlike Qwen, whose decliners declined on purpose. The route still closes for
+  the same reason as on Qwen: a silent Sonnet agent facing a reporter notes the forfeit
+  cannot trigger and defects (p_NR = 0.11), and a reporter facing a silent partner does
+  the same (pN = 0 of 29). The corrected prediction-3 bound, 2·(1 − r)·(p_NR − pN), is
+  0.03 on Sonnet; the measured gain from reporting is +0.02, as on Qwen.
+- *Opus's "all-honest" label is a scoring convention.* No Opus agent ever stayed silent,
+  so honest play against a silent partner is unobserved and the analysis scores the
+  invader as reporting at every f; at f = 1 that is two reporting invaders forfeiting
+  against each other (II = −1) against an honest agent's 0, hence g(1) = −1. If a silent
+  invader were met with defection, as Opus did at D1's c = 2 (pN = 0 of 200), the
+  all-invader corner would be neutral, as on the other two models. Either way the honest
+  population repels the invader by a full point per game.
+
+Cost: about 20 minutes and a few dollars per model.
 
 ## Caveats
 

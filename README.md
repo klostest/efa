@@ -37,6 +37,24 @@ API keys go in `.env` (see `.env.example`). Every model call is cached in
 - `configs/` one YAML per experiment block
 - `docs/` study guide, preregistration, research log, master variable list (`variables.md`)
 
+## Prior work and hackathon work
+
+This repository was built in the three weeks before the Swarm Alignment Hackathon
+(6–8 November 2026). The boundary is the git tag `pre-hackathon` (commit `a79d9fb`, the
+state at the Friday kickoff).
+
+- **Built before the event (prior work):** everything outside `hackathon/`: the harness
+  (`src/efa`), the configs, the analysis scripts, the tests, every run under `runs/`
+  (the Qwen3.5-27B gate, H1, C2, the confound check, D1, D2, the audited claim, and the
+  Claude Sonnet 5.5 / Opus 5.5 replays of C2, D2 and D1), the write-ups under `reports/`
+  and the documents under `docs/`.
+- **Made during the hackathon:** everything under `hackathon/`: the event-weekend reruns
+  of the Qwen matrix from a cleared cache (`hackathon/runs/event/`), the audited-claim arm
+  on the two Claude models (a new experiment), the headline table and replication figure,
+  and the report. `hackathon/README.md` has the full list, including the few edits made
+  outside that directory during the weekend.
+
 ## Status
 
-Week 1 of 3. See `docs/research_log.md`.
+Screen complete; see `docs/research_log.md` and the write-ups in `reports/`. The hackathon
+submission is under `hackathon/`.
