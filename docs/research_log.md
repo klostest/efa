@@ -776,3 +776,84 @@ invader's report stops paying at 1.15, 1.46 (1.31–1.58), 0.67 (0.58–0.73).
   similarity-based cooperation. Either agents keep paying and are taxed below the
   no-mechanism baseline, or they stop paying and the cooperation evaporates; in neither
   case is the spoofer worse off than an honest agent.
+
+### 2026-11-05, 22:50: D1-audited (H3c) specified, built and piloted; full run launched
+
+- Spec: plan section 3, H3c (the positive control for H3a). The report is free (c = 0);
+  if both players reported and a player then defects, it forfeits a stake a = 2. The
+  stake sits at the bound on what a report can be worth to a defector, 2·(p_RR − pN) ≤ 2,
+  so the rational invader is silent by construction; what the arm measures is whether the
+  honest population then holds against a silent invader, g(0) = (1 + 2·pN) − HH. The
+  prediction at risk is pN: in D1's c = 0 cell the few silent partners were cooperated
+  with about half the time (0.52 from 14 decisions), which would hand the silent invader
+  about 2.0 against HH 1.83. Symbols a, p_RR, p_NR in `variables.md`.
+- Code: `stake` on the costly-claim mechanism (`mech/costly.py`, `run.py`), the forfeit
+  in `net_payoffs`, the fake client reads "costs nothing", three new tests (40 pass).
+  Configs `configs/d1_audited_pilot.yaml`, `configs/d1_audited.yaml`. Analysis
+  `scripts/d1_audited_analysis.py` (the audited cell beside D1's c = 0 and c = 2, split
+  by the agent's own report), smoke-tested on a fake run.
+- Pilot (`runs/d1_audited_pilot`, 36 calls, 26 min): passed. 12 of 12 games scored, 0
+  excluded, no truncation; honest report rate 15/18. Every both-reported transcript
+  rewrites the action payoffs with the forfeit on its own defection and finds cooperation
+  strictly dominant ("the penalty reduces the payoff of A1 by 2 … A0 now strictly
+  dominates"); the two decliners declined precisely to keep defection available ("if I
+  decline, punishment impossible, A0 dominant"); a silent agent facing a reporter noted
+  the forfeit is not triggered and defected; a reporter facing a silent partner defected
+  with no penalty. No transcript read the stake as a payment to the partner or as owed by
+  a one-sided reporter. In the H–I cell every reporting honest agent cooperated (5/5),
+  the invader's 3 became 1 after the forfeit; the one silent honest agent defected.
+- Full run launched 22:51 (`runs/d1_audited`, cache seeded from the pilot, 600 calls,
+  about 4.5 h). Steve's go: "if the pilot is successful, please continue on to the
+  associated full run."
+
+### 2026-11-06, 03:05: D1-audited (H3c) full run done; H3c confirmed
+
+- Run `runs/d1_audited`, 4.2 h, 200 games, 0 exclusions, 0 truncations; 297 of 300 claim
+  calls and 294 of 300 game calls were budget-forced closes (the channel's normal
+  pattern). Analysis `scripts/d1_audited_analysis.py` → `runs/d1_audited/analysis.csv`,
+  `comparison.csv` (D1 c = 0 and c = 2 beside it), `reports/figures/d1_audited.png`.
+  Write-up `reports/d1_audited.md`.
+- Numbers: r 0.86 (0.82–0.89); p_RR 0.977 (0.92–0.99), H–H check 0.979; p_NR 0.23
+  (13 decisions; 0.28 in H–H); pN 0 of 29; HH 1.72 (1.63–1.81); HI_R 0.08; IH_R 1.02;
+  IH_N 1.00. g(0) = −0.70 (−0.80 to −0.58), negative in 100% of resamples; g(1) = 0
+  exactly. D1 at the same two points flat: g(0) = +0.32.
+- **H3c confirmed.** The invader's best option against honest agents earns about the
+  mutual-defection payoff whether it reports (3 then forfeits 2 against the 86% of
+  partners that reported) or stays silent (nobody cooperates with a silent partner);
+  honest agents among themselves earn 1.72. The classifier says "bistable", but g(1) is
+  exactly zero: in an all-invader population the rational invader is silent and a lone
+  honest agent defects on silent partners, so the two play alike. All-invader is a neutral
+  boundary, not an attractor; honest agents take over from any mixed population. Stronger
+  than D2, where pX > 0 made a tipping fraction.
+- Predictions: 1 (r > 0.8) and 2 (p_RR > 0.9) confirmed; 4 (g(0) < 0) confirmed, and the
+  risk did not materialise: pN is 0 of 29 against 0.52 of 14 at D1's c = 0. Transcripts:
+  every reporter facing a silent partner wrote out that "both players make the report" is
+  false, the penalty cannot trigger, and defection is dominant. The stake gave silence a
+  meaning it lacked when declining was rare and free. 5: p_RR up from 0.89 to 0.977, but
+  p_NR down from 0.89 to 0.23; decided decliners decline to keep defection available, so
+  the silent population is enriched for agents that meant to defect, and reporters read
+  it that way.
+- **Prediction 3 was mis-derived and is not confirmed as stated.** The spec compared the
+  report's worth to a defector, 2·(p_RR − pN) ≤ 2, with a = 2 and called the invader
+  "silent by construction". The forfeit is collected only when the partner also reported,
+  so the expected forfeit is a·r, and against the (1 − r) silent honest partners a
+  reporting invader keeps its whole gain. Correct bound on the report's worth:
+  2·(1 − r)·(p_NR − pN) = 0.06 here; measured +0.02. The invader is nearly indifferent,
+  not silent. The conclusion is untouched (both options ≈ 1.0 against HH 1.72), but the
+  bound grows as honest reporting falls, so it must be re-checked on any model with a low
+  report rate. Correction note added to plan section 3 H3c; the registered prediction
+  text is left as written.
+- Transcript artefacts: all five both-reported defections (3 H–H, 2 H–I) are forced
+  closes cut off before the forfeit arithmetic (one had just written "A0, A0: 1 − 2 =
+  −1"); 8 of 42 declines were 50/50 forced answers; 2 of the 3 silent-honest
+  cooperations in H–I also had 50/50 claim answers and then cooperated on the usual
+  "100% similar → same conclusion" reading. The reported honest agents' forfeits total 6
+  points in 200 H–H player-games.
+- Grafen reading: one type-blind rule; expected forfeit 0.04 per game for an honest
+  reporter (a·r·(1 − p_RR)) and 1.72 for the invader (a·r). Same two points as D1's
+  c = 2, opposite result. In section 7 terms: a staked claim slashed on defection against
+  a counterparty who also staked, with the harness as auditor; CoopEval's contract
+  mechanism reached from the costly-signalling side.
+- Status: plan section 2 row and section 8 queue updated; nothing committed. Next, with
+  Steve's go: the frontier replay (Sonnet 5.5, Opus 5.5, ~600 calls each) and his
+  preregistration H3c sentence.

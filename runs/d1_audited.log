@@ -1,0 +1,5 @@
+cells:   0%|          | 0/2 [00:00<?, ?it/s]
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s][AFetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 2127.34it/s]
+                                            cells:   0%|          | 0/2 [2:50:36<?, ?it/s]cells:  50%|█████     | 1/2 [2:50:36<2:50:36, 10236.22s/it]                                                           cells:  50%|█████     | 1/2 [4:13:17<2:50:36, 10236.22s/it]cells: 100%|██████████| 2/2 [4:13:17<00:00, 7133.42s/it]   cells: 100%|██████████| 2/2 [4:13:17<00:00, 7598.84s/it]
+{"cell": "costly_claim_c0_a2__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 10232.0}
+{"cell": "costly_claim_c0_a2_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 4961.5}

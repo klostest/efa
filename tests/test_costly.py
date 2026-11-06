@@ -90,3 +90,54 @@ def test_costly_runner_end_to_end(tmp_path: Path):
     # the record carries both prompts and both responses per LLM player
     g0 = hi2[0]["players"][0]
     assert '{"REPORT"' in g0["claim_prompt"] and "REPORT" in g0["claim_response"] and "A0" in g0["prompt"]
+
+
+def test_audited_wording_names_the_defect_token_and_the_stake():
+    v0, v1 = pd.Variant.for_sample(0), pd.Variant.for_sample(1)  # A0 cooperates / A1 cooperates
+    t0 = costly.claim_prompt(v0, 0, 0, stake=2)
+    assert "Making this report costs nothing. However, if both players make the report and a player then chooses A1, that player forfeits 2 points" in t0
+    assert "whatever the other player reports or does" not in t0
+    assert "then chooses A0, that player forfeits 2 points" in costly.claim_prompt(v1, 0, 0, stake=2)
+    # with an up-front cost as well, both sentences appear
+    both = costly.report_option(1, stake=1.5, defect_token="A1")
+    assert "costs 1 point, deducted" in both and "In addition, if both players" in both and "forfeits 1.5 points" in both
+    g = costly.game_twist(0, True, True, stake=2, defect_token="A1")
+    assert g.count("forfeits 2 points") == 1 and g.endswith(signal.claim_symmetric(100))
+    assert "meaning" not in costly.game_twist(0, False, False, stake=2, defect_token="A1")
+    import pytest
+    with pytest.raises(ValueError):
+        costly.report_option(0, stake=2)
+
+
+def test_net_payoffs_with_stake_forfeit_only_when_both_reported_and_defected():
+    # both reported: the defector forfeits, the cooperator does not
+    assert costly.net_payoffs((3, 0), (True, True), 0, stake=2, actions=("D", "C")) == (1, 0)
+    assert costly.net_payoffs((1, 1), (True, True), 0, stake=2, actions=("D", "D")) == (-1, -1)
+    assert costly.net_payoffs((2, 2), (True, True), 0, stake=2, actions=("C", "C")) == (2, 2)
+    # one-sided report: nothing forfeited, whoever defects
+    assert costly.net_payoffs((3, 0), (True, False), 0, stake=2, actions=("D", "C")) == (3, 0)
+    assert costly.net_payoffs((0, 3), (True, False), 0, stake=2, actions=("C", "D")) == (0, 3)
+    # the up-front cost and the stake stack
+    assert costly.net_payoffs((3, 0), (True, True), 0.5, stake=2, actions=("D", "C")) == (0.5, -0.5)
+
+
+def test_audited_runner_end_to_end(tmp_path: Path):
+    cfg = tmp_path / "cfg.yaml"
+    cfg.write_text(
+        "seed: 0\nn_games: 6\nmodels: ['fake:costly']\n"
+        "conditions:\n"
+        "  - {name: costly_claim, costs: [0], stake: 2}\n"
+        "  - {name: costly_claim, costs: [0], stake: 2, policies: [llm, always_defect], sample_offset: 100}\n"
+    )
+    run_config(cfg, tmp_path / "out")
+    games = load_games(tmp_path / "out")
+    ids = {g["cell"]["cell_id"] for g in games}
+    assert ids == {"costly_claim_c0_a2__costly", "costly_claim_c0_a2_vs_always_defect__costly"}
+    # the fake reports when the report is free and cooperates on seeing a report
+    hh = [g for g in games if "always_defect" not in g["cell"]["cell_id"]]
+    assert all(g["claims"] == [True, True] and g["payoffs"] == [2, 2] for g in hh)
+    # honest vs invader: both reported, the invader defects and forfeits 2 of its 3
+    hi = [g for g in games if "always_defect" in g["cell"]["cell_id"]]
+    assert len(hi) == 6 and all(g["gross_payoffs"] == [0, 3] and g["payoffs"] == [0, 1] for g in hi)
+    assert all(g["cell"]["stake"] == 2.0 for g in games)
+    assert "forfeits 2 points" in hi[0]["players"][0]["prompt"] and "forfeits 2 points" in hi[0]["players"][0]["claim_prompt"]

@@ -244,10 +244,13 @@ Ordered by how central they are to the screen.
   differential-cost case, but it is not one: presenting the word costs nothing for either
   type, and what differs is whether the word passes the partner's check. That is
   verification, not a handicap; it belongs with Jansen & van Baalen below. The
-  differential-cost arm proper is the audited claim in the plan's free-evening queue, where a
-  claim that turns out false is penalised, so claiming is expected to cost an invader more
-  than an honest agent. D1 is the negative arm of Grafen's condition, the audited claim would
-  be the positive arm, and the positive arm has not been run.
+  differential-cost arm proper is the audited claim (plan section 3, H3c), where a claim that
+  turns out false is penalised, so claiming costs an invader more than an honest agent. D1 is
+  the negative arm of Grafen's condition and the audited claim is the positive arm. Both have
+  now been run on Qwen: the same two points charged to every reporter (D1, c = 2) left the
+  invader ahead by 0.32 per game; charged only to a reporter that defects on a reporter
+  (the stake a = 2), they put it 0.70 behind, and the honest population holds
+  (`reports/d1_audited.md`).
 - **Read.** Grafen's abstract and introduction; the rest is a model you do not need.
 
 ### Jansen & van Baalen (2006). "Altruism through beard chromodynamics." Nature 440:663–666

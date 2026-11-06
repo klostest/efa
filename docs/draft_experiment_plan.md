@@ -201,7 +201,7 @@ Names match the plan, the study guide, and the hypotheses.
 | C2 confound check | C1a minimal claim at stated similarity 100, to size the "you reported" commitment effect against the C2 H–H cell | H–H | Done, N=100 (2026-10-26): 0.93 vs C2 H–H 0.87; no commitment effect in the feared direction |
 | D1 costly claim | As C2, plus: reporting costs c points, paid whatever the partner does; the honest agent chooses whether to report (a separate call before the game); the invader is scripted to report | H–H and H–I, c in {0, 0.5, 1, 1.5, 2}, priority 0.5, 1.5, 0, 2, 1 | Done, N=100 per cell at all five levels (H3a confirmed, 2026-10-27): invader advantage positive at both ends at every c; honest reporting halves at c ≈ 0.95, the invader's report stops paying at c ≈ 1.15 |
 | D2 rotating secret | "Agents whose decision-making is 100% similar to yours were issued the code word W this round. The other player presented the code word W′." W′ = W in the match cells, a different token in the mismatch cell; fresh nonsense tokens per game | H–H match, H–I match, H–I mismatch (section 3, H3b) | Done 2026-10-29 (`runs/d2_secret`, `reports/d2_secret.md`): H3b confirmed, ρ* = 0.45 (0.38–0.53); Sonnet 5.5 and Opus 5.5 agree (0.47, 0.50) |
-| D1-audited claim | As D1 at c = 0, plus: if both players reported and a player then defects, it forfeits a = 2 points; one-sided reports forfeit nothing | H–H and H–I at a = 2 (section 3, H3c) | Specified 2026-11-05; the positive control for H3a; not yet run |
+| D1-audited claim | As D1 at c = 0, plus: if both players reported and a player then defects, it forfeits a = 2 points; one-sided reports forfeit nothing | H–H and H–I at a = 2 (section 3, H3c) | Done 2026-11-06 (`runs/d1_audited`, `reports/d1_audited.md`): H3c confirmed, g(0) = −0.70 (−0.80 to −0.58), pN = 0 of 29, honest agents take over from any mixture; prediction 3 mis-derived (correction note in H3c); frontier replay pending |
 | D3 reciprocity | Five rounds with the same partner, history shown | H–H and H–I | After the event |
 | D4 endogenous similarity | Agent judges similarity from the partner's reasoning; invaders mimic | H–H and H–I | After the event |
 
@@ -527,6 +527,18 @@ silent partner) and HH (honest payoff among honest agents, net of any forfeits) 
 measured. So the arm can fail, and if it does the reason is that honest agents cooperate
 with silent partners too readily, a finding about trust rather than about the stake.
 
+*Correction, 2026-11-06, after the run.* The two paragraphs above compare the report's
+worth to a defector, 2·(p_RR − pN), with the stake a, and conclude the invader is silent
+by construction. That omits the games where the honest partner is silent: the forfeit is
+collected only when both reported, so a reporting invader's expected forfeit is a·r, not
+a, and against the (1 − r) silent honest partners it keeps its whole gain from the report.
+The invader's gain from reporting is r·[2·(p_RR − pN) − a] + (1 − r)·2·(p_NR − pN); at
+a = 2 the first term is at most zero and the second is at most 2·(1 − r). Measured on
+Qwen: +0.02 (the invader is nearly indifferent), with HH 1.72 against either option's
+1.0, so the conclusion stands; the "by construction" claim does not, and the bound must be
+re-checked on any model with a low honest report rate. Predictions below are left as
+registered; see `reports/d1_audited.md` for the scoring.
+
 **Cells.** Same shape as one D1 level, on the carrier, with D1's seed and sample offsets;
 the frontier models later, as for every arm.
 
@@ -567,7 +579,14 @@ axes, drawn apart from the c levels and labelled as the stake.
    then beats defecting by a full point whatever the partner does.
 3. The rational invader is silent at every f (this follows from the bound, see above).
 4. g(0) < 0 and the end state is bistable, as in D2: the silent invader earns 1 + 2·pN
-   against HH ≈ 1 + r²·p_RR. On D1's c = 0 numbers that is about 1.3 against about 1.8.
+   against HH ≈ 1 + r²·p_RR, so the prediction holds iff pN < (HH − 1)/2, about 0.4.
+   This is the prediction at risk. In D1's c = 0 cell, where almost everyone reported,
+   the few silent partners were still cooperated with about half the time (pN = 0.52
+   from 14 decisions), which would give the silent invader about 2.0 against HH = 1.83;
+   in D1's c = 2 cell, where silence was the norm, pN was 0.06. The arm decides whether
+   an honest agent reads a silent partner as a non-claimant when reporting is free.
+   If pN stays near 0.5 the stake closes the spoofing route and the silence route stays
+   open, which is D1's "the silent invader still wins" in a new form.
 5. Secondary: p_RR here, against D1's c = 0 cell split the same way by the agent's own
    report, says whether an audited report is trusted more than a free one.
 
@@ -964,9 +983,10 @@ Order after D2: audited claim first, since it closes the D1 story.
    in this recommended order; none is a registered cell.
    1. *Audited-claim arm* (from the second opinions; specified 2026-11-05 as H3c in
       section 3): if both players reported, a reporter that then defects forfeits a
-      stake a = 2, the slashable-stake version of a differential cost. H–H and H–I,
-      4.5 h. First because it is the positive control showing the cost mechanism can work
-      when the cost is type-dependent.
+      stake a = 2, the slashable-stake version of a differential cost. **Done on Qwen
+      2026-11-06** (`runs/d1_audited`, `reports/d1_audited.md`): H3c confirmed, the
+      positive control showing the cost mechanism works when the cost is type-dependent.
+      Remaining: the frontier replay (Sonnet 5.5, Opus 5.5, ~600 calls each).
    2. *Wording two-by-two.* The confound check compared sentences that differ in two
       things at once: the "you have reported" clause and the paper's common-knowledge line
       ("the other agent is seeing this information as well"). Two cells complete the

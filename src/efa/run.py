@@ -53,6 +53,8 @@ class Cell:
     cost_range: tuple[float, float] | None = None
     # D1 only: run the claim call and stop (the claim-rate sweep needs no game).
     claim_only: bool = False
+    # D1-audited (H3c) only: the stake a player forfeits if both reported and it defected.
+    stake: float | None = None
     # D2 only: whether the two players' code words match in every game of the cell.
     match: bool | None = None
 
@@ -64,6 +66,9 @@ def expand_cells(cfg: dict) -> list[Cell]:
             levels = cond.get("levels", [None])
             costs = cond.get("costs", [None])
             cost_range = tuple(cond["cost_range"]) if "cost_range" in cond else None
+            stake = cond.get("stake")
+            if stake is not None and cond["name"] != "costly_claim":
+                raise ValueError("`stake` belongs to costly_claim")
             if cond["name"] == "costly_claim":
                 levels = [costly.CUE]
                 if costs == [None] and cost_range is None:
@@ -79,6 +84,8 @@ def expand_cells(cfg: dict) -> list[Cell]:
                     tag = f"{cond['name']}"
                     if cond["name"] == "costly_claim":
                         tag += f"_c{c:g}" if c is not None else f"_c{cost_range[0]:g}to{cost_range[1]:g}"
+                        if stake is not None:
+                            tag += f"_a{float(stake):g}"
                     elif cond["name"] == "secret":
                         tag += "_match" if match else "_mismatch"
                     elif lvl is not None:
@@ -106,6 +113,7 @@ def expand_cells(cfg: dict) -> list[Cell]:
                             cost_range=cost_range,
                             claim_only=bool(cond.get("claim_only", False)),
                             match=match,
+                            stake=None if stake is None else float(stake),
                         )
                     )
     return cells
@@ -173,7 +181,8 @@ def build_requests(cell: Cell, claims: dict[tuple[int, int], bool] | None = None
                 if claims is None or (g, p) not in claims or (g, 1 - p) not in claims:
                     out.append((g, p, None, v))
                     continue
-                tw = costly.game_twist(cost_for_game(cell, g), claims[(g, p)], claims[(g, 1 - p)])
+                tw = costly.game_twist(cost_for_game(cell, g), claims[(g, p)], claims[(g, 1 - p)],
+                                       stake=cell.stake, defect_token=v.defect_token)
             elif cell.condition == "secret":
                 w = words_for_game(cell, g)
                 tw = secret.game_twist(w[p], w[1 - p])
@@ -192,7 +201,7 @@ def build_claim_requests(cell: Cell) -> list[tuple[int, int, Request | None, pd.
             if cell.policies[p] != "llm":
                 out.append((g, p, None, v))
                 continue
-            out.append((g, p, _request(cell, costly.claim_prompt(v, p, c), g, p, v, "claim"), v))
+            out.append((g, p, _request(cell, costly.claim_prompt(v, p, c, stake=cell.stake), g, p, v, "claim"), v))
     return out
 
 
@@ -319,7 +328,8 @@ def run_cell(cell: Cell, client, rng: np.random.Generator, log) -> dict:
             gross = pd.payoffs(actions[0], actions[1]) if not excluded else None
             pay = gross
             if gross is not None and cell.condition == "costly_claim":
-                pay = costly.net_payoffs(gross, game_claims, c)
+                pay = costly.net_payoffs(gross, game_claims, c, stake=cell.stake,
+                                         actions=(actions[0], actions[1]))
         n_ok += not excluded
         log.write(json.dumps({
             "cell": asdict(cell), "game": g, "variant": asdict(v), "actions": actions,

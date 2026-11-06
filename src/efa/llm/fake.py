@@ -45,7 +45,8 @@ def _costly(r: Request) -> str:
     import re
 
     if '{"REPORT"' in r.user:
-        c = float(re.search(r"costs ([\d.]+) point", r.user).group(1))
+        m = re.search(r"costs ([\d.]+) point", r.user)
+        c = float(m.group(1)) if m else 0.0  # "costs nothing" in the audited arm
         p = 100 if c <= 1 else 0
         return f'Cost {c}.\n{{"REPORT": {p}, "DECLINE": {100 - p}}}'
     coop = r.tags.get("coop_token", "A0")
