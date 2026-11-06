@@ -75,14 +75,18 @@ instead of 1.
 **Population quantities.** Let f be the fraction of invaders, with random pairing. The
 *invader advantage* g(f) is the mean invader payoff minus the mean honest payoff at that
 f. With two types g is linear in f, so its two ends decide the dynamics: g(0) = IH(ρ) − HH
-asks whether a rare invader spreads in an honest population, g(1) = II − HI(ρ) = pX·(1 − ρ)
-+ pM·ρ ≥ 0 asks whether honest agents can re-enter an invader population. Since g(1) is
-never negative (an honest agent sometimes cooperates with a defector and never gains from
-it), the best achievable outcome is *bistable*: g(0) < 0 and g(1) > 0, so the population
-settles at all-honest or all-invader depending on which side of a tipping fraction
+asks whether a rare invader spreads in an honest population, and
+g(1) = II − HI(ρ) = pX·(1 − ρ) + pM·ρ ≥ 0 asks whether honest agents can re-enter an
+invader population. Since g(1) is never negative (against a defector an agent earns
+1 − [it cooperated], so the honest agent's shortfall against the invaders' 1 is exactly its
+probability of cooperating with an invader, ρ·pM + (1 − ρ)·pX), the best achievable
+outcome is *bistable*: g(0) < 0 and g(1) > 0, so the population
+settles, under replicator dynamics (Taylor & Jonker 1978; the equation is in the study
+guide), at all-honest or all-invader depending on which side of a tipping fraction
 f* = g(0)/(g(0) − g(1)) it starts. The *tolerable replay success* ρ* is the ρ at which
-g(0) crosses zero; below it the honest population holds. Solving IH(ρ) = HH with
-HH = 1 + pM gives ρ* = (pM − 2pX)/(2(pM − pX)), which exists only when pX < pM/2.
+g(0) crosses zero; below it the honest population holds. Solving IH(ρ) = HH (i.e. g(0) = 0) with
+HH = 1 + pM gives ρ* = (pM − 2pX)/(2(pM − pX)), which exists only when pX < pM/2
+(derivation in `docs/variables.md`).
 
 **Intervals.** Cooperation rates carry Wilson 95% intervals. Everything built from payoffs
 carries a bootstrap 95% interval from 2,000 resamples of the games within each cell; ρ* is
@@ -129,14 +133,21 @@ spoofer as long as the spoofer's captured word is still current less than 45% of
 time. In the rotation picture that is a replay delay of more than about 55% of the
 rotation period; in the pool picture it is a pool of three or more words. The threshold is
 set by the two rates: the cooperation a current word buys (0.805) and the cooperation a
-wrong word still gets (0.06). Since pX is near zero, ρ* is near its ceiling of one half;
-no rotation scheme can tolerate a replay rate above 0.5, because at that point even a
-perfectly discriminating honest agent is exploited often enough to lose.
+wrong word still gets (0.06). Since pX is near zero, ρ* is near one half, the ceiling the
+formula gives at pX = 0; no rotation scheme can tolerate a replay rate above 0.5, because
+at that point even a perfectly discriminating honest agent is exploited often enough to
+lose.
 
 **Bistable, not globally stable.** The defense protects an honest population; it does not
 recover one. At ρ = 1/4 a population that is already more than 55% invaders drifts to
 all-invader, because honest agents meeting each other are rare and the occasional wrong-word
 cooperation (pX) is a pure loss. The tipping fraction rises as ρ falls (0.85 at ρ = 1/16).
+In engineering terms: a swarm that has become all spoofers cannot be repaired by adding
+honest agents one at a time, however fast the key rotates. A lone honest agent meets only
+defectors, earns the cooperative 2 with nobody, and every time it is fooled it turns a 1
+into a 0, so it leaves fewer copies than the average and dies out. Honest agents have to be
+reintroduced as a block larger than the tipping fraction, more than 55% of the population
+at ρ = 1/4 and 85% at ρ = 1/16.
 
 **The word is read exactly as intended.** In the mismatch cell every transcript that
 reached the twist drew the inference "if they were a copy they would have my word", and

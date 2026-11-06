@@ -75,16 +75,50 @@ because it chose to report before seeing the partner.
 
 **Population quantities.** Let f be the fraction of invaders in the population, with random
 pairing. The *invader advantage* g(f) is the mean invader payoff minus the mean honest
-payoff at that f. With two types g is linear in f, so its two ends determine the dynamics:
+payoff at that f. With two types and fixed cell payoffs, each type's expected payoff is
+(1 − f) times its payoff against an honest partner plus f times its payoff against an
+invader, so g is a straight line in f and its two ends determine the dynamics:
 g(0) = IH − HH asks whether a rare invader spreads in an honest population, and
 g(1) = II − HI asks whether honest agents can re-enter an invader population. Under
 *replicator dynamics* (each type's share grows in proportion to its payoff advantage over
-the average) both ends positive means the population goes to all-invader from any start.
+the average; Taylor & Jonker 1978, the equation is in the study guide) both ends positive
+means the population goes to all-invader from any start.
+In D1 the invader's payoffs are not fixed in f; the two paragraphs after the next one say
+what that does to g.
 
 **Rational-invader rule.** The invader's report helps only against honest partners, met with
 probability 1 − f, so it pays when 2·(1 − f)·(pR − pN) > c. The invader type is scored as
 reporting at a given f only when this holds. "Invader reports when rare" means the
 inequality holds at f = 0, that is c < c_I.
+
+**Why g is not one straight line in D1.** The linearity argument above needs the four cell
+payoffs to be constants. In C2 and D2 they are. In D1 the invader has two options whose
+value depends on f, and the rule above makes it take the better one, so its payoff against
+an honest partner, and the honest payoff against it, change at the frequency where the
+better option switches. Written out over a whole population:
+
+```
+reporting:  inv_R(f) = (1 − f)·(1 + 2·pR − c) + f·(1 − c) = 1 + 2·(1 − f)·pR − c
+silent:     inv_N(f) = (1 − f)·(1 + 2·pN)     + f·1       = 1 + 2·(1 − f)·pN
+```
+
+(Against another invader both defect, so the reporter earns 1 − c and the silent one 1.)
+The report is worth inv_R − inv_N = 2·(1 − f)·(pR − pN) − c, which falls as f rises because
+the extra cooperation it buys comes only from honest partners and they get rarer, while
+the fee stays fixed. It crosses zero at f_switch = 1 − c/c_I. Below f_switch the invader
+reports; above it, it stays silent. The invader's own payoff is continuous at f_switch
+(the two options are equal there by definition). The honest payoff is not: an honest agent
+earns HI_R against a reporting invader and HI_N against a silent one, and HI_N > HI_R
+because the honest agent is not talked into cooperating, so at f_switch the honest payoff
+steps up and g steps down. g is therefore two straight-line pieces with a downward step
+between them. The sign of each piece is still fixed by its own two ends, so the end state
+follows from four values (g at 0, just below and just above f_switch, and at 1); the
+analysis does not rely on that and computes g on a grid of 101 values of f, classifying
+from the sign everywhere rather than from the two ends alone. At c = 0.5, for instance,
+f_switch = 0.46 and g steps from +0.68 just below it to +0.47 just above, both positive, so
+the end state is all-invader either way. When c ≥ c_I the invader is silent at every f, and
+when c = 0 the report is free and it always reports; in both cases g is a single line
+again and the two ends suffice.
 
 **Intervals.** Report rates carry Wilson 95% intervals. Everything built from payoffs
 carries a bootstrap 95% interval from 2,000 resamples of the games within each cell.

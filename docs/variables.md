@@ -16,7 +16,11 @@ symbol and a row here. Grouped by where the symbol is introduced.
 
 Every payoff in the game can be written as `1 + 2·[partner cooperates] − [I cooperate]`,
 where the brackets are 1 when true and 0 otherwise. The expected payoff tables below all
-follow from this one line.
+follow from this one line. Read against a defector, the partner bracket is 0 and the payoff
+is 1 − [I cooperate]: cooperating with a defector costs exactly one point. So an honest
+agent in an all-invader population falls short of the invaders' 1 by exactly its
+probability of cooperating with one, which is why g(1) = II − HI is that probability and
+can never be negative.
 
 ## Population and dynamics (C2 onward)
 
@@ -24,12 +28,37 @@ follow from this one line.
 |---|---|---|
 | f | invader fraction of the population | 0–1 |
 | q | probability that a random partner is an invader; q = f·N/(N − 1) in a finite population of N agents, q = f in the large-population limit that the replicator uses | 0–1 |
-| g(f) | invader advantage: mean invader payoff minus mean honest payoff when the invader fraction is f. Linear in f with two types, so g(0) and g(1) decide the dynamics | points |
+| g(f) | invader advantage: mean invader payoff minus mean honest payoff when the invader fraction is f. A straight line in f with two types and fixed cell payoffs (note below), so g(0) and g(1) decide the dynamics; piecewise linear in D1 under the rational-invader rule | points |
 | f* | tipping fraction: the f at which g(f) = 0 when g(0) < 0 < g(1) (bistable). Below f* the honest population repels invaders, above it the invaders take over. f* = g(0) / (g(0) − g(1)) | 0–1 |
 
 End states under replicator dynamics: g(0) > 0 and g(1) > 0, all-invader; both negative,
 all-honest; g(0) < 0 < g(1), bistable with tipping fraction f*; g(0) > 0 > g(1), a stable
 interior mixture.
+
+Why g is a straight line. With random pairing an honest agent meets an invader with
+probability f and an honest agent with probability 1 − f, so its expected payoff is a
+weighted average of two constants, and likewise for the invader:
+
+```
+W_H(f) = (1 − f)·HH + f·HI
+W_I(f) = (1 − f)·IH + f·II
+g(f)   = W_I − W_H = (1 − f)·g(0) + f·g(1)
+```
+
+This is the two-strategy case of "fitness equals the payoff matrix times the frequency
+vector" (Nowak, *Evolutionary Dynamics*, chapter 4). It needs the four cell payoffs to be
+constants that do not change with f, which holds in C2 and D2. In D1 the invader's payoff
+depends on f because the rational-invader rule lets it switch options (D1 group below), so
+g is two straight-line pieces with a step between them and the analysis classifies the
+end state from g on a grid of f rather than from the two ends alone.
+
+Where f* comes from. Setting the line to zero, (1 − f)·g(0) + f·g(1) = 0, gives
+f* = g(0)/(g(0) − g(1)). When g(0) < 0 < g(1) both numerator and denominator are
+negative, so f* lies strictly between 0 and 1. From the two-type replicator equation
+df/dt = f·(1 − f)·g(f) (study guide, Taylor & Jonker entry), f moves in the direction of
+the sign of g: below f* the honest population wins, above it the invaders do, so f* is an
+unstable equilibrium, a tipping point. With the signs reversed, g(0) > 0 > g(1), the same
+formula gives a stable interior mixture that attracts from both sides.
 
 ## Payoff notation (D1 onward)
 
@@ -54,9 +83,13 @@ subscript.
 | HI_R, HI_N | honest net payoff against an invader that reported / stayed silent | points |
 | IH_R, IH_N | invader net payoff against an honest agent when the invader reported / stayed silent: 1 + 2·pR − c and 1 + 2·pN | points |
 | c_I | the invader's break-even claim cost, 2·(pR − pN); the invader reports when rare iff c < c_I | points |
+| f_switch | the invader fraction above which the rational invader stops reporting, 1 − c/c_I; undefined (always silent) when c ≥ c_I | 0–1 |
 
 The rational-invader rule: the invader reports at invader fraction f iff
-2·(1 − f)·(pR − pN) > c.
+2·(1 − f)·(pR − pN) > c, that is iff f < f_switch. Because the honest agent earns HI_R
+against a reporting invader and HI_N against a silent one, g steps down at f_switch and is
+a straight line only on each side of it (derivation in `reports/d1_costly_claim.md`, "Why
+g is not one straight line in D1").
 
 ## D2 rotating secret
 
@@ -90,6 +123,27 @@ independently at its situation's rate and invaders never cooperating:
 
 The analysis uses measured HH and measured cell payoffs; the expected forms are for
 understanding and for deriving ρ*.
+
+Where ρ* comes from. A rare invader (f → 0) plays only honest partners, so its payoff is
+IH(ρ) and the honest agents' is HH; g(0) = 0 is IH(ρ) = HH. Using the expected forms:
+
+```
+IH(ρ) = ρ·(1 + 2·pM) + (1 − ρ)·(1 + 2·pX) = 1 + 2·[ρ·pM + (1 − ρ)·pX]
+HH    = 1 + pM
+
+2·[ρ·pM + (1 − ρ)·pX] = pM
+ρ·(pM − pX) = pM/2 − pX
+ρ* = (pM − 2·pX) / (2·(pM − pX))
+```
+
+In words: the invader matches the honest agents once its partners cooperate with it half
+as often as honest agents cooperate with each other, because a cooperating partner is
+worth 2 to a defector but only a net 1 to an honest agent, who pays 1 for its own
+cooperation. The denominator is positive whenever a wrong word lowers cooperation at all
+(pX < pM). The numerator is positive only when pX < pM/2: if honest agents cooperate with
+a wrong word more than half as often as with a right one, the invader earns 1 + 2·pX > HH
+even when every replay fails, and no rotation rate helps. With pX = 0 the formula gives
+ρ* = 1/2, its ceiling: no scheme can tolerate replay success above one half.
 
 ## Statistics
 

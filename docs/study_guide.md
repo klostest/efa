@@ -240,8 +240,14 @@ Ordered by how central they are to the screen.
   cost cannot separate honest from false beards: a cost high enough to stop bluffing also
   stops honest claiming. The interesting numbers: honest agents gain about 1 point from a
   successful claim (2 vs 1), false beards gain about 2 (3 vs 1), so honest claiming should
-  stop first as the cost rises. D2 (a secret cue) is the differential-cost case: free for true
-  copies, expensive for invaders. D1 and D2 together are a test of Grafen's condition.
+  stop first as the cost rises. D2 (a secret cue) is sometimes described as the
+  differential-cost case, but it is not one: presenting the word costs nothing for either
+  type, and what differs is whether the word passes the partner's check. That is
+  verification, not a handicap; it belongs with Jansen & van Baalen below. The
+  differential-cost arm proper is the audited claim in the plan's free-evening queue, where a
+  claim that turns out false is penalised, so claiming is expected to cost an invader more
+  than an honest agent. D1 is the negative arm of Grafen's condition, the audited claim would
+  be the positive arm, and the positive arm has not been run.
 - **Read.** Grafen's abstract and introduction; the rest is a model you do not need.
 
 ### Jansen & van Baalen (2006). "Altruism through beard chromodynamics." Nature 440:663–666
@@ -278,7 +284,11 @@ Ordered by how central they are to the screen.
   reference book.
 - **Here.** The analysis code implements the replicator equation on our measured payoff
   matrices. You do not need the proofs, only the idea: share of a type grows in proportion to
-  (its payoff − population average payoff).
+  (its payoff − population average payoff). In symbols, with x_i the share of type i, W_i
+  its expected payoff and W̄ the population average: dx_i/dt = x_i · (W_i − W̄). With two
+  types this reduces to df/dt = f·(1 − f)·g(f), where f is the invader share and g the
+  invader advantage, so the sign of g alone decides which way f moves. Schuster & Sigmund
+  (1983, J. Theor. Biol. 100:533–538) gave the equation its name.
 
 ### Nowak (2006). "Five rules for the evolution of cooperation." Science 314:1560–1563
 - **What.** A four-page overview: kin selection, direct reciprocity, indirect reciprocity

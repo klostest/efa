@@ -746,7 +746,8 @@ same logic as proof of work against spam. That is a volume effect, not a per-cla
 
 The costs that do separate types are the differential ones, where a true claim is cheap
 and a false one is expensive: a slashable stake, which is an audit with a penalty (the
-audited-claim extension below); a shared secret that only members were issued (D2); a
+audited-claim extension below); a shared secret that only members were issued, which
+separates types by verification rather than by cost (D2); a
 signed statement from the agent's model provider or hardware that it is what it claims,
 which a spoofer cannot forge unless the key leaks (real infrastructure, not tested
 here); and a behavioural demonstration, a probe only the claimed kind of agent passes,
