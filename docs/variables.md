@@ -17,27 +17,39 @@ symbol and a row here. Grouped by where the symbol is introduced.
 Every payoff in the game can be written as `1 + 2·[partner cooperates] − [I cooperate]`,
 where the brackets are 1 when true and 0 otherwise. The expected payoff tables below all
 follow from this one line. Read against a defector, the partner bracket is 0 and the payoff
-is 1 − [I cooperate]: cooperating with a defector costs exactly one point. So an honest
-agent in an all-invader population falls short of the invaders' 1 by exactly its
-probability of cooperating with one, which is why g(1) = II − HI is that probability and
-can never be negative.
+is 1 − [I cooperate]: cooperating with a defector costs exactly one point.
+
+## Payoff notation (C2 onward)
+
+Two-letter payoff symbols name the earner first and the partner second: HI is what an
+honest agent earns against an invader, IH what an invader earns against an honest agent.
+A subscript names the partner's situation as the honest agent saw it. HH and II have no
+subscript.
+
+| Symbol | Meaning | Type / range |
+|---|---|---|
+| HH | mean honest net payoff against an honest partner, measured in the H–H cell | points |
+| II | invader payoff against an invader: 1, less any claim cost both paid | points |
 
 ## Population and dynamics (C2 onward)
 
 | Symbol | Meaning | Type / range |
 |---|---|---|
 | f | invader fraction of the population | 0–1 |
-| q | probability that a random partner is an invader; q = f·N/(N − 1) in a finite population of N agents, q = f in the large-population limit that the replicator uses | 0–1 |
-| g(f) | invader advantage: mean invader payoff minus mean honest payoff when the invader fraction is f. A straight line in f with two types and fixed cell payoffs (note below), so g(0) and g(1) decide the dynamics; piecewise linear in D1 under the rational-invader rule | points |
+| q | probability that a random partner is an invader; q = f·M/(M − 1) in a finite population of M agents, q = f in the large-population limit that the replicator uses | 0–1 |
+| g(f) | invader advantage: mean invader payoff minus mean honest payoff when the invader fraction is f. A straight line in f with two types and fixed cell payoffs (note below), so g(0) and g(1) decide the dynamics; piecewise linear in D1 under the rational-invader rule (D1 group below) | points |
 | f* | tipping fraction: the f at which g(f) = 0 when g(0) < 0 < g(1) (bistable). Below f* the honest population repels invaders, above it the invaders take over. f* = g(0) / (g(0) − g(1)) | 0–1 |
 
 End states under replicator dynamics: g(0) > 0 and g(1) > 0, all-invader; both negative,
 all-honest; g(0) < 0 < g(1), bistable with tipping fraction f*; g(0) > 0 > g(1), a stable
-interior mixture.
+interior mixture. Because cooperating with a defector costs exactly one point (the payoff
+identity above), an honest agent in an all-invader population falls short of the invaders'
+1 by exactly its probability of cooperating with one, which is why g(1) = II − HI is that
+probability and can never be negative.
 
 Why g is a straight line. With random pairing an honest agent meets an invader with
-probability f and an honest agent with probability 1 − f, so its expected payoff is a
-weighted average of two constants, and likewise for the invader:
+probability f and an honest agent with probability 1 − f, so its expected payoff, call it
+W_H(f), is a weighted average of two constants, and likewise W_I(f) for the invader:
 
 ```
 W_H(f) = (1 − f)·HH + f·HI
@@ -60,18 +72,6 @@ the sign of g: below f* the honest population wins, above it the invaders do, so
 unstable equilibrium, a tipping point. With the signs reversed, g(0) > 0 > g(1), the same
 formula gives a stable interior mixture that attracts from both sides.
 
-## Payoff notation (D1 onward)
-
-Two-letter payoff symbols name the earner first and the partner second: HI is what an
-honest agent earns against an invader, IH what an invader earns against an honest agent.
-A subscript names the partner's situation as the honest agent saw it. HH and II have no
-subscript.
-
-| Symbol | Meaning | Type / range |
-|---|---|---|
-| HH | mean honest net payoff against an honest partner, measured in the H–H cell | points |
-| II | invader payoff against an invader: 1, less any claim cost both paid | points |
-
 ## D1 costly claim
 
 | Symbol | Meaning | Type / range |
@@ -90,6 +90,22 @@ The rational-invader rule: the invader reports at invader fraction f iff
 against a reporting invader and HI_N against a silent one, g steps down at f_switch and is
 a straight line only on each side of it (derivation in `reports/d1_costly_claim.md`, "Why
 g is not one straight line in D1").
+
+## D1-audited claim (H3c)
+
+| Symbol | Meaning | Type / range |
+|---|---|---|
+| a | the stake: points a player forfeits if both players made the report and that player then defected. Set to 2 (plan, H3c) | points |
+| p_RR | honest cooperation rate when the agent itself reported and its partner reported | 0–1 |
+| p_NR | honest cooperation rate when the agent itself stayed silent and its partner reported | 0–1 |
+
+The report is free (c = 0); the stake is the arm's only cost. r, pN, HH, II and the
+two-letter payoffs keep their D1 meanings, with the forfeit included in any net payoff.
+D1's pR is the mix r·p_RR + (1 − r)·p_NR; the split is needed here because the forfeit
+depends on the agent's own report as well as the partner's. The rule never names a type:
+an agent that reported and plays honest partners who report at rate r forfeits
+a·r·(1 − p_RR) per game in expectation if it is honest and a·r if it is an invader, the
+gap being the honest agent's cooperation with reporting partners.
 
 ## D2 rotating secret
 
