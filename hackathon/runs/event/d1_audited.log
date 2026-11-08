@@ -1,3 +1,11 @@
 === [audited] start Fri Nov  6 13:50:35 PST 2026  config=configs/d1_audited.yaml only=all
 cells:   0%|          | 0/2 [00:00<?, ?it/s]
 Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s][AFetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 2313.95it/s]
+                                            cells:   0%|          | 0/2 [3:48:21<?, ?it/s]cells:  50%|█████     | 1/2 [3:48:21<3:48:21, 13701.08s/it]                                                           cells:  50%|█████     | 1/2 [5:30:42<3:48:21, 13701.08s/it]cells: 100%|██████████| 2/2 [5:30:42<00:00, 9253.96s/it]   cells: 100%|██████████| 2/2 [5:30:42<00:00, 9921.03s/it]
+{"cell": "costly_claim_c0_a2__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 13696.7}
+{"cell": "costly_claim_c0_a2_vs_always_defect__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 6141.0}
+=== [audited] done Fri Nov  6 19:21:18 PST 2026 exit=0
+wrote hackathon/runs/event/d1_audited/summary.csv
+   condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced  cost  n_claims  claim_rate  claim_lo  claim_hi  claim_truncated
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.765    0.702    0.818          0.765     3.43     2018.435             0          0              197   0.0       200       0.855      0.80     0.897                0
+costly_claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          100      0.890    0.814    0.937          0.890     1.09     2011.690             0          0               99   0.0       100       0.870      0.79     0.922                0

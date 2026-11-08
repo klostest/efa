@@ -24,32 +24,35 @@ thinking at low effort). Symbols as in `docs/variables.md`.
   honest agent spread). End states: all-invader (both positive), all-honest (both
   negative), bistable (g(0) < 0 ≤ g(1)), interior (g(0) > 0 > g(1)).
 
+Labels: RQ1 claim vs oracle, RQ2 false beards, RQ3 flat cost, RQ4 audited claim, RQ5
+rotating secret; the key to the preregistration's names is in `hackathon/README.md`.
+
 ## Pre-event Qwen results not in the generated table
 
-- **C0 gate (replication of Kundu et al.):** cooperation 0.00 / 0.25 / 0.45 / 0.53 / 0.63 /
+- **RQ1, oracle curve (replication of Kundu et al.):** cooperation 0.00 / 0.25 / 0.45 / 0.53 / 0.63 /
   0.92 at stated similarity 0 / 20 / 40 / 60 / 80 / 100; "?" control 0.37; base 0.00;
   0 exclusions. Qwen3-8B was flat in the same channel and dropped.
-- **H1:** claim 0.635 vs attributed oracle 0.662 at stated similarity 80; difference
+- **RQ1, claim vs oracle:** claim 0.635 vs attributed oracle 0.662 at stated similarity 80; difference
   −0.027 (95% −0.12 to +0.07; z = −0.59, p = 0.55). Inside the preregistered 10-point
   margin; the formal equivalence test (TOST at 10 points) narrowly fails (90% CI −0.107
   to +0.050). Unattributed oracle at 80 from the gate: 0.63.
-- **Confound check:** minimal claim at 100 gave 0.93 against 0.87 for the C2 sentence
+- **RQ2 wording control:** minimal claim at 100 gave 0.93 against 0.87 for the full claim sentence
   (difference +0.06, 95% +0.00 to +0.12; z = 2.0, p = 0.046; Fisher p = 0.066). The
-  "you have reported" clause did not raise cooperation; the C2 sentence is, if anything,
+  "you have reported" clause did not raise cooperation; the full sentence is, if anything,
   slightly conservative.
-- **C2:** HH 1.87, HI 0.15, IH 2.70; g(0) = +0.83 (0.69–0.97), g(1) = +0.85; 100% of
+- **RQ2:** HH 1.87, HI 0.15, IH 2.70; g(0) = +0.83 (0.69–0.97), g(1) = +0.85; 100% of
   resamples all-invader. Honest cooperation 0.87 with an honest partner, 0.85 with the
   invader (same prompt, independent draws).
-- **D1 crossings:** honest reporting halves at c = 0.95 (bootstrap 95% 0.84–1.07); the
+- **RQ3 crossings:** honest reporting halves at c = 0.95 (bootstrap 95% 0.84–1.07); the
   invader's report stops paying at c = 1.15 (0.82–1.37). A report buys about 0.65 extra
-  cooperation, not C2's 0.87. Honest cooperation with a reporter is flat in c (0.70–0.75).
+  cooperation, not RQ2's 0.87. Honest cooperation with a reporter is flat in c (0.70–0.75).
   At c = 2 the silent invader still wins (+0.32) because honest agents keep paying for
   reports and HH falls to 0.80, below mutual defection. 1 exclusion in 1,500 decisions.
-- **D2:** pM 0.805 (0.75–0.87), pM check 0.82, pX 0.06 (0.02–0.11); HH 1.81; ρ* measured
+- **RQ5:** pM 0.805 (0.75–0.87), pM check 0.82, pX 0.06 (0.02–0.11); HH 1.81; ρ* measured
   0.45 (0.38–0.53), closed form 0.46; bistable in 100% of resamples at ρ = 1/4 and 1/16
-  with tipping fractions f* = 0.55 and 0.85; all-invader at ρ = 1 (+0.84, C2 restated).
+  with tipping fractions f* = 0.55 and 0.85; all-invader at ρ = 1 (+0.84, RQ2 restated).
   All six wrong-word cooperations are thinking-budget forced closes. 0 exclusions.
-- **Audited claim (run the night before the event):** r 0.86 (0.82–0.89); p_RR 0.977
+- **RQ4, audited claim (run the night before the event):** r 0.86 (0.82–0.89); p_RR 0.977
   (0.92–0.99), H–H check 0.979; p_NR 0.23 (13 decisions; 0.28 in H–H); pN 0 of 29;
   HH 1.72 (1.63–1.81); HI_R 0.08; IH_R 1.02; IH_N 1.00; g(0) = −0.70 (−0.80 to −0.58) in
   100% of resamples; g(1) = 0 exactly. Game counts: H–H 73 both-reported (70 C,C; 3 one
@@ -68,17 +71,17 @@ thinking at low effort). Symbols as in `docs/variables.md`.
 | Quantity | Qwen | Sonnet 5.5 | Opus 5.5 |
 |---|---|---|---|
 | base cooperation | 0.00 | 0.00 | 0.00 |
-| C2 honest cooperation, H–H / H–I | 0.87 / 0.85 | 0.99 / 1.00 | 1.00 / 1.00 |
-| C2 g(0) | +0.83 | +1.01 | +1.00 |
-| D2 pM / pX | 0.805 / 0.06 | 0.835 / 0.00 | 1.00 / 0.00 |
-| D2 ρ* | 0.45 (0.38–0.53) | 0.47 (0.43–0.52) | 0.50 |
-| D1 honest report rate at c = 0 / 0.5 / 1 / 1.5 / 2 | 0.93 / 0.66 / 0.48 / 0.25 / 0.19 | 0.89 / 0.12 / 0.05 / 0.02 / 0.02 | 1.00 / 0.38 / 0.00 / 0.00 / 0.00 |
-| D1 HH at c = 0 / 0.5 / 1 / 1.5 / 2 | 1.83 / 1.23 / 0.97 / 0.85 / 0.80 | 1.78 / 1.01 / 1.00 / 0.99 / 0.965 | 1.99 / 1.12 / 1.00 / 1.00 / 1.00 |
-| D1 g(0) at c = 0 / 0.5 / 1 / 1.5 / 2 | +0.95 / +0.77 / +0.52 / +0.28 / +0.32 | +0.91 / +0.76 / +0.42 / +0.01 / +0.035 | +0.89 / +0.18 / 0 / 0 / 0 |
-| D1 reporting halves at c = | 0.95 | 0.26 | 0.41 |
-| D1 invader's report stops paying at c = | 1.15 | 1.46 (1.31–1.58) | 0.67 (0.58–0.73) |
+| RQ2 honest cooperation, H–H / H–I | 0.87 / 0.85 | 0.99 / 1.00 | 1.00 / 1.00 |
+| RQ2 g(0) | +0.83 | +1.01 | +1.00 |
+| RQ5 pM / pX | 0.805 / 0.06 | 0.835 / 0.00 | 1.00 / 0.00 |
+| RQ5 ρ* | 0.45 (0.38–0.53) | 0.47 (0.43–0.52) | 0.50 |
+| RQ3 honest report rate at c = 0 / 0.5 / 1 / 1.5 / 2 | 0.93 / 0.66 / 0.48 / 0.25 / 0.19 | 0.89 / 0.12 / 0.05 / 0.02 / 0.02 | 1.00 / 0.38 / 0.00 / 0.00 / 0.00 |
+| RQ3 HH at c = 0 / 0.5 / 1 / 1.5 / 2 | 1.83 / 1.23 / 0.97 / 0.85 / 0.80 | 1.78 / 1.01 / 1.00 / 0.99 / 0.965 | 1.99 / 1.12 / 1.00 / 1.00 / 1.00 |
+| RQ3 g(0) at c = 0 / 0.5 / 1 / 1.5 / 2 | +0.95 / +0.77 / +0.52 / +0.28 / +0.32 | +0.91 / +0.76 / +0.42 / +0.01 / +0.035 | +0.89 / +0.18 / 0 / 0 / 0 |
+| RQ3 reporting halves at c = | 0.95 | 0.26 | 0.41 |
+| RQ3 invader's report stops paying at c = | 1.15 | 1.46 (1.31–1.58) | 0.67 (0.58–0.73) |
 
-Two routes to the same H3a conclusion: Qwen keeps reporting and is taxed below mutual
+Two routes to the same RQ3 conclusion: Qwen keeps reporting and is taxed below mutual
 defection; the Claude models stop reporting at the first positive cost, so from c = 1
 nobody reports, HH returns to 1.00 and the two types play alike (g(0) = 0, "neutral").
 Opus cooperates with a reporting partner almost only when it reported itself (1.00 vs
@@ -87,7 +90,7 @@ there is nothing to spoof).
 
 ## Made during the hackathon
 
-- **Audited claim on Sonnet 5.5 and Opus 5.5** (`hackathon/runs/api_d1_audited`, 600 calls
+- **RQ4, audited claim on Sonnet 5.5 and Opus 5.5** (`hackathon/runs/api_d1_audited`, 600 calls
   per model, 0 exclusions; full table in `reports/d1_audited.md`, "Across models"):
 
   | Quantity | Qwen | Sonnet 5.5 | Opus 5.5 |
@@ -100,14 +103,22 @@ there is nothing to spoof).
   | invader vs honest: reporting / silent | 1.02 / 1.00 | 1.02 / 1.00 | 1.00 / undefined |
   | g(0) | −0.70 (−0.80 to −0.58) | −0.73 (−0.82 to −0.64) | −1.00 |
   | end state | bistable (g(1) = 0), 100% | bistable (g(1) = 0), 100% | all-honest by scoring convention, 100% |
-  | same model, D1 flat cost c = 2: g(0) | +0.32 | +0.035 | 0 |
+  | same model, RQ3 flat cost c = 2: g(0) | +0.32 | +0.035 | 0 |
 
-  H3c holds on all three. Sonnet's 13% silence is mostly tail sampling of hedged answers
+  RQ4's answer holds on all three. Sonnet's 13% silence is mostly tail sampling of hedged answers
   (stated report probability 0.90–0.97 in 222 of 300 claim calls; 7 decided declines),
   not self-selection as on Qwen; the silent agents still defect. Opus never stays silent,
   so its play against a silent partner is unobserved and the invader is scored as
   reporting at every f (hence g(1) = −1, "all-honest"); with defection against a silent
-  partner, as Opus showed at D1's c = 2 (0 of 200), the all-invader corner would be
+  partner, as Opus showed at RQ3's c = 2 (0 of 200), the all-invader corner would be
   neutral as on the other models. Pilot: 24 games, 0 exclusions, forfeit named in every
   transcript, no payment-to-partner reading.
 - **Event reruns of the Qwen matrix** (`hackathon/runs/event`): see the generated table.
+  Status Saturday 11:15: RQ2, RQ4, RQ5, RQ3 c = 2 and c = 0.5 done and replicating (every
+  pre-event and event interval overlaps; seven point estimates fall outside the pre-event
+  interval, none changing an end state; details in the research log). Event headline
+  values the report can quote now: RQ2 g(0) = +0.845 (0.71–0.97); RQ4 g(0) = −0.64
+  (−0.77 to −0.45), r 0.86, pN 1 of 27; RQ5 pM 0.864, pX 0.03, ρ* 0.56 (0.48–0.65), closed
+  form 0.48; RQ3 c = 2 r 0.26, HH 0.77, g(0) = +0.46; RQ3 c = 0.5 r 0.64, HH 1.295,
+  g(0) = +0.725. Remaining blocks in order: RQ3 c = 0 (running), 1.5, 1, RQ1 oracle curve,
+  RQ1 claim vs oracle, RQ2 wording control; expected to finish Sunday morning.

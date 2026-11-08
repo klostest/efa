@@ -1,0 +1,72 @@
+---
+Introduction
+
+Swarms of AI agents have recently garnered headlines for their surprising abilities to thwart the security measures of some of the world's largest tech companies through unexpected cooperation, while also displaying dishonest activity between agents (METR). While these events have understandably concerned many, at the same time it is likely that agent cooperation will be purposefully developed precisely because the coordinated actions of many intelligent entities are more powerful than when they act alone (are there citations that think similarly?). How can we begin to understand these behaviors? The history of life on earth, studied through the lens of evolutionary biology, has led to fundamental theories of how entities interact, and may hold valuable lessons for how groups of agents behave.
+
+This work was conducted as part of the Swarm Alignment Hackathon track "Strengthening agent infrastructure: Identity, reputation, and commitments that hold up when agents can copy and rename themselves," and takes inspiration from Richard Dawkins' work in biological kin theory (1976). Dawkins theorized the possibility of a single gene, called a green beard, that expresses as both a visible external cue to other entities possessing the gene, as well as an altruistic action toward such entities. While initially thought to be rare in nature if indeed it existed at all, in subsequent decades many real-world examples of green beards were found across the plant and animal kingdoms, down to single-celled organisms, and the underlying theory developed (Queller et al. 2003, ).
+
+Life is not always honest, due to fierce competition between selfish individuals (Nowak 2006), and the green beard theory developed to include false beards, that display the cue but don't act altruistically, as well as beard chromodynamics, which postulates that many beard colors must coexist in a population in order for the signal to be meaningful and ward off the possibility of invasion by false beards. In the technology world, agent swarms that are intended to honestly cooperate may be vulnerable to false beards (other agents spoofing similarity), while beard chromodynamics can be viewed as a potential solution to spoofing, in the form of a rotating secret key used to prove identity in copied and renamed agents.
+
+Our main contributions are:
+
+- Cooperation based on agent-claimed similarity collapses under false beard invaders, as hypothesized by (citation from CS, if this is not already shown, not sure of biology citation)
+- A flat cost across all agents, honest and dishonest (e.g. proof-of-work in the crypto world) fails to restore cooperation, but an deception-weighted cost (cite biology, and is this like staking in crypto?) may (are there CS citations for this?)
+- A rotating secret key can also restore cooperation provided the key rotates faster than spoofers can acquire it (any citations? any way to make this not sound obvious?)
+
+---
+Related prior work
+
+Start with Hammond et al. as the foundational resource, Kundu et al., Tewolde et al. Then make a link to biology. Give the closest examples of anyone referring to evolutionary biology in the study of groups of agents, including the LessWrong post we found.
+
+Make the connection from the average payoff to a cooperator or defector being viewed as reproductive fitness, i.e. will a certain class of agent be able to take over the population from some given starting proportion, i.e. starting rare.
+
+---
+Methods
+
+Building on recent work by Kundu et al. (2026), here LLM agents are pitted against each other in single-shot Prisoner's Dilemma games, to observe cooperation and deception. Kundu et al. (2026) gave the agents a prompt that indicated, without attribution, that an agent was X% similar to its partner in gameplay, varying X from 0-100. Here this is called the oracle approach, where the claim comes from the environment and not the other player. While a diversity of cooperative trends was observed across a range of LLMs, on average cooperation increased with X. Here this work is extended by first recreating the oracle approach on a more recent generation of LLMs: (Qwen vXX, and Claude Sonnet vXX and Opus vXX), then comparing the situation where the similarity claim explicitly comes from the other agent, as opposed to the environment (RQ1). We then ... I think I'll get Claude to help with this.
+
+[prompts in appendix]
+
+---
+Results
+
+---
+Conclusion
+
+I don't want this to be super long. I think I can probably be concise and still make some valuable statements. The overall point should be that evolutionary biology hypotheses have predicted agent behavior successfully. Then I need to be able to point to ideas for the future, ideally ones that I'll be able to execute on before anyone else.
+
+I might point to the actually pretty pessimistic picture painted by Dawkins of how every organism is selfish, and as Nowak says, "Evolution is based on a fierce competition between individuals and should therefore reward only selfish behavior. Every gene, every cell, and every organism should be designed to promote its own evolutionary success at the expense of its competitors." Although competition is observed. But the recent Science commentary on the 50th (?) anniversary edition of "The Selfish Gene" seems to argue for another way of thinking, that might also be more hopeful.
+
+
+=====
+
+Hello, I'm writing the Swarm Alignment Hackathon report for EFA ("false beards"). I submit it
+tomorrow (Nov 8) and will probably also post a version on LessWrong.
+
+Please read these first, in this order:
+1. hackathon/outline.md: the section plan, page budget, naming rules (RQ1–RQ5 only, never
+   the preregistration's H/C/D names), and the paragraphs that must appear (prior-work
+   disclosure, limitations, dual use).
+2. https://docs.google.com/document/d/1U02TB281CFHFEL7uEWoPhF6Uxt6Ni_pMvKyZUhhVOv0/edit?tab=t.0: my draft so far.
+3. hackathon/numbers.md and hackathon/runs/headline.md: the only sources for numbers.
+   Never quote a number from memory.
+4. hackathon/related_work_sources.md: the verified bibliography, with placement by
+   section, must/should/optional tiers, a suggested novelty sentence, and corrections
+   to my reference list.
+5. hackathon/README.md and hackathon/submission.md: the naming table and the
+   submission requirements.
+
+Ground rules:
+- I write every section in my own words. Help me by outlining, checking claims
+  against the numbers and the sources, tightening my prose, and flagging anything
+  that is missing or overstated.
+- Don't write whole sections for me unless I ask.
+- Body target is 4 pages (8 max), excluding references and appendices. Overflow
+  goes to an appendix (e.g. I think we should include all prompts in full in the appendix) or to the LessWrong version.
+
+First task: Please review my introduction.
+
+======
+
+
+Next up: Finish methods, and associated appendices, then on to results.

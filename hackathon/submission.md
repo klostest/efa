@@ -9,8 +9,10 @@ to replace the PDF.
 **Project summary (a short abstract: what you did, what you found):** (Steve; the
 report's abstract, trimmed)
 
-**PDF report:** `hackathon/report/<file>.pdf`, official template, 8 pages max before
-references and appendices, abstract 150–250 words, author name and affiliation, the
+**PDF report:** `hackathon/report/<file>.pdf`, official template, recommended length 4 pages (stated in the
+template), limit 8 pages (kickoff recording 2026-11-06, Nguyen of Apart: "8 pages at most";
+transcript `Hackathon/Kickoff_Presentation/GMT20261106-133326_Recording.transcript.vtt`,
+line 165), both before references and appendices, abstract 150–250 words, author name and affiliation, the
 required Limitations and Dual-Use / Ethical Considerations appendix.
 
 **Interested in publishing:** (Steve)
@@ -23,7 +25,7 @@ required Limitations and Dual-Use / Ethical Considerations appendix.
 **Project code:** https://github.com/klostest/efa (public; prior work and weekend work
 separated by the `pre-hackathon` tag and the `hackathon/` directory, see both READMEs).
 
-**Slides / project image:** optional; `hackathon/figures/d1_audited.png` or the D1 three-model
+**Slides / project image:** optional; `hackathon/figures/d1_audited.png` (RQ4) or the RQ3 three-model
 figure would do as the image.
 
 **Team name:** (Steve)  **Location:** Los Angeles

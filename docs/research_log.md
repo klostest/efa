@@ -862,7 +862,9 @@ invader's report stops paying at 1.15, 1.46 (1.31–1.58), 0.67 (0.58–0.73).
 
 - Kickoff rules (transcript in `../Hackathon/Kickoff_presentation/`): only the weekend's
   work is judged; prior work is allowed if the README and the report say exactly what was
-  built before; PDF on the official template, 8 pages, 150–250 word abstract, required
+  built before; PDF on the official template, 4 pages recommended (template) and 8 pages
+  the limit (kickoff recording, Nguyen of Apart, transcript line 165), 150–250 word
+  abstract, required
   limitations / dual-use appendix; deadline Sunday 11:59 PM AoE. Steve submits to the
   global sprint only (not prize-eligible at the LA hub); no video.
 - Separation: git tag `pre-hackathon` on commit a79d9fb (Steve's Friday-morning commit of
@@ -904,3 +906,70 @@ invader's report stops paying at 1.15, 1.46 (1.31–1.58), 0.67 (0.58–0.73).
 - Reading for the report: the same two points as a flat fee left the invader level or
   ahead on all three models; as a stake forfeited only by a defector that reported to a
   reporter, they put it 0.7 to 1.0 behind on all three.
+
+## 2026-11-07, 11:15: event reruns through D1 c = 0.5 done; all replicate
+
+- Finished overnight (`hackathon/runs/event/`, fresh samples, 100 games per cell): C2
+  (Fri 13:50), audited claim (19:21), D2 (22:31), D1 c = 2 (Sat 03:08), D1 c = 0.5
+  (07:35). D1 c = 0 running; then c = 1.5, c = 1, C0 gate, H1, confound. Blocks ran
+  10–30% longer than the pre-event timings; every cell reached its N with at most one
+  exclusion (D2: 2 of 300).
+- `hackathon/scripts/headline.py` now also reports whether the pre-event and event 95%
+  intervals overlap (the two-sample check; "event inside pre-event interval" alone flags
+  ordinary sampling noise). 29 headline quantities have event values; all 29 intervals
+  overlap. Seven event estimates fall outside the pre-event interval, none changing a
+  conclusion: D1 c = 2 report rate 0.26 vs 0.19 and g(0) +0.46 vs +0.32 (silent invader
+  still wins, all-invader 100%); D2 ρ* 0.56 vs 0.45 (closed form 0.48 vs 0.46), g(0) at
+  ρ = 1/4 −0.44 vs −0.31 (bistable 100%, f* 0.68 vs 0.55), g(0) at ρ = 1 +0.64 vs +0.84
+  (all-invader 100%); audited pN 1 of 27 vs 0 of 29 (g(1) = +0.04 instead of 0, still
+  bistable 100%).
+- Audited claim, event: r 0.86 (0.82–0.89), p_RR 0.966, p_NR 0.385 (5 of 13), HH 1.715,
+  IH_R 1.04, g(0) = −0.64 (−0.77 to −0.45), bistable in 100% of resamples. H3c replicates.
+- C2, event: HH 1.895, g(0) = +0.845 (0.71–0.97), all-invader 100%. D2, event: pM 0.864,
+  pX 0.03, HH 1.86. D1 c = 0.5, event: r 0.64, HH 1.295, g(0) = +0.725.
+- The audited script's D1 comparison rows use the pre-event D1 run until the event c = 0
+  level completes (`headline.py` switches automatically); `hackathon/figures/
+  d1_costly_claim.png` shows a partial c = 0 point until then and is not report-ready.
+
+## 2026-11-07, 12:40: one naming scheme for the report (RQ1 to RQ5)
+
+Steve's decision: the report and everything under `hackathon/` label experiments by
+research question only, numbered in the order they are presented, and never by the
+preregistration's H/C/D names in prose. The preregistration, the plan, the pre-event
+reports, the configs and the run directories keep their names; the key is the "Naming"
+table in `hackathon/README.md`:
+
+| Report label | Preregistered as | Run directory |
+|---|---|---|
+| RQ1 claim vs oracle | H1; C0 (oracle) and C1 (claim) | `c0_gate_27b_think`, `c1_h1` |
+| RQ2 false beards | H2; C2; "confound" is the wording control | `c2_false_beards`, `c2_confound` |
+| RQ3 flat cost | H3a; D1 | `d1_costly_claim` |
+| RQ4 audited claim | H3c (added 2026-10-27); "audited" | `d1_audited` |
+| RQ5 rotating secret | H3b; D2 | `d2_secret` |
+
+The cross-model replays (Sonnet 5.5, Opus 5.5) are a robustness subsection, not a sixth
+question. `hackathon/scripts/headline.py` labels and orders its table and figure the same
+way (RQ3, RQ4, RQ5 in that order).
+
+### 2026-11-07: literature scan 3 (final check before the write-up)
+
+- `LITERATURE_TRACKER.md` updated. The full verified bibliography, sorted by report section, is
+  in `hackathon/related_work_sources.md`.
+- New and close:
+  - Kaushik et al. (arXiv 2610.37984): recognition handshakes between colluders, with a Kundu
+    co-author.
+  - The ICLR workshop paper is now identified as Za, Panos, Čuhel, Albanie: a correlated
+    stranger gets the same cooperation as a correlated self.
+  - Arsen's CliqueBots post: a formal condition for when "cooperate with what looks like me"
+    can be exploited.
+  - Del Giudice et al. (2609.35928): identity labels are trusted.
+  - Apart Collusion Sprint projects: same-model claims, silent swaps, and stakes.
+  - Blindfold (2610.37055): audits fail if agents can see the audit coin. This is a
+    limitation for RQ4.
+- Still unpublished elsewhere: the invasion analysis, and the costly, audited and rotating
+  defenses.
+- Corrections for the reference list:
+  - Hofstadter: use the June 1983 column.
+  - Barasz is first author of the "LaVictoire et al. 2014" paper.
+  - Kundu et al. has no confirmed venue.
+  - The "false beard" term is not confirmed as Gardner & West's.

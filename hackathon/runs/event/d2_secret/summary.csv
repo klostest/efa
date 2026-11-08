@@ -1,0 +1,4 @@
+cell,condition,level,model,games,excluded,n_decisions,coop_rate,coop_lo,coop_hi,stated_p_coop,welfare,mean_tokens,format_fixed,truncated,thinking_forced
+secret_match__Qwen3.5-27B-4bit,secret,100,mlx:mlx-community/Qwen3.5-27B-4bit,100,1,198,0.8636363636363636,0.8088681075810444,0.9045626222585923,0.8651515151515152,3.727272727272727,2008.7424242424242,0,1,196
+secret_match_vs_always_defect__Qwen3.5-27B-4bit,secret,100,mlx:mlx-community/Qwen3.5-27B-4bit,100,0,100,0.75,0.6569535362992417,0.8245490599627573,0.76,2.75,2012.04,1,0,98
+secret_mismatch_vs_always_defect__Qwen3.5-27B-4bit,secret,100,mlx:mlx-community/Qwen3.5-27B-4bit,100,1,99,0.030303030303030304,0.010358451889070856,0.08533823116525735,0.038181818181818185,2.0303030303030303,1996.4343434343434,1,1,97

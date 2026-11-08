@@ -2,14 +2,16 @@
 pre-event runs (runs/) and the event-weekend reruns (hackathon/runs/event/), side by side,
 plus a replication figure.
 
-Blocks and their run directories (same stem in both samples):
-  c0        c0_gate_27b_think   cooperation at stated similarity 0..100, "?" and base
-  h1        c1_h1               oracle-attributed vs partner claim at 80, and the difference
-  confound  c2_confound         minimal claim at 100 against the C2 sentence
-  c2        c2_false_beards     H-H and H-I cooperation, HH, HI, IH, g(0), g(1), end state
-  d1        d1_costly_claim     per cost level: r, pR, pN, HH, g(0), end state  (scripts/d1_analysis.py)
-  d2        d2_secret           pM, pM check, pX, rho*, g(0) at rho = 1/4 and 1  (scripts/d2_analysis.py)
-  audited   d1_audited          r, p_RR, p_NR, pN, HH, g(0), g(1)  (scripts/d1_audited_analysis.py)
+Blocks, their run directories (same stem in both samples) and the research question each
+serves in the report (the mapping from the preregistration's C/D/H names to RQ1..RQ5 is in
+hackathon/README.md, "Naming"):
+  c0        c0_gate_27b_think   RQ1  cooperation at stated similarity 0..100, "?" and base
+  h1        c1_h1               RQ1  oracle-attributed vs partner claim at 80, and the difference
+  c2        c2_false_beards     RQ2  H-H and H-I cooperation, HH, HI, IH, g(0), g(1), end state
+  confound  c2_confound         RQ2  control: minimal claim at 100 against the full sentence
+  d1        d1_costly_claim     RQ3  per cost level: r, pR, pN, HH, g(0), end state  (scripts/d1_analysis.py)
+  audited   d1_audited          RQ4  r, p_RR, p_NR, pN, HH, g(0), g(1)  (scripts/d1_audited_analysis.py)
+  d2        d2_secret           RQ5  pM, pM check, pX, rho*, g(0) at rho = 1/4 and 1  (scripts/d2_analysis.py)
 
 For the pre-event sample the per-arm CSVs already in runs/ are read as they are. For the event
 sample the per-arm scripts are run on the event directories (figures go to hackathon/figures)
@@ -79,8 +81,8 @@ def block_c0(sample, cells) -> list[dict]:
     for lvl in (0, 20, 40, 60, 80, 100):
         cid = f"oracle_{lvl}"
         if cid in cells:
-            rows.append(rate_row(sample, "c0", f"c0_{lvl}", f"C0 cooperation, similarity {lvl}", cells[cid]))
-    for cid, label in (("unknown", 'C0 cooperation, "?" control'), ("base", "C0 cooperation, base (no signal)")):
+            rows.append(rate_row(sample, "c0", f"c0_{lvl}", f"RQ1 oracle: cooperation, similarity {lvl}", cells[cid]))
+    for cid, label in (("unknown", 'RQ1 oracle: "?" control'), ("base", "RQ1 oracle: base (no signal)")):
         if cid in cells:
             rows.append(rate_row(sample, "c0", f"c0_{cid}", label, cells[cid]))
     return rows
@@ -89,9 +91,9 @@ def block_c0(sample, cells) -> list[dict]:
 def block_h1(sample, cells) -> list[dict]:
     rows = []
     if "oracle_attributed_80" in cells and "claim_80" in cells:
-        a = rate_row(sample, "h1", "h1_oracle", "H1 cooperation, environment reports 80", cells["oracle_attributed_80"])
-        b = rate_row(sample, "h1", "h1_claim", "H1 cooperation, partner reports 80", cells["claim_80"])
-        rows += [a, b, diff_row(sample, "h1", "h1_diff", "H1 difference, claim − oracle", b, a)]
+        a = rate_row(sample, "h1", "h1_oracle", "RQ1 cooperation, environment reports 80", cells["oracle_attributed_80"])
+        b = rate_row(sample, "h1", "h1_claim", "RQ1 cooperation, partner reports 80", cells["claim_80"])
+        rows += [a, b, diff_row(sample, "h1", "h1_diff", "RQ1 difference, claim − oracle", b, a)]
     return rows
 
 
@@ -99,18 +101,18 @@ def block_c2(sample, cells, boot, rng) -> list[dict]:
     rows = []
     hh, hi = cells.get("claim_symmetric_100"), cells.get("claim_symmetric_100_vs_always_defect")
     if hh and hi:
-        rows.append(rate_row(sample, "c2", "c2_hh", "C2 honest cooperation, honest partner", hh))
-        rows.append(rate_row(sample, "c2", "c2_hi", "C2 honest cooperation, invader partner", hi, (0,)))
+        rows.append(rate_row(sample, "c2", "c2_hh", "RQ2 honest cooperation, honest partner", hh))
+        rows.append(rate_row(sample, "c2", "c2_hi", "RQ2 honest cooperation, invader partner", hi, (0,)))
         c = c2_numbers(hh, hi, boot, rng)
-        for key, label in (("HH", "C2 honest payoff vs honest (HH)"), ("HI", "C2 honest payoff vs invader (HI)"),
-                           ("IH", "C2 invader payoff vs honest (IH)")):
+        for key, label in (("HH", "RQ2 honest payoff vs honest (HH)"), ("HI", "RQ2 honest payoff vs invader (HI)"),
+                           ("IH", "RQ2 invader payoff vs honest (IH)")):
             rows.append(dict(sample=sample, block="c2", key=f"c2_{key}", label=label, estimate=c[key], lo=np.nan, hi=np.nan,
                              n=len(hh) + len(hi)))
-        rows.append(dict(sample=sample, block="c2", key="c2_g0", label="C2 invader advantage g(0)", estimate=c["g0"],
+        rows.append(dict(sample=sample, block="c2", key="c2_g0", label="RQ2 invader advantage g(0)", estimate=c["g0"],
                          lo=c["g0_lo"], hi=c["g0_hi"], n=len(hh) + len(hi)))
-        rows.append(dict(sample=sample, block="c2", key="c2_g1", label="C2 invader advantage g(1)", estimate=c["g1"],
+        rows.append(dict(sample=sample, block="c2", key="c2_g1", label="RQ2 invader advantage g(1)", estimate=c["g1"],
                          lo=np.nan, hi=np.nan, n=len(hi)))
-        rows.append(dict(sample=sample, block="c2", key="c2_all_invader", label="C2 resamples ending all-invader",
+        rows.append(dict(sample=sample, block="c2", key="c2_all_invader", label="RQ2 resamples ending all-invader",
                          estimate=c["frac_all_invader"], lo=np.nan, hi=np.nan, n=boot))
     return rows
 
@@ -118,11 +120,11 @@ def block_c2(sample, cells, boot, rng) -> list[dict]:
 def block_confound(sample, cells, c2_cells) -> list[dict]:
     rows = []
     if "claim_100" in cells:
-        a = rate_row(sample, "confound", "confound_min", "Confound: minimal claim at 100", cells["claim_100"])
+        a = rate_row(sample, "confound", "confound_min", "RQ2 control: minimal claim at 100", cells["claim_100"])
         rows.append(a)
         if c2_cells.get("claim_symmetric_100"):
-            b = rate_row(sample, "confound", "confound_c2", "C2 sentence at 100", c2_cells["claim_symmetric_100"])
-            rows.append(diff_row(sample, "confound", "confound_diff", "Confound difference, minimal − C2 sentence", a, b))
+            b = rate_row(sample, "confound", "confound_c2", "RQ2 control: full claim sentence at 100", c2_cells["claim_symmetric_100"])
+            rows.append(diff_row(sample, "confound", "confound_diff", "RQ2 control difference, minimal − full sentence", a, b))
     return rows
 
 
@@ -139,7 +141,7 @@ def block_d1(sample, run_dir, cells, boot, do_scripts) -> list[dict]:
     if not any(k.startswith("costly_claim_c") for k in cells):
         return []
     if sample == "event" and do_scripts:
-        if not run_script("d1_analysis.py", run_dir, FIGS / "d1_costly_claim.png", ["--title", "Qwen3.5-27B, event rerun"], boot):
+        if not run_script("d1_analysis.py", run_dir, FIGS / "d1_costly_claim.png", ["--title", "RQ3 flat cost, Qwen3.5-27B, event rerun"], boot):
             return []
     csv = run_dir / "analysis.csv"
     if not csv.exists():
@@ -152,13 +154,13 @@ def block_d1(sample, run_dir, cells, boot, do_scripts) -> list[dict]:
             continue
         n = len(cells[f"costly_claim_c{c:g}"]) + len(cells[f"costly_claim_c{c:g}_vs_always_defect"])
         r = df.loc[c]
-        rows.append(dict(sample=sample, block="d1", key=f"d1_r_{c:g}", label=f"D1 honest report rate, c = {c:g}",
+        rows.append(dict(sample=sample, block="d1", key=f"d1_r_{c:g}", label=f"RQ3 honest report rate, c = {c:g}",
                          estimate=r["r"], lo=r["r_wilson_lo"], hi=r["r_wilson_hi"], n=n))
-        rows.append(dict(sample=sample, block="d1", key=f"d1_pR_{c:g}", label=f"D1 cooperation with a reporter, c = {c:g}",
+        rows.append(dict(sample=sample, block="d1", key=f"d1_pR_{c:g}", label=f"RQ3 cooperation with a reporter, c = {c:g}",
                          estimate=r["pR"], lo=r["pR_lo"], hi=r["pR_hi"], n=n))
-        rows.append(dict(sample=sample, block="d1", key=f"d1_HH_{c:g}", label=f"D1 honest payoff HH, c = {c:g}",
+        rows.append(dict(sample=sample, block="d1", key=f"d1_HH_{c:g}", label=f"RQ3 honest payoff HH, c = {c:g}",
                          estimate=r["HH"], lo=r["HH_lo"], hi=r["HH_hi"], n=n))
-        rows.append(dict(sample=sample, block="d1", key=f"d1_g0_{c:g}", label=f"D1 invader advantage g(0), c = {c:g}",
+        rows.append(dict(sample=sample, block="d1", key=f"d1_g0_{c:g}", label=f"RQ3 invader advantage g(0), c = {c:g}",
                          estimate=r["g0"], lo=r["g0_lo"], hi=r["g0_hi"], n=n))
     return rows
 
@@ -168,7 +170,7 @@ def block_d2(sample, run_dir, cells, boot, do_scripts) -> list[dict]:
     if not all(k in cells for k in need):
         return []
     if sample == "event" and do_scripts:
-        if not run_script("d2_analysis.py", run_dir, FIGS / "d2_secret.png", ["--title", "Qwen3.5-27B, event rerun"], boot):
+        if not run_script("d2_analysis.py", run_dir, FIGS / "d2_secret.png", ["--title", "RQ5 rotating secret, Qwen3.5-27B, event rerun"], boot):
             return []
     cells_csv, grid_csv = run_dir / "cells.csv", run_dir / "analysis.csv"
     if not (cells_csv.exists() and grid_csv.exists()):
@@ -177,14 +179,14 @@ def block_d2(sample, run_dir, cells, boot, do_scripts) -> list[dict]:
     grid = pd.read_csv(grid_csv)
     n = sum(len(cells[k]) for k in need)
     rows = []
-    for key, label in (("pM", "D2 cooperation, words match (pM)"), ("pM_check", "D2 pM check (H–I match cell)"),
-                       ("pX", "D2 cooperation, wrong word (pX)"), ("rho_star", "D2 tolerable replay success ρ*")):
+    for key, label in (("pM", "RQ5 cooperation, words match (pM)"), ("pM_check", "RQ5 pM check (H–I match cell)"),
+                       ("pX", "RQ5 cooperation, wrong word (pX)"), ("rho_star", "RQ5 tolerable replay success ρ*")):
         if key in cells_df.index:
             r = cells_df.loc[key]
             rows.append(dict(sample=sample, block="d2", key=f"d2_{key}", label=label, estimate=r["estimate"], lo=r["lo"], hi=r["hi"], n=n))
     for rho, tag in ((0.25, "1/4"), (1.0, "1")):
         g = grid.iloc[(grid["rho"] - rho).abs().argmin()]
-        rows.append(dict(sample=sample, block="d2", key=f"d2_g0_{tag}", label=f"D2 invader advantage g(0), ρ = {tag}",
+        rows.append(dict(sample=sample, block="d2", key=f"d2_g0_{tag}", label=f"RQ5 invader advantage g(0), ρ = {tag}",
                          estimate=g["g0"], lo=g["g0_lo"], hi=g["g0_hi"], n=n))
     return rows
 
@@ -195,7 +197,7 @@ def block_audited(sample, run_dir, cells, boot, do_scripts, d1_dir: Path) -> lis
         return []
     if sample == "event" and do_scripts:
         if not run_script("d1_audited_analysis.py", run_dir, FIGS / "d1_audited.png",
-                          ["--d1", str(d1_dir), "--title", "Qwen3.5-27B, event rerun"], boot):
+                          ["--d1", str(d1_dir), "--title", "RQ4 audited claim, Qwen3.5-27B, event rerun"], boot):
             return []
     csv = run_dir / "analysis.csv"
     if not csv.exists():
@@ -203,13 +205,13 @@ def block_audited(sample, run_dir, cells, boot, do_scripts, d1_dir: Path) -> lis
     r = pd.read_csv(csv).iloc[0]
     n = sum(len(cells[k]) for k in need)
     rows = []
-    for key, label, lo, hi in (("r", "Audited honest report rate", "r_wilson_lo", "r_wilson_hi"),
-                               ("p_RR", "Audited cooperation, both reported (p_RR)", "p_RR_wilson_lo", "p_RR_wilson_hi"),
-                               ("p_NR", "Audited cooperation, silent agent facing a reporter (p_NR)", "p_NR_lo", "p_NR_hi"),
-                               ("pN", "Audited cooperation with a silent partner (pN)", "pN_lo", "pN_hi"),
-                               ("HH", "Audited honest payoff HH", "HH_lo", "HH_hi"),
-                               ("g0", "Audited invader advantage g(0)", "g0_lo", "g0_hi"),
-                               ("g1", "Audited invader advantage g(1)", "g1_lo", "g1_hi")):
+    for key, label, lo, hi in (("r", "RQ4 honest report rate", "r_wilson_lo", "r_wilson_hi"),
+                               ("p_RR", "RQ4 cooperation, both reported (p_RR)", "p_RR_wilson_lo", "p_RR_wilson_hi"),
+                               ("p_NR", "RQ4 cooperation, silent agent facing a reporter (p_NR)", "p_NR_lo", "p_NR_hi"),
+                               ("pN", "RQ4 cooperation with a silent partner (pN)", "pN_lo", "pN_hi"),
+                               ("HH", "RQ4 honest payoff HH", "HH_lo", "HH_hi"),
+                               ("g0", "RQ4 invader advantage g(0)", "g0_lo", "g0_hi"),
+                               ("g1", "RQ4 invader advantage g(1)", "g1_lo", "g1_hi")):
         rows.append(dict(sample=sample, block="audited", key=f"aud_{key}", label=label, estimate=r[key],
                          lo=r.get(lo, np.nan), hi=r.get(hi, np.nan), n=n))
     return rows
@@ -224,9 +226,13 @@ def collect(sample: str, base: Path, boot: int, do_scripts: bool, rng) -> list[d
     rows += block_c2(sample, cells["c2_false_beards"], boot, rng)
     rows += block_confound(sample, cells["c2_confound"], cells["c2_false_beards"])
     rows += block_d1(sample, base / "d1_costly_claim", cells["d1_costly_claim"], boot, do_scripts)
-    rows += block_d2(sample, base / "d2_secret", cells["d2_secret"], boot, do_scripts)
-    d1_dir = base / "d1_costly_claim" if (base / "d1_costly_claim" / "analysis.csv").exists() else PRE / "d1_costly_claim"
+    # The audited script's comparison rows (D1 at c = 0 and c = 2) come from the same sample once both
+    # levels are complete there; until then they come from the pre-event D1 run. The headline table
+    # reads only the audited row (analysis.csv), so this affects comparison.csv and the figure only.
+    d1_levels = [f"costly_claim_c{c}{s}" for c in ("0", "2") for s in ("", "_vs_always_defect")]
+    d1_dir = base / "d1_costly_claim" if all(k in cells["d1_costly_claim"] for k in d1_levels) else PRE / "d1_costly_claim"
     rows += block_audited(sample, base / "d1_audited", cells["d1_audited"], boot, do_scripts, d1_dir)
+    rows += block_d2(sample, base / "d2_secret", cells["d2_secret"], boot, do_scripts)
     return rows
 
 
@@ -253,13 +259,16 @@ def wide_table(df: pd.DataFrame) -> pd.DataFrame:
         label = (pre if len(pre) else ev).iloc[0]["label"]
         p = pre.iloc[0] if len(pre) else None
         e = ev.iloc[0] if len(ev) else None
-        inside = ""
+        inside, overlap = "", ""
         if p is not None and e is not None and not pd.isna(p["lo"]):
             inside = "yes" if p["lo"] - 1e-9 <= e["estimate"] <= p["hi"] + 1e-9 else "no"
+            if not pd.isna(e["lo"]):
+                # the two-sample check: the pre-event and event intervals share at least one value
+                overlap = "yes" if (e["lo"] <= p["hi"] + 1e-9 and p["lo"] <= e["hi"] + 1e-9) else "no"
         out.append(dict(key=k, quantity=label,
                         pre_event=fmt(p["estimate"], p["lo"], p["hi"]) if p is not None else "",
                         event=fmt(e["estimate"], e["lo"], e["hi"]) if e is not None else "(not yet run)",
-                        event_inside_pre_interval=inside,
+                        event_inside_pre_interval=inside, intervals_overlap=overlap,
                         source="event" if e is not None else "pre-event (fallback)"))
     return pd.DataFrame(out)
 
@@ -331,8 +340,10 @@ def main() -> None:
     out_dir = ROOT / "hackathon" / "runs"
     df.to_csv(out_dir / "headline.csv", index=False)
     wide = wide_table(df)
-    md = ["| Quantity | Pre-event (95%) | Event rerun (95%) | Event inside pre-event interval | Report uses |", "|---|---|---|---|---|"]
-    md += [f"| {r.quantity} | {r.pre_event} | {r.event} | {r.event_inside_pre_interval} | {r.source} |" for r in wide.itertuples()]
+    md = ["| Quantity | Pre-event (95%) | Event rerun (95%) | Event inside pre-event interval | Intervals overlap | Report uses |",
+          "|---|---|---|---|---|---|"]
+    md += [f"| {r.quantity} | {r.pre_event} | {r.event} | {r.event_inside_pre_interval} | {r.intervals_overlap} | {r.source} |"
+           for r in wide.itertuples()]
     (out_dir / "headline.md").write_text("\n".join(md) + "\n")
     pd.set_option("display.width", 250)
     pd.set_option("display.max_colwidth", 60)
