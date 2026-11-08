@@ -1,0 +1,11 @@
+=== [h1] start Sun Nov  8 03:04:56 PST 2026  config=configs/c1_h1.yaml only=all
+cells:   0%|          | 0/2 [00:00<?, ?it/s]
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s][AFetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 1372.03it/s]
+                                            cells:   0%|          | 0/2 [1:28:25<?, ?it/s]cells:  50%|█████     | 1/2 [1:28:25<1:28:25, 5305.86s/it]                                                          cells:  50%|█████     | 1/2 [2:55:21<1:28:25, 5305.86s/it]cells: 100%|██████████| 2/2 [2:55:21<00:00, 5252.78s/it]  cells: 100%|██████████| 2/2 [2:55:21<00:00, 5260.74s/it]
+{"cell": "oracle_attributed_80__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5301.6}
+{"cell": "claim_80__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5215.6}
+=== [h1] done Sun Nov  8 06:00:18 PST 2026 exit=0
+wrote hackathon/runs/event/c1_h1/summary.csv
+        condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+oracle_attributed     80 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200       0.70    0.633    0.759          0.684      3.4     2032.405             0          0              199
+            claim     80 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200       0.65    0.582    0.713          0.654      3.3     2013.220             3          0              191

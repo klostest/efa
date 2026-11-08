@@ -1,0 +1,9 @@
+=== [confound] start Sun Nov  8 06:00:19 PST 2026  config=configs/c2_confound.yaml only=all
+cells:   0%|          | 0/1 [00:00<?, ?it/s]
+Fetching 13 files:   0%|          | 0/13 [00:00<?, ?it/s][AFetching 13 files: 100%|██████████| 13/13 [00:00<00:00, 1199.61it/s]
+                                            cells:   0%|          | 0/1 [1:25:40<?, ?it/s]cells: 100%|██████████| 1/1 [1:25:40<00:00, 5140.97s/it]cells: 100%|██████████| 1/1 [1:25:40<00:00, 5140.97s/it]
+{"cell": "claim_100__Qwen3.5-27B-4bit", "games": 100, "ok": 100, "seconds": 5136.7}
+=== [confound] done Sun Nov  8 07:26:01 PST 2026 exit=0
+wrote hackathon/runs/event/c2_confound/summary.csv
+condition  level                              model  games  excluded  n_decisions  coop_rate  coop_lo  coop_hi  stated_p_coop  welfare  mean_tokens  format_fixed  truncated  thinking_forced
+    claim    100 mlx:mlx-community/Qwen3.5-27B-4bit    100         0          200      0.915    0.868    0.946          0.914     3.83     2009.895             0          0              195

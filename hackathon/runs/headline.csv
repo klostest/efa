@@ -53,6 +53,17 @@ pre-event,d2,d2_pX,"RQ5 cooperation, wrong word (pX)",0.06,0.02,0.11,300
 pre-event,d2,d2_rho_star,RQ5 tolerable replay success ρ*,0.4506578947368418,0.3825154785809906,0.5286959491565691,300
 pre-event,d2,d2_g0_1/4,"RQ5 invader advantage g(0), ρ = 1/4",-0.3049999999999999,-0.4099999999999999,-0.1999999999999999,300
 pre-event,d2,d2_g0_1,"RQ5 invader advantage g(0), ρ = 1",0.8350000000000002,0.6599999999999999,0.9899999999999998,300
+event,c0,c0_0,"RQ1 oracle: cooperation, similarity 0",0.016666666666666666,0.002948083860873682,0.08855338226779477,60
+event,c0,c0_20,"RQ1 oracle: cooperation, similarity 20",0.36666666666666664,0.2562073884620827,0.4931723263320327,60
+event,c0,c0_40,"RQ1 oracle: cooperation, similarity 40",0.38333333333333336,0.2708808958488824,0.5098263545959686,60
+event,c0,c0_60,"RQ1 oracle: cooperation, similarity 60",0.5333333333333333,0.40893208671135106,0.65372298459012,60
+event,c0,c0_80,"RQ1 oracle: cooperation, similarity 80",0.6333333333333333,0.5068276736679673,0.7437926115379172,60
+event,c0,c0_100,"RQ1 oracle: cooperation, similarity 100",0.8,0.6821795390818299,0.8817161026314104,60
+event,c0,c0_unknown,"RQ1 oracle: ""?"" control",0.38333333333333336,0.2708808958488824,0.5098263545959686,60
+event,c0,c0_base,RQ1 oracle: base (no signal),0.05,0.01714919117914121,0.13700734625099836,60
+event,h1,h1_oracle,"RQ1 cooperation, environment reports 80",0.7,0.6332080400667355,0.759253557565936,200
+event,h1,h1_claim,"RQ1 cooperation, partner reports 80",0.65,0.5816333576186576,0.712712840605846,200
+event,h1,h1_diff,"RQ1 difference, claim − oracle",-0.04999999999999993,-0.14167060597596148,0.04167060597596163,400
 event,c2,c2_hh,"RQ2 honest cooperation, honest partner",0.895,0.8448186177864638,0.9302930375380627,200
 event,c2,c2_hi,"RQ2 honest cooperation, invader partner",0.87,0.7901947810519012,0.9224290614158575,100
 event,c2,c2_HH,RQ2 honest payoff vs honest (HH),1.895,,,200
@@ -61,6 +72,8 @@ event,c2,c2_IH,RQ2 invader payoff vs honest (IH),2.74,,,200
 event,c2,c2_g0,RQ2 invader advantage g(0),0.8450000000000002,0.7050000000000001,0.9749999999999999,200
 event,c2,c2_g1,RQ2 invader advantage g(1),0.87,,,100
 event,c2,c2_all_invader,RQ2 resamples ending all-invader,1.0,,,2000
+event,confound,confound_min,RQ2 control: minimal claim at 100,0.915,0.8681031145576462,0.9462547005301477,200
+event,confound,confound_diff,"RQ2 control difference, minimal − full sentence",0.020000000000000018,-0.037436695587402986,0.07743669558740301,400
 event,d1,d1_r_0,"RQ3 honest report rate, c = 0",0.9130434782608696,0.8756388490182879,0.9399690463303036,199
 event,d1,d1_pR_0,"RQ3 cooperation with a reporter, c = 0",0.8484848484848485,0.7777777777777778,0.9191919191919192,199
 event,d1,d1_HH_0,"RQ3 honest payoff HH, c = 0",1.85,1.795,1.9,199
@@ -69,10 +82,18 @@ event,d1,d1_r_0.5,"RQ3 honest report rate, c = 0.5",0.64,0.5842282582018847,0.69
 event,d1,d1_pR_0.5,"RQ3 cooperation with a reporter, c = 0.5",0.76,0.67,0.84,200
 event,d1,d1_HH_0.5,"RQ3 honest payoff HH, c = 0.5",1.295,1.23,1.3575,200
 event,d1,d1_g0_0.5,"RQ3 invader advantage g(0), c = 0.5",0.7250000000000001,0.5399999999999998,0.8975000000000002,200
+event,d1,d1_r_1,"RQ3 honest report rate, c = 1",0.447457627118644,0.3917530068590251,0.5045131087018606,197
+event,d1,d1_pR_1,"RQ3 cooperation with a reporter, c = 1",0.7272727272727273,0.6363636363636364,0.8080808080808081,197
+event,d1,d1_HH_1,"RQ3 honest payoff HH, c = 1",1.0051020408163265,0.9489795918367347,1.0612244897959184,197
+event,d1,d1_g0_1,"RQ3 invader advantage g(0), c = 1",0.4494434137291281,0.3382282870478998,0.626365697794269,197
+event,d1,d1_r_1.5,"RQ3 honest report rate, c = 1.5",0.27,0.2229032246065321,0.3229127531924262,200
+event,d1,d1_pR_1.5,"RQ3 cooperation with a reporter, c = 1.5",0.66,0.56975,0.75,200
+event,d1,d1_HH_1.5,"RQ3 honest payoff HH, c = 1.5",0.8775,0.81,0.94,200
+event,d1,d1_g0_1.5,"RQ3 invader advantage g(0), c = 1.5",0.3863307692307693,0.2893049345076784,0.497806470588235,200
 event,d1,d1_r_2,"RQ3 honest report rate, c = 2",0.2566666666666666,0.2105325525458353,0.3089539167197292,200
-event,d1,d1_pR_2,"RQ3 cooperation with a reporter, c = 2",0.66,0.57,0.75,200
+event,d1,d1_pR_2,"RQ3 cooperation with a reporter, c = 2",0.66,0.57,0.76,200
 event,d1,d1_HH_2,"RQ3 honest payoff HH, c = 2",0.77,0.68,0.85,200
-event,d1,d1_g0_2,"RQ3 invader advantage g(0), c = 2",0.4602966101694914,0.3469237848915538,0.590420031907296,200
+event,d1,d1_g0_2,"RQ3 invader advantage g(0), c = 2",0.4602966101694914,0.3407589639329678,0.5833136995651733,200
 event,audited,aud_r,RQ4 honest report rate,0.86,0.8161675002526941,0.8947292301489361,200
 event,audited,aud_p_RR,"RQ4 cooperation, both reported (p_RR)",0.9655172413793104,0.903457576607831,0.9882043932385832,200
 event,audited,aud_p_NR,"RQ4 cooperation, silent agent facing a reporter (p_NR)",0.3846153846153846,0.125,0.6666666666666666,200

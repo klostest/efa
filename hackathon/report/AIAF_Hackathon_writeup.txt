@@ -70,3 +70,10 @@ First task: Please review my introduction.
 
 
 Next up: Finish methods, and associated appendices, then on to results.
+
+----
+
+I don't really understand where this comes from "versus at most 5% with no similarity statement", and was it only measured on Qwen? Need to figure that out before being done with RQ1/2 results.
+
+RQ3: A flat cost to declaring similarity, paid by honest and false beard agents alike, cannot restore cooperation. When agents are given the opportunity to pay a cost (0, 0.5, 1, 1.5, or 2 points) to make the similarity claim before playing the game, under Qwen the payoff advantage of a rare false beard is still positive, so they would invade the population. Under Sonnet and Opus, the payoff advantage shrinks to zero, but only because honest agents also stop cooperating.
+

@@ -1,0 +1,15 @@
+# C2 confound check (2026-10-26): does telling the agent "you have reported 100%" raise its
+# cooperation beyond what the partner's claim alone gives? Minimal claim sentence ("The
+# other player reports that its decision-making is 100% similar to yours ...") at stated
+# similarity 100, honest vs honest, N=100 (200 decisions). Compare with the C2 honest-honest
+# cell (symmetric sentence, 0.87 on 200) and the gate's oracle at 100 (0.92 on 60).
+seed: 0
+n_games: 100
+max_tokens: 300
+thinking_budget: 2000
+cot: false
+temperature: 1.0
+models: ["mlx:mlx-community/Qwen3.5-27B-4bit"]
+client: {completion_batch_size: 32, prefill_batch_size: 8, stage2_prefill_batch_size: 2}
+conditions:
+  - {name: claim, levels: [100]}

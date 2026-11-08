@@ -66,6 +66,23 @@ rotating secret; the key to the preregistration's names is in `hackathon/README.
   closed by the harness; the forced-close rate is reported per cell in every summary CSV.
   Exclusions across the whole screen: 2 (one in H1, one in D1).
 
+## Event-sample test statistics not in the generated table
+
+Same tests as the pre-event bullets above (two-proportion z with pooled variance, Wald
+interval on the difference, Fisher exact on the decision counts; the equivalence test is
+two one-sided tests at the preregistered 10-point margin, read off the 90% interval).
+
+- **RQ1, claim vs oracle (event):** claim 130 of 200 (0.650) vs attributed oracle 140 of 200
+  (0.700) at stated similarity 80; difference −0.050 (95% −0.142 to +0.042; z = −1.07,
+  p = 0.29; Fisher p = 0.34). Inside the 10-point margin as a point estimate; the
+  equivalence test fails again, by more than pre-event (90% CI −0.127 to +0.027, crossing
+  −0.10 by 0.027). Same statement as before: no detectable difference, consistent with
+  equivalence, not established at the margin chosen.
+- **RQ2 wording control (event):** minimal claim at 100 gave 183 of 200 (0.915) against 179
+  of 200 (0.895) for the full claim sentence (difference +0.020, 95% −0.037 to +0.077;
+  z = 0.68, p = 0.50; Fisher p = 0.61). Pre-event's marginal +0.06 (p = 0.046) does not
+  recur; the clause neither raises nor lowers cooperation detectably.
+
 ## Frontier models (pre-event, `runs/api_slice`, `runs/api_d1`; about $53)
 
 | Quantity | Qwen | Sonnet 5.5 | Opus 5.5 |
@@ -114,11 +131,16 @@ there is nothing to spoof).
   neutral as on the other models. Pilot: 24 games, 0 exclusions, forfeit named in every
   transcript, no payment-to-partner reading.
 - **Event reruns of the Qwen matrix** (`hackathon/runs/event`): see the generated table.
-  Status Saturday 11:15: RQ2, RQ4, RQ5, RQ3 c = 2 and c = 0.5 done and replicating (every
-  pre-event and event interval overlaps; seven point estimates fall outside the pre-event
-  interval, none changing an end state; details in the research log). Event headline
-  values the report can quote now: RQ2 g(0) = +0.845 (0.71–0.97); RQ4 g(0) = −0.64
-  (−0.77 to −0.45), r 0.86, pN 1 of 27; RQ5 pM 0.864, pX 0.03, ρ* 0.56 (0.48–0.65), closed
-  form 0.48; RQ3 c = 2 r 0.26, HH 0.77, g(0) = +0.46; RQ3 c = 0.5 r 0.64, HH 1.295,
-  g(0) = +0.725. Remaining blocks in order: RQ3 c = 0 (running), 1.5, 1, RQ1 oracle curve,
-  RQ1 claim vs oracle, RQ2 wording control; expected to finish Sunday morning.
+  Status Sunday 07:30: every block done (last one, the RQ2 wording control, at 07:26
+  Sunday), so the fallback to pre-event numbers is not needed anywhere; every cell reached
+  its N with at most one exclusion (RQ5: 2 of 300). All 54 headline quantities replicate:
+  every pre-event and event 95% interval overlaps, and no end state changes. Nine point
+  estimates fall outside the pre-event interval (sampling noise at N = 100; listed in the
+  research log). Event headline values the report quotes: RQ1 oracle curve 0.02, 0.37,
+  0.38, 0.53, 0.63, 0.80 at similarity 0 to 100, "?" 0.38, base 0.05; RQ1 claim − oracle at
+  80 = −0.05 (−0.14 to +0.04), 0.65 vs 0.70; RQ2 g(0) = +0.845 (0.71–0.97), HH 1.895,
+  all-invader 100%; RQ2 wording control 0.915 vs 0.895, difference +0.02 (−0.04 to +0.08);
+  RQ3 report rate 0.91, 0.64, 0.45, 0.27, 0.26 and g(0) +0.85, +0.73, +0.45, +0.39, +0.46
+  at c = 0, 0.5, 1, 1.5, 2, all-invader at every level; RQ4 g(0) = −0.64 (−0.77 to −0.45),
+  r 0.86, pN 1 of 27, bistable 100%; RQ5 pM 0.864, pX 0.03, ρ* 0.56 (0.48–0.65), closed
+  form 0.48, bistable at ρ = 1/4, all-invader at ρ = 1.

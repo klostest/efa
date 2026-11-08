@@ -973,3 +973,35 @@ way (RQ3, RQ4, RQ5 in that order).
   - Barasz is first author of the "LaVictoire et al. 2014" paper.
   - Kundu et al. has no confirmed venue.
   - The "false beard" term is not confirmed as Gardner & West's.
+
+## 2026-11-08, 07:30: event reruns complete; the whole Qwen matrix replicates
+
+- `run_event.sh` finished at 07:26 Sunday after 44.4 h (launched Fri 11:03): D1 c = 1
+  done Sat 23:30, C0 gate Sun 03:05, H1 06:00, confound 07:26. Every cell reached its N
+  with at most one exclusion (D2: 2 of 300), so no cell falls under the fallback rule and
+  the report uses event numbers throughout (`hackathon/runs/headline.md`, 54 quantities,
+  "Report uses" = event on every row).
+- Replication check: all 54 pre-event and event intervals overlap; no end state changes
+  (C2 and every D1 level all-invader 100%, audited bistable 100%, D2 bistable at ρ = 1/4
+  and all-invader at ρ = 1). Nine point estimates fall outside the pre-event interval, the
+  seven listed at 11:15 Saturday plus D1 c = 1.5 g(0) +0.39 vs +0.28 (still all-invader)
+  and the C0 oracle point at similarity 100, 0.80 (0.68–0.88) vs 0.92 (0.82–0.96), N = 60
+  decisions. The C0 curve keeps its shape (0.02, 0.37, 0.38, 0.53, 0.63, 0.80; "?" 0.38;
+  base 0.05) and the gate criterion (rises with similarity, controls below the 100 level)
+  holds on the fresh sample.
+- H1, event: environment reports 80 → 0.70 (0.63–0.76), partner reports 80 → 0.65
+  (0.58–0.71), difference −0.05 (−0.14 to +0.04); the claim is trusted as the oracle is.
+  Confound, event: minimal claim at 100 → 0.915 vs the full sentence 0.895, difference
+  +0.02 (−0.04 to +0.08); wording does not carry the C2 effect.
+- D1 c = 1, event: r 0.45, pR 0.73, HH 1.005, g(0) = +0.45 (0.34–0.63), all-invader 100%.
+  The full D1 curve on the event sample: report rate 0.91, 0.64, 0.45, 0.27, 0.26 and g(0)
+  +0.85, +0.73, +0.45, +0.39, +0.46 at c = 0, 0.5, 1, 1.5, 2; the flat cost never makes the
+  silent invader lose, as before.
+- Nothing is left to run on the Mac. `headline.py`, `hackathon/figures/event_replication.png`
+  and the per-arm event figures are regenerated from the complete sample; the audited
+  comparison rows use the event D1 run.
+- 08:00, at the report session's request: event-sample test statistics added to
+  `hackathon/numbers.md`. H1: 130/200 vs 140/200, −0.05 (95% −0.14 to +0.04), z = −1.07,
+  p = 0.29; TOST at 10 points fails (90% CI −0.127 to +0.027). Confound: 183/200 vs
+  179/200, +0.02 (95% −0.04 to +0.08), z = 0.68, p = 0.50, Fisher p = 0.61; the pre-event
+  marginal +0.06 does not recur.

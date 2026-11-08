@@ -17,6 +17,22 @@ Methods section once.
 - RQ5: does a rotating secret cue stop them?
 - Robustness, not a question of its own: do RQ2 to RQ5 hold on Sonnet 5.5 and Opus 5.5?
 
+Terms (decided 2026-11-07): the report uses the standard evolutionary game theory terms below,
+in prose and in figure labels. Internal files (`numbers.md`, `headline.md`, the analysis
+scripts) keep "invader" and g(f); the appendix defines the symbols once, for readers going to
+the repository. The figures are redrawn for the report by a new script under
+`hackathon/scripts/`, which changes labels only, not the plotted numbers.
+
+| Use | For | Instead of |
+|---|---|---|
+| honest agent, false beard | the two types, at any share of the population | "invader" as a type name |
+| invade, invader | whichever type is rare and trying to spread, in either direction | — |
+| payoff advantage of false beards | false-beard payoff minus honest payoff at a given false-beard share (g(f)) | "invader advantage" |
+| can a rare false beard invade? / can a rare honest agent invade? | the two ends of that advantage (g(0), g(1)) | g(0), g(1) in prose |
+| ESS | all-honest is an ESS when a rare false beard earns less (Maynard Smith & Price 1973) | — |
+| dominance, bistability, coexistence | the end states, as standard in replicator dynamics (Nowak 2006, *Evolutionary Dynamics*) | "all-invader", "interior" |
+| stated by the environment, claimed by the partner | RQ1's two sources of the similarity statement | "oracle" in the body |
+
 Steve writes every section in his own words. This file maps the template's sections to
 the material, names the figure for each, and gives the paragraphs that must appear
 somewhere (the prior-work disclosure, the limitations, the dual-use note). Numbers come
@@ -27,8 +43,11 @@ Page budget, from the template's own guide (template doc
 related work 1 page together, methods and results 2.5, discussion 0.5. Here: introduction
 0.6 (about 300 words), related work 0.4 (about 200 words), methods 0.9, results 1.6 (two or
 three figures), discussion 0.5; the title block and abstract come on top. Steve's rule (2026-11-07):
-aim close to 4 pages, since every round of edits tends to add length. Going a little over is fine,
-and 8 is the hard limit. Anything that doesn't fit goes to an appendix or the LessWrong version.
+aim for about 5 pages (the organizers' Q&A said "try and keep it under 8"), keeping it tight,
+since every round of edits tends to add length; 8 is the hard limit. Two figures in the body:
+Figure 1, RQ3 with RQ4 beside it (payoff advantage against claim cost, one panel per model);
+Figure 2, RQ5 (payoff advantage against replay success, one panel per model). Both are drawn by
+`hackathon/scripts/report_figures.py` into `hackathon/figures/report_*.png`. Anything that doesn't fit goes to an appendix or the LessWrong version.
 The required appendix and references do not count; the full results tables, the cross-model table,
 the replication table and all prompts in full go in appendices.
 
