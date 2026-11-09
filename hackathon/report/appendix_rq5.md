@@ -100,7 +100,10 @@ research log.
 - **Formula vs measurement on Qwen.** The formula gives 0.48 from the two cooperation rates.
   The measured 0.56 uses each kind of game's measured payoffs instead; in particular, in the
   honest-vs-false-beard games with matching words Qwen cooperated 75% of the time rather than
-  86.4%, so a false beard with a current word earned less than the formula assumes.
+  86.4%, so a false beard with a current word earned less than the formula assumes. The
+  honest agent's prompt is identical in those two kinds of game, so the gap is sampling
+  noise. That is also why the measured 0.56 can sit above the formula's ceiling of one half;
+  its interval includes one half.
 - **Below the threshold, the honest population holds.** With replay success 1/4 (a pool of
   four words), a rare false beard on Qwen earns 0.44 points less per game than honest agents
   (95% interval −0.53 to −0.35). The outcome is bistable: false beards would have to start

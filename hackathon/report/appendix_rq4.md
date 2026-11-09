@@ -113,7 +113,7 @@ proposed as an extension on 2026-10-26, then specified with its prediction (g(0)
   players claimed.
 - **The stake makes claiming unprofitable for a false beard.** A false beard that claims
   and then defects loses the stake whenever its partner claimed too; one that stays silent
-  gets almost no cooperation (Qwen cooperated with a silent partner in 1 of 27 games). Either
+  gets almost no cooperation (Qwen cooperated with a silent partner in 1 of 29 decisions). Either
   way, it earns about 1 point per game, mutual-defection pay.
 - **So a rare false beard loses.** Payoff advantage of a rare false beard on Qwen: −0.64
   points per game (95% interval −0.77 to −0.45); Sonnet −0.73 (−0.82 to −0.64); Opus −1.00.
@@ -122,7 +122,10 @@ proposed as an extension on 2026-10-26, then specified with its prediction (g(0)
 - **The audit protects, but doesn't rescue.** When false beards are already common, a rare
   honest agent does no better than they do (Qwen: false beards still ahead by 0.037, interval
   0.00–0.13, which is pN, as the formula says). On Qwen and Sonnet this is bistability in
-  100% of the 2,000 resamples: whichever type is common stays common.
+  100% of the 2,000 resamples, but lopsided: the tipping share is f* = 0.945 on Qwen (95%
+  interval 0.79–1.00), so honest agents hold unless false beards are already at least about
+  80% of the population. On Sonnet, g(1) = 0 exactly, so f* = 1: honest agents hold unless
+  false beards are the entire population.
 - **Opus caveat:** Opus always claimed, so its play against a silent partner was never
   observed. We scored the false beard as always claiming, which gives "honest population
   takes over from any starting share". If Opus defects against silent partners, as it did at

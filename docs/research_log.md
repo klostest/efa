@@ -1005,3 +1005,13 @@ way (RQ3, RQ4, RQ5 in that order).
   p = 0.29; TOST at 10 points fails (90% CI −0.127 to +0.027). Confound: 183/200 vs
   179/200, +0.02 (95% −0.04 to +0.08), z = 0.68, p = 0.50, Fisher p = 0.61; the pre-event
   marginal +0.06 does not recur.
+- 08:30, at the report session's request: the audited tipping fraction f* added to
+  `hackathon/numbers.md`, from the script's own bootstrap. Qwen event f* = 0.945, 95%
+  0.79–1.00 once resamples with pN = 0 (38%, g(1) = 0, honest holds at every f < 1) are
+  scored f* = 1; the CSV's stored 0.76–0.96 drops them (`np.nanpercentile`). Sonnet and
+  pre-event Qwen have g(1) = 0 in every resample, f* = 1; Opus all-honest, no f*.
+  `d1_audited_analysis.py` itself is unchanged (pre-event code).
+- Correction: the event audited pN is 1 cooperation in 29 honest decisions facing a silent
+  partner (1 of 23 by reporters, 0 of 6 by silent agents; pN = r·p_rn + (1 − r)·p_nn =
+  0.037), not "1 of 27" as written on Saturday. Fixed in `hackathon/numbers.md`; the value
+  0.037 and the conclusions are unchanged.

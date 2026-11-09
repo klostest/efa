@@ -132,8 +132,11 @@ there is nothing to spoof).
   transcript, no payment-to-partner reading.
 - **Event reruns of the Qwen matrix** (`hackathon/runs/event`): see the generated table.
   Status Sunday 07:30: every block done (last one, the RQ2 wording control, at 07:26
-  Sunday), so the fallback to pre-event numbers is not needed anywhere; every cell reached
-  its N with at most one exclusion (RQ5: 2 of 300). All 54 headline quantities replicate:
+  Sunday), so the fallback to pre-event numbers is not needed anywhere. Exclusions: 6 of
+  2,250 games, at most 2 in any cell (RQ3: 4, two of them in the c = 1 honest-vs-honest
+  cell, which ended at 98 games; RQ5: 2 of 300). Forced closes: 95–100% of decisions per
+  cell (5 of 29 cells at 100%), 98.4% overall (corrected 2026-11-08 from "every cell
+  reached its N with at most one exclusion", checked against the summary CSVs). All 54 headline quantities replicate:
   every pre-event and event 95% interval overlaps, and no end state changes. Nine point
   estimates fall outside the pre-event interval (sampling noise at N = 100; listed in the
   research log). Event headline values the report quotes: RQ1 oracle curve 0.02, 0.37,
@@ -142,5 +145,22 @@ there is nothing to spoof).
   all-invader 100%; RQ2 wording control 0.915 vs 0.895, difference +0.02 (−0.04 to +0.08);
   RQ3 report rate 0.91, 0.64, 0.45, 0.27, 0.26 and g(0) +0.85, +0.73, +0.45, +0.39, +0.46
   at c = 0, 0.5, 1, 1.5, 2, all-invader at every level; RQ4 g(0) = −0.64 (−0.77 to −0.45),
-  r 0.86, pN 1 of 27, bistable 100%; RQ5 pM 0.864, pX 0.03, ρ* 0.56 (0.48–0.65), closed
+  r 0.86, pN 0.037 (1 cooperation in 29 silent-partner decisions), bistable 100%; RQ5 pM 0.864, pX 0.03, ρ* 0.56 (0.48–0.65), closed
   form 0.48, bistable at ρ = 1/4, all-invader at ρ = 1.
+- **RQ4 tipping fraction f\*** (the invader share above which the invaders' advantage
+  g(f) turns positive, so the all-honest state holds for every invader share below f\*;
+  f\* = g(0) / (g(0) − g(1)) when g(1) > 0, and f\* = 1 when g(1) = 0, since g(f) < 0 at
+  every f < 1 and the all-invader corner is neutral: a silent invader among silent
+  invaders plays exactly like a silent honest agent). Computed from the audited script's
+  own 2,000 bootstrap resamples (`d1_audited_analysis.py`, seed 0), no new runs.
+  - Qwen, event sample: f\* = 0.945, 95% 0.79–1.00 (median 0.95, lowest resample 0.55).
+    Every resample is bistable; 38% of them have pN = 0 exactly and so f\* = 1 (the
+    stored `f_star_lo`/`f_star_hi` in `analysis.csv`, 0.76–0.96, drop those resamples and
+    understate the top of the interval). Reading: honest agents hold unless false beards
+    are at least about 80% of the population, point estimate 95%.
+  - Qwen, pre-event: pN = 0 of 29, so g(1) = 0 and f\* = 1 in the point estimate and in
+    every resample.
+  - Sonnet 5.5: pN = 0 of 29, g(1) = 0 exactly in the point estimate and every resample;
+    classified bistable with a neutral all-invader corner, f\* = 1 (95% 1.00–1.00):
+    honest agents hold at every invader share below 1.
+  - Opus 5.5: all-honest by scoring convention (g(1) = −1), so no tipping fraction.

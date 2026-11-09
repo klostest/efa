@@ -77,3 +77,19 @@ I don't really understand where this comes from "versus at most 5% with no simil
 
 RQ3: A flat cost to declaring similarity, paid by honest and false beard agents alike, cannot restore cooperation. When agents are given the opportunity to pay a cost (0, 0.5, 1, 1.5, or 2 points) to make the similarity claim before playing the game, under Qwen the payoff advantage of a rare false beard is still positive, so they would invade the population. Under Sonnet and Opus, the payoff advantage shrinks to zero, but only because honest agents also stop cooperating.
 
+---
+
+- One of the caveats should be that some of the sampling schemes are non-optimal, e.g. it seems we wasted some sampling by simulating 300 matching word scenarios in RQ5 and only 100 different-word scenarios.
+
+
+=======
+
+
+This work was conducted as part of the Swarm Alignment Hackathon track "Strengthening agent infrastructure: Identity, reputation, and commitments that hold up when agents can copy and rename themselves," 
+
+
+
+How can we begin to understand and guide cooperating agents to avoid unintended outcomes? The history of life on earth, studied through the lens of evolutionary biology, has led to fundamental theories of how entities interact, and may hold valuable lessons for how groups of agents behave.
+
+
+Recent events have indicated that the capabilities of LLM agent swarms are greater than the sum of their parts. While this may have been discovered by accident in some recent situations (Greenblatt, Cotra & Wijk, 2026), at the same time the prospect of LLM agent teams being used at scale has been proposed as likely, and requiring safety and alignment work specifically geared towards them as opposed to individual agents (Hammond et al., 2025; Tewolde et al., 2026; Kundu et al., 2026).
